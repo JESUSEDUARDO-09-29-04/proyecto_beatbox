@@ -1,0 +1,231 @@
+/* Contenedor general */
+.contenedor-home {
+  font-family: 'Arial', sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Navbar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: white;
+  border-bottom: 1px solid #ddd;
+}
+
+.logo {
+  height: 50px;
+}
+
+.nav-enlaces {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.nav-enlaces a {
+  text-decoration: none;
+  color: black;
+  font-weight: bold;
+}
+
+.btn-iniciar-sesion {
+  background-color: #ff8800;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.menu-icono {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+/* Menú Desplegable */
+.menu-desplegable {
+  position: fixed;
+  top: 0;
+  right: -100%;
+  width: 80%;
+  max-width: 300px;
+  height: 100vh;
+  background-color: white;
+  transition: right 0.3s ease-in-out;
+  padding: 20px;
+  box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.menu-desplegable.activo {
+  right: 0;
+}
+
+.btn-cerrar {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  margin-left: auto;
+}
+
+.menu-desplegable ul {
+  list-style: none;
+  padding: 0;
+  margin-top: 20px;
+}
+
+.menu-desplegable ul li {
+  margin-bottom: 15px;
+}
+
+.menu-desplegable ul li a {
+  text-decoration: none;
+  color: black;
+  font-size: 18px;
+}
+
+/* Sección de Certificados */
+.certificados-container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap; /* Permitir que los elementos se ajusten a la pantalla */
+  padding: 40px 20px;
+  gap: 40px;
+}
+
+.certificado-card {
+  flex: 1 1 30%; /* Ajusta el tamaño a 30% del contenedor, pero permite flexibilidad */
+  min-width: 280px; /* Define un ancho mínimo para pantallas pequeñas */
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* Estilo para la imagen del certificado */
+.certificado-img-placeholder {
+  width: 100%;
+  height: 150px;
+  background-color: #f0f0f0;
+  color: #888;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+/* Estilo para el logo del certificado */
+.certificado-logo-placeholder {
+  width: 80px;
+  height: 80px;
+  background-color: #ddd;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+/* Estilo para la descripción del certificado */
+.certificado-descripcion {
+  font-size: 16px;
+  color: #555;
+}
+
+.certificado-descripcion h3 {
+  margin-bottom: 10px;
+  font-size: 18px;
+}
+
+/* Estilo del título centrado */
+h1 {
+  text-align: center;
+  font-size: 28px;
+  margin: 50px auto 30px auto; /* Añadir margen superior e inferior */
+  width: 100%; /* Asegurar que ocupa el ancho completo */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Footer */
+.footer {
+  background-color: black;
+  color: white;
+  text-align: center;
+  padding: 30px 0;
+  margin-top: auto;
+}
+
+.logo-footer {
+  height: 40px;
+  margin-bottom: 10px;
+}
+
+.footer h2 {
+  margin: 10px 0;
+}
+
+.redes-sociales {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 10px;
+}
+
+.redes-sociales a {
+  color: white;
+  font-size: 24px;
+}
+
+.redes-sociales a:hover {
+  color: #ff8800;
+}
+
+.footer-secciones {
+  display: flex;
+  justify-content: center;
+  gap: 50px;
+  margin-top: 20px;
+}
+
+.footer-secciones h3 {
+  margin-bottom: 10px;
+}
+
+.footer-secciones ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-secciones ul li {
+  margin-bottom: 5px;
+}
+
+.footer-secciones ul li a {
+  text-decoration: none;
+  color: white;
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+  .certificados-container {
+      flex-direction: column;
+      align-items: center; /* Centra las tarjetas en pantallas pequeñas */
+  }
+
+  .certificado-card {
+      width: 100%; /* En pantallas pequeñas, ocupar todo el ancho */
+  }
+}
