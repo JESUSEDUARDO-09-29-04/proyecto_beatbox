@@ -168,3 +168,9 @@
 .footer-secciones {
   margin-top: 20px;
 }
+.fortaleza-debil {
+  color: red;
+}
+.fortaleza-fuerte {
+  color: green;
+}

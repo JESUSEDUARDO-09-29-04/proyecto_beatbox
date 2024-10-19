@@ -2,10 +2,13 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Importa useNavigate
 import './Registro.css';
 import logo from '../../assets/logo.png'; // Ruta del logo
+import { registerUser } from '../../services/api';  // Ruta corregida
 
 const Registro = () => {
   const navigate = useNavigate(); // Inicializa el hook para navegar
   const [menuAbierto, setMenuAbierto] = useState(false); // Estado del menú
+
+  // Estados para los campos del formulario
   const [nombre, setNombre] = useState('');
   const [apellidoPaterno, setApellidoPaterno] = useState('');
   const [apellidoMaterno, setApellidoMaterno] = useState('');
@@ -13,20 +16,36 @@ const Registro = () => {
   const [contrasena, setContrasena] = useState('');
   const [confirmarContrasena, setConfirmarContrasena] = useState('');
 
+  // Estados para manejar los mensajes de éxito y error
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+
   const toggleMenu = () => {
     setMenuAbierto(!menuAbierto); // Alternar el menú hamburguesa
   };
 
-  const manejarEnvio = (e) => {
+  const manejarEnvio = async (e) => {
     e.preventDefault();
+    setError('');  // Limpia el mensaje de error
+    setSuccess(''); // Limpia el mensaje de éxito
+
     // Validación de contraseñas
     if (contrasena !== confirmarContrasena) {
-      alert('Las contraseñas no coinciden');
+      setError('Las contraseñas no coinciden');
       return;
     }
-    alert('Registro exitoso');
-    // Redirige al formulario de verificación de correo
-    navigate('/verificar-correo');
+
+    try {
+      // Llamada al backend para registrar el usuario
+      const response = await registerUser(correo, contrasena);
+      setSuccess('Registro exitoso');
+      
+      // Redirige al formulario de verificación de correo
+      navigate('/verificar-correo');
+
+    } catch (err) {
+      setError(err.message || 'Error en el registro');
+    }
   };
 
   return (
@@ -56,6 +75,13 @@ const Registro = () => {
       <div className="formulario-imagen">
         <form className="formulario" onSubmit={manejarEnvio}>
           <h2>Registro</h2>
+          
+          {/* Mensaje de Error */}
+          {error && <p style={{ color: 'red' }}>{error}</p>}
+          
+          {/* Mensaje de Éxito */}
+          {success && <p style={{ color: 'green' }}>{success}</p>}
+
           <label htmlFor="nombre">Nombre</label>
           <input
             type="text"

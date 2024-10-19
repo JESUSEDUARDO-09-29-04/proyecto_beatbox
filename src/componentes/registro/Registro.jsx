@@ -1,32 +1,87 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Importa useNavigate
-import './Registro.css';
-import logo from '../../assets/logo.png'; // Ruta del logo
+import { useNavigate } from 'react-router-dom'; 
+import './Registro.css'; 
+import logo from '../../assets/logo.png';
 
 const Registro = () => {
-  const navigate = useNavigate(); // Inicializa el hook para navegar
-  const [menuAbierto, setMenuAbierto] = useState(false); // Estado del menú
+  const navigate = useNavigate();
+  const [menuAbierto, setMenuAbierto] = useState(false);
+
   const [nombre, setNombre] = useState('');
   const [apellidoPaterno, setApellidoPaterno] = useState('');
   const [apellidoMaterno, setApellidoMaterno] = useState('');
   const [correo, setCorreo] = useState('');
   const [contrasena, setContrasena] = useState('');
   const [confirmarContrasena, setConfirmarContrasena] = useState('');
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+  const [passwordStrength, setPasswordStrength] = useState('');
+  const [recommendations, setRecommendations] = useState([]);
 
   const toggleMenu = () => {
-    setMenuAbierto(!menuAbierto); // Alternar el menú hamburguesa
+    setMenuAbierto(!menuAbierto);
   };
 
-  const manejarEnvio = (e) => {
+  const manejarEnvio = async (e) => {
     e.preventDefault();
-    // Validación de contraseñas
+    setError('');
+    setSuccess('');
+
     if (contrasena !== confirmarContrasena) {
-      alert('Las contraseñas no coinciden');
+      setError('Las contraseñas no coinciden');
       return;
     }
-    alert('Registro exitoso');
-    // Redirige al formulario de verificación de correo
-    navigate('/verificar-correo');
+
+    if (passwordStrength !== 'Fuerte') {
+      setError('La contraseña no es lo suficientemente fuerte');
+      return;
+    }
+
+    try {
+      const response = await registerUser(correo, contrasena);
+      setSuccess('Registro exitoso');
+      navigate('/verificar-correo');
+    } catch (err) {
+      setError(err.message || 'Error en el registro');
+    }
+  };
+
+  // Función para evaluar la fortaleza de la contraseña y recomendaciones
+  const evaluarFortalezaContrasena = (password) => {
+    const recomendaciones = [];
+
+    if (password.length < 8) {
+      recomendaciones.push('Debe tener al menos 8 caracteres');
+    }
+    if (!/[A-Z]/.test(password)) {
+      recomendaciones.push('Debe tener al menos una letra mayúscula');
+    }
+    if (!/[a-z]/.test(password)) {
+      recomendaciones.push('Debe tener al menos una letra minúscula');
+    }
+    if (!/[0-9]/.test(password)) {
+      recomendaciones.push('Debe tener al menos un número');
+    }
+    if (!/[!@#$%^&*]/.test(password)) {
+      recomendaciones.push('Debe tener al menos un carácter especial (!@#$%^&*)');
+    }
+
+    setRecommendations(recomendaciones);
+
+    if (recomendaciones.length === 0) {
+      return 'Fuerte';
+    } else if (password.length >= 6) {
+      return 'Débil';
+    } else {
+      return 'Muy débil';
+    }
+  };
+
+  const handlePasswordChange = (e) => {
+    const password = e.target.value;
+    setContrasena(password);
+    const strength = evaluarFortalezaContrasena(password);
+    setPasswordStrength(strength);
   };
 
   return (
@@ -56,6 +111,10 @@ const Registro = () => {
       <div className="formulario-imagen">
         <form className="formulario" onSubmit={manejarEnvio}>
           <h2>Registro</h2>
+
+          {error && <p style={{ color: 'red' }}>{error}</p>}
+          {success && <p style={{ color: 'green' }}>{success}</p>}
+
           <label htmlFor="nombre">Nombre</label>
           <input
             type="text"
@@ -102,9 +161,22 @@ const Registro = () => {
             id="contrasena"
             placeholder="Ingresa tu contraseña"
             value={contrasena}
-            onChange={(e) => setContrasena(e.target.value)}
+            onChange={handlePasswordChange}
             required
           />
+          {/* Muestra la fortaleza de la contraseña */}
+          {contrasena && (
+            <div>
+              <p style={{ color: passwordStrength === 'Fuerte' ? 'green' : 'red' }}>
+                Fortaleza de la contraseña: {passwordStrength}
+              </p>
+              <ul>
+                {recommendations.map((rec, index) => (
+                  <li key={index} style={{ color: 'red' }}>{rec}</li>
+                ))}
+              </ul>
+            </div>
+          )}
 
           <label htmlFor="confirmarContrasena">Confirmar Contraseña</label>
           <input
@@ -116,7 +188,10 @@ const Registro = () => {
             required
           />
 
-          <button type="submit" className="btn-registrar">Registrar</button>
+          {/* Botón de registro */}
+          <button type="submit" className="btn-registrar" disabled={passwordStrength !== 'Fuerte' || contrasena !== confirmarContrasena}>
+            Registrar
+          </button>
         </form>
 
         <div className="imagen-lateral">
@@ -127,7 +202,7 @@ const Registro = () => {
       {/* Footer */}
       <footer className="footer">
         <img src={logo} alt="Logo Beatbox" className="logo-footer" />
-        <div className="linea-separacion"></div> {/* Línea debajo del logo */}
+        <div className="linea-separacion"></div> 
 
         <h2>Síguenos</h2>
         <div className="redes-sociales">
@@ -137,7 +212,7 @@ const Registro = () => {
           <a href="#"><i className="fab fa-youtube"></i></a>
         </div>
 
-        <div className="linea-separacion"></div> {/* Línea debajo de las redes sociales */}
+        <div className="linea-separacion"></div>
 
         <div className="footer-secciones">
           <div>
