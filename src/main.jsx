@@ -1,13 +1,13 @@
+// src/index.js
 import React from 'react';
-import ReactDOM from 'react-dom/client';
+import ReactDOM from 'react-dom';
 import App from './App';
-import ThemeProvider from './context/ThemeContext'; // Importa el ThemeProvider aquí
+import ThemeProvider from './context/ThemeContext'; // Importar el ThemeProvider
+import { AuthProvider } from './context/AuthContext'; // Importa el proveedor de autenticación
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <ThemeProvider>  {/* Envuelve toda tu aplicación */}
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>
-  </ThemeProvider>
+ReactDOM.render(
+  <ThemeProvider>
+        <App />
+  </ThemeProvider> ,
+  document.getElementById('root')
 );

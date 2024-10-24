@@ -1,15 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Home.css';
-import logo from '../../assets/logo.png'; // Ruta del logo
-import { useNavigate } from 'react-router-dom';
-import '@fortawesome/fontawesome-free/css/all.min.css';
+import logo from '../../assets/logo.png';
+import { useNavigate, Link } from 'react-router-dom';
 
-const Home = () => {
-  const [menuAbierto, setMenuAbierto] = useState(false); // Estado del menú
-  const navigate = useNavigate(); // Inicializar navigate
-  
+
+const HomeUsuarioLogueado = () => {
+  const [menuAbierto, setMenuAbierto] = useState(false);
+  const [username, setUsername] = useState(''); // Estado para almacenar el nombre del usuario
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Verificar si el token existe en localStorage
+    const token = localStorage.getItem('token');
+    const storedUsername = localStorage.getItem('user');
+    const storedRole = localStorage.getItem('role');
+    if (!token || !storedUsername || storedRole !== "user") {
+      // Si no hay token o nombre de usuario, redirige a la página de inicio de sesión
+      navigate('/iniciar-sesion');
+    } else {
+      // Si existe, almacena el nombre del usuario en el estado
+      setUsername(storedUsername);
+    }
+  }, [navigate]); // Se ejecuta al montar el componente
+
+
   const toggleMenu = () => {
-    setMenuAbierto(!menuAbierto); // Alternar el menú
+    setMenuAbierto(!menuAbierto);
+  };
+
+  // Función para cerrar sesión
+  const manejarCerrarSesion = () => {
+    localStorage.removeItem('token'); // Elimina el token del localStorage
+    localStorage.removeItem('user');  // Elimina el nombre del usuario
+    localStorage.removeItem('role'); // Elimina el rol de usuario
+    navigate('/iniciar-sesion'); // Redirige a la página de inicio de sesión.
   };
 
   return (
@@ -17,16 +41,12 @@ const Home = () => {
       {/* Navbar */}
       <header className="navbar">
         <img src={logo} alt="Logo Beatbox" className="logo" />
+        <span>Bienvenido, {username} a Beatbox</span> {/* Mostrar el nombre del usuario */}
         <nav className="nav-enlaces">
-          {/* Botón de iniciar sesión */}
-          <button className="btn btn-inicio" onClick={() => navigate('/iniciar-sesion')}>
-            Iniciar sesión
+          {/* Botón de cerrar sesión */}
+          <button className="btn btn-inicio" onClick={manejarCerrarSesion}>
+            Cerrar sesión
           </button>
-          {/* Botón de registrarse */}
-          <button className="btn btn-registrarse" onClick={() => navigate('/registro')}>
-            Registrarse
-          </button>
-
           {/* Menú Hamburguesa */}
           <button className="menu-icono" onClick={toggleMenu}>
             ☰
@@ -111,4 +131,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default HomeUsuarioLogueado;

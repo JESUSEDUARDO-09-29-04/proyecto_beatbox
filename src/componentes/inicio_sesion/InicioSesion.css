@@ -202,3 +202,55 @@
   align-items: center;
   gap: 5px; /* Ajusta el espacio entre el botón de registro y el menú hamburguesa */
 }
+/* Estilo para el campo select (Tipo de Usuario) */
+.formulario select {
+  padding: 8px; /* Mismo padding que el input */
+  border-radius: 5px; /* Mismo borde redondeado que el input */
+  border: 1px solid #ddd; /* Mismo borde que el input */
+  font-size: 16px; /* Mismo tamaño de fuente que el input */
+  appearance: none; /* Elimina el estilo predeterminado del navegador */
+  background-color: white; /* Fondo blanco */
+  color: black; /* Texto negro */
+  width: 100%; /* Asegura que el select ocupe todo el ancho disponible */
+}
+
+/* Estilo para el select cuando esté enfocado */
+.formulario select:focus {
+  outline: none; /* Elimina el contorno predeterminado */
+  border-color: #008cba; /* Cambia el borde cuando está enfocado */
+}
+
+/* Icono del select para pantallas pequeñas */
+.formulario select::after {
+  content: '▼'; /* Añadir una flecha hacia abajo */
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+/* Estilo para el contenedor select */
+.select-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.select-field select {
+  width: 100%;
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  font-size: 16px;
+  appearance: none; /* Eliminar el estilo predeterminado del select */
+  background-color: white;
+  color: black;
+}
+
+/* Posicionamiento del ícono */
+.icono-select {
+  position: absolute;
+  right: 10px; /* Ajusta el espacio entre el ícono y el borde */
+  pointer-events: none; /* Evitar que el ícono interfiera con el uso del select */
+  color: #888;
+}

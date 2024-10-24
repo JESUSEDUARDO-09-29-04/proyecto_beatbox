@@ -6,6 +6,7 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';  
 import { FaEye, FaEyeSlash } from 'react-icons/fa';  
 import ReCAPTCHA from 'react-google-recaptcha'; // Importar reCAPTCHA
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
 const Registro = () => {
   const navigate = useNavigate();

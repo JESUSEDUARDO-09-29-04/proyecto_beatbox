@@ -1,12 +1,332 @@
-/* Reset básico */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-  body {
-    background-color: #f4f4f4;
-    font-family: 'Arial', sans-serif;
-  }
-  
+/* src/App.css */
+
+/* Estilos para el tema claro */
+.app.light {
+  background-color: #f4f4f4; /* Fondo claro */
+  color: black;
+}
+
+/* Header en tema claro */
+.app.light .navbar {
+  background-color: white;
+  color: black;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Estilos para el tema oscuro */
+.app.dark {
+  background-color: #242323; /* Fondo oscuro */
+  color: white;
+}
+
+/* Header en tema oscuro */
+.app.dark .navbar {
+  background-color: black; /* Fondo negro para el header */
+  color: white;
+  border-bottom: 1px solid #444;
+}
+
+/* Estilos del botón flotante para cambiar de tema */
+#theme-toggle-button {
+  position: fixed;
+  bottom: 50px;
+  right: 20px;
+  background-color: #444;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  font-size: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+#theme-toggle-button:hover {
+  background-color: #ff8800; /* Hover para el botón de cambio de tema */
+}
+
+/* Estilo para el tema claro */
+.app.light .contenedor-cambiar-contrasena {
+  background-color: #f4f4f4; /* Blanco para tema claro */
+  color: black; /* Texto negro */
+}
+
+/* Estilo para el tema oscuro */
+.app.dark .contenedor-cambiar-contrasena {
+  background-color: #242323; /* Fondo negro para tema oscuro */
+  color: white; /* Texto blanco */
+}
+
+/* Estilos adicionales comunes */
+.contenedor-cambiar-contrasena {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  font-family: 'Arial', sans-serif;
+}
+
+.app.light .contenedor-inicio-sesion {
+  background-color: #f4f4f4; /* Blanco para tema claro */
+  color: black; /* Texto negro */
+}
+
+/* Estilo para el tema oscuro */
+.app.dark .contenedor-inicio-sesion {
+  background-color: #242323; /* Fondo negro para tema oscuro */
+  color: white; /* Texto blanco */
+}
+
+/* Estilos adicionales comunes */
+.contenedor-inicio-sesion {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  font-family: 'Arial', sans-serif;
+}
+.app.light .registro-contenedor {
+  background-color: #f4f4f4; /* Blanco para tema claro */
+  color: black; /* Texto negro */
+}
+
+/* Estilo para el tema oscuro */
+.app.dark .registro-contenedor {
+  background-color: #242323; /* Fondo negro para tema oscuro */
+  color: white; /* Texto blanco */
+}
+
+/* Estilos adicionales comunes */
+.registro-contenedor {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  font-family: 'Arial', sans-serif;
+}
+.app.light .contenedor-verificar-correo {
+  background-color: #f4f4f4; /* Blanco para tema claro */
+  color: black; /* Texto negro */
+}
+
+/* Estilo para el tema oscuro */
+.app.dark .contenedor-verificar-correo {
+  background-color: #242323; /* Fondo negro para tema oscuro */
+  color: white; /* Texto blanco */
+}
+
+/* Estilos adicionales comunes */
+.contenedor-verificar-correo {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  font-family: 'Arial', sans-serif;
+}
+/* Estilo para el tema claro */
+.app.light .certificado-card {
+  background-color: white; /* Fondo blanco para tema claro */
+  color: black; /* Texto negro */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilo para el tema oscuro */
+.app.dark .certificado-card {
+  background-color: black; /* Fondo oscuro para tema oscuro */
+  color: white; /* Texto blanco */
+  box-shadow: 0 2px 5px rgba(255, 255, 255, 0.1); /* Sombra más clara en tema oscuro */
+}
+
+/* Estilos comunes */
+.certificado-card {
+  flex: 1 1 20%;
+  min-width: 280px; /* Ancho mínimo para pantallas pequeñas */
+  border-radius: 10px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+/* Estilos para textos (h1, h2, h3 p, label) en ambos temas */
+.app.light h1, .app.light h2, .app.light h3, .app.light p, .app.light label {
+  color: black; /* Texto negro en tema claro */
+}
+
+.app.dark h1, .app.dark h2, .app.light h3, .app.dark p, .app.dark label {
+  color: white; /* Texto blanco en tema oscuro */
+}
+/* Estilos para el tema claro */
+.app.light .certificado-img-placeholder {
+  background-color: #f0f0f0; /* Fondo claro para la imagen del certificado */
+  color: #888; /* Texto gris */
+}
+
+.app.light .certificado-logo-placeholder {
+  background-color: #ddd; /* Fondo claro para el logo del certificado */
+}
+
+.app.light .certificado-descripcion {
+  color: #555; /* Texto gris para la descripción del certificado */
+}
+
+.app.light .certificado-descripcion h3 {
+  color: black; /* Títulos en negro para el tema claro */
+}
+
+/* Estilos para el tema oscuro */
+.app.dark .certificado-img-placeholder {
+  background-color: #333; /* Fondo oscuro para la imagen del certificado */
+  color: #ccc; /* Texto gris claro en tema oscuro */
+}
+
+.app.dark .certificado-logo-placeholder {
+  background-color: #555; /* Fondo oscuro para el logo del certificado */
+}
+
+.app.dark .certificado-descripcion {
+  color: #bbb; /* Texto gris claro para la descripción del certificado en tema oscuro */
+}
+
+.app.dark .certificado-descripcion h3 {
+  color: white; /* Títulos en blanco para el tema oscuro */
+}
+
+/* Estilos comunes */
+.certificado-img-placeholder {
+  width: 100%;
+  height: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.certificado-logo-placeholder {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.certificado-descripcion {
+  font-size: 16px;
+}
+
+.certificado-descripcion h3 {
+  margin-bottom: 10px;
+  font-size: 18px;
+}
+/* Icono del menú hamburguesa */
+.menu-icono {
+  background: none;
+  border: none;
+  font-size: 30px;
+  cursor: pointer;
+  color: inherit; /* El color se ajustará según el tema activo */
+}
+
+/* Menú Desplegable - Tema Claro */
+.app.light .menu-desplegable {
+  background-color: white; /* Fondo blanco para tema claro */
+  color: black; /* Texto negro */
+  box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1); /* Sombra clara */
+}
+
+/* Menú Desplegable - Tema Oscuro */
+.app.dark .menu-desplegable {
+  background-color: #333; /* Fondo oscuro para tema oscuro */
+  color: white; /* Texto blanco */
+  box-shadow: -5px 0 15px rgba(255, 255, 255, 0.1); /* Sombra más clara para el tema oscuro */
+}
+
+/* Menú Desplegable Común */
+.menu-desplegable {
+  position: fixed;
+  top: 0;
+  right: -100%;
+  width: 80%; /* Reducir el ancho del menú */
+  max-width: 300px; /* Tamaño máximo del menú */
+  height: 100vh;
+  transition: right 0.3s ease-in-out;
+  padding: 20px;
+}
+
+/* Menú activo (común para ambos temas) */
+.menu-desplegable.activo {
+  right: 0;
+}
+
+/* Opciones dentro del menú */
+.menu-desplegable ul {
+  list-style: none;
+  padding: 0;
+}
+
+.menu-desplegable ul li {
+  margin-bottom: 20px;
+}
+
+.menu-desplegable ul li a {
+  text-decoration: none;
+  color: inherit; /* El color cambiará según el tema (hereda de .menu-desplegable) */
+  font-size: 18px;
+}
+
+.menu-desplegable ul li a:hover {
+  text-decoration: underline;
+}
+/* Formulario - Tema Claro */
+.app.light .formulario {
+  background-color: white; /* Fondo blanco para tema claro */
+  color: black; /* Texto negro */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Sombra ligera para tema claro */
+}
+
+/* Formulario - Tema Oscuro */
+.app.dark .formulario {
+  background-color: black; /* Fondo oscuro para tema oscuro */
+  color: white; /* Texto blanco */
+  box-shadow: 0 2px 10px rgba(255, 255, 255, 0.1); /* Sombra ligera con borde claro para tema oscuro */
+}
+
+/* Estilos comunes para el formulario */
+.formulario {
+  margin: 40px auto;  /* Espacio superior e inferior para separarlo del header y footer */
+  width: 40%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 30px; /* Ajustar padding interno */
+  gap: 20px;
+  border-radius: 10px;
+}
+/* Tema claro */
+.app.light .imagen-lateral {
+  background-color: #e0e0e0; /* Fondo claro */
+  color: #666; /* Texto gris oscuro */
+}
+
+/* Tema oscuro */
+.app.dark .imagen-lateral {
+  background-color: #000000; /* Fondo oscuro */
+  color: #ccc; /* Texto gris claro */
+}
+
+/* Estilos comunes */
+.imagen-lateral {
+  width: 60%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  font-size: 18px;
+}
+.footer h2 {
+  color: white !important; /* Mantener blanco en ambos temas */
+}

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import './VerificarCorreo.css';
 import logo from '../../assets/logo.png'; // Ruta del logo
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
 const VerificarCorreo = () => {
   const [codigo, setCodigo] = useState('');  // Estado para el OTP (código)

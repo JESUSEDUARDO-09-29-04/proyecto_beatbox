@@ -3,6 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import './CambiarContrasena.css';
 import logo from '../../assets/logo.png';
 import { FaEye, FaEyeSlash } from 'react-icons/fa'; // Para los iconos de contraseña
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
 const CambiarContrasena = () => {
   const [contrasena, setContrasena] = useState('');
@@ -89,7 +90,7 @@ const CambiarContrasena = () => {
       const data = await response.json();
       if (response.ok) {
         alert('Contraseña actualizada exitosamente');
-        navigate('/login');
+        navigate('/iniciar-sesion');
       } else {
         setError(data.message || 'Error al actualizar la contraseña');
       }

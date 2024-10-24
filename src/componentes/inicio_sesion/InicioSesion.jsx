@@ -2,25 +2,28 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import './InicioSesion.css';
 import logo from '../../assets/logo.png';
-import { FaEye, FaEyeSlash } from 'react-icons/fa';  // Importar los íconos de mostrar/ocultar contraseña.
+import { FaEye, FaEyeSlash, FaChevronDown } from 'react-icons/fa';  // Importar los íconos de mostrar/ocultar contraseña.
 
 const InicioSesion = () => {
   const navigate = useNavigate();
   const [menuAbierto, setMenuAbierto] = useState(false);
   const [usuario, setUsuario] = useState('');
   const [contrasena, setContrasena] = useState('');
-  const [showPassword, setShowPassword] = useState(false);  // Estado para mostrar/ocultar contraseña
+  const [tipoUsuario, setTipoUsuario] = useState(''); 
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
 
   const toggleMenu = () => setMenuAbierto(!menuAbierto);
 
+  // Función para manejar el envío del formulario
   const manejarEnvio = async (e) => {
     e.preventDefault();
     setError('');
 
     const requestBody = {
       usuario: usuario,
-      contraseña: contrasena
+      contraseña: contrasena,
+      role: tipoUsuario  // Incluir el tipo de usuario en el cuerpo de la solicitud
     };
 
     try {
@@ -35,8 +38,19 @@ const InicioSesion = () => {
       const data = await response.json();
 
       if (response.ok) {
+        localStorage.setItem('token', data.token); // Suponiendo que la API devuelve un token
+        localStorage.setItem('user', usuario);
+        localStorage.setItem('role', tipoUsuario); // Almacenar el tipo de usuario también
+  
         console.log('Login exitoso:', data);
-        navigate('/'); // Redirige al home.
+
+        
+        if(tipoUsuario == 'user') {
+          navigate('/home-login'); // Redirigir al Home de usuarios logueados
+        }else{
+          navigate('/home-admin'); // Redirigir al Home de usuarios logueados
+        }
+
       } else {
         setError(data.message || 'Error al iniciar sesión');
       }
@@ -73,7 +87,7 @@ const InicioSesion = () => {
         </ul>
       </div>
 
-      {/* Contenedor del Formulario e Imagen */}
+      {/* Formulario de inicio de sesión */}
       <div className="formulario-imagen">
         <form className="formulario" onSubmit={manejarEnvio}>
           <h2>Iniciar Sesión</h2>
@@ -87,6 +101,22 @@ const InicioSesion = () => {
             onChange={(e) => setUsuario(e.target.value)}
             required
           />
+
+          {/* Nuevo campo para seleccionar el tipo de usuario */}
+          <label htmlFor="tipoUsuario">Tipo de Usuario</label>
+          <div className="select-field" style={{ position: 'relative' }}>
+            <select
+              id="tipoUsuario"
+              value={tipoUsuario}
+              onChange={(e) => setTipoUsuario(e.target.value)} // Actualiza el estado con el valor seleccionado
+              required
+              style={{ width: '100%', paddingRight: '30px' }} // Aseguramos espacio para el ícono
+            >
+              <option value="user">Cliente</option>
+              <option value="admin">Administrador</option>
+            </select>
+            <FaChevronDown className="icono-select" /> {/* Ícono dentro del select */}
+          </div>
 
           <label htmlFor="contrasena">Contraseña</label>
           <div className="password-field">
@@ -107,7 +137,7 @@ const InicioSesion = () => {
             </button>
           </div>
 
-          {error && <p style={{ color: 'red' }}>{error}</p>} {/* Mensaje de error */}
+          {error && <p style={{ color: 'red' }}>{error}</p>}
 
           <button type="submit" className="btn-iniciar">Iniciar Sesión</button>
 
