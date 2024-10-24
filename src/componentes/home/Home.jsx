@@ -3,7 +3,6 @@ import './Home.css';
 import logo from '../../assets/logo.png'; // Ruta del logo
 import { useNavigate } from 'react-router-dom';
 
-
 const Home = () => {
   const [menuAbierto, setMenuAbierto] = useState(false); // Estado del menú
   const navigate = useNavigate(); // Inicializar navigate
@@ -18,12 +17,16 @@ const Home = () => {
       <header className="navbar">
         <img src={logo} alt="Logo Beatbox" className="logo" />
         <nav className="nav-enlaces">
-        <button 
-            className="btn-iniciar-sesion" 
-            onClick={() => navigate('/iniciar-sesion')} // Redirige al inicio de sesión
-          >
+          {/* Botón de iniciar sesión */}
+          <button className="btn btn-inicio" onClick={() => navigate('/iniciar-sesion')}>
             Iniciar sesión
           </button>
+          {/* Botón de registrarse */}
+          <button className="btn btn-registrarse" onClick={() => navigate('/registro')}>
+            Registrarse
+          </button>
+
+          {/* Menú Hamburguesa */}
           <button className="menu-icono" onClick={toggleMenu}>
             ☰
           </button>

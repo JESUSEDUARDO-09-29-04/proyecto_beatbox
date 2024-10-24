@@ -16,35 +16,44 @@
   border-bottom: 1px solid #ddd;
 }
 
-.logo {
-  height: 50px;
-}
-
+/* Enlaces en la Navbar */
 .nav-enlaces {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 5px; /* Ajustar el espacio entre los botones */
 }
 
-.nav-enlaces a {
-  text-decoration: none;
-  color: black;
-  font-weight: bold;
-}
+/* Estilo común para los botones */
 
-.btn-iniciar-sesion {
+.btn-inicio {
   background-color: #ff8800;
   color: white;
   border: none;
   border-radius: 20px;
-  padding: 10px 20px;
+  padding: 5px 7px; /* Tamaño reducido para los botones */
   cursor: pointer;
+  font-size: 14px; /* Texto más pequeño */
+  transition: background-color 0.3s ease;
+}
+.btn-registrarse {
+  background-color: #ff8800;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 5px 7px; /* Tamaño reducido para los botones */
+  cursor: pointer;
+  font-size: 14px; /* Texto más pequeño */
+  transition: background-color 0.3s ease;
+}
+.btn:hover {
+  background-color: #e67300; /* Color de hover */
 }
 
+/* Icono del menú hamburguesa */
 .menu-icono {
   background: none;
   border: none;
-  font-size: 24px;
+  font-size: 30px;
   cursor: pointer;
 }
 
@@ -53,8 +62,8 @@
   position: fixed;
   top: 0;
   right: -100%;
-  width: 80%;
-  max-width: 300px;
+  width: 80%; /* Reducir el ancho del menú */
+  max-width: 300px; /* Tamaño máximo del menú */
   height: 100vh;
   background-color: white;
   transition: right 0.3s ease-in-out;
@@ -66,14 +75,16 @@
   right: 0;
 }
 
+/* Botón para cerrar el menú */
 .btn-cerrar {
   background: none;
   border: none;
-  font-size: 24px;
+  font-size: 24px; /* Tamaño del icono de cerrar */
   cursor: pointer;
   margin-left: auto;
 }
 
+/* Lista del menú */
 .menu-desplegable ul {
   list-style: none;
   padding: 0;
@@ -81,13 +92,13 @@
 }
 
 .menu-desplegable ul li {
-  margin-bottom: 15px;
+  margin-bottom: 15px; /* Espacio entre los elementos del menú */
 }
 
 .menu-desplegable ul li a {
   text-decoration: none;
   color: black;
-  font-size: 18px;
+  font-size: 18px; /* Tamaño del texto dentro del menú */
 }
 
 /* Sección de Certificados */
@@ -100,8 +111,8 @@
 }
 
 .certificado-card {
-  flex: 1 1 30%; /* Ajusta el tamaño a 30% del contenedor, pero permite flexibilidad */
-  min-width: 280px; /* Define un ancho mínimo para pantallas pequeñas */
+  flex: 1 1 20%;
+  min-width: 280px; /* Ancho mínimo para pantallas pequeñas */
   background-color: white;
   border-radius: 10px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -110,6 +121,12 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
+}
+
+/* Logo */
+.logo {
+  height: 28px; /* Tamaño reducido del logo */
+  width: auto;
 }
 
 /* Estilo para la imagen del certificado */
@@ -152,8 +169,8 @@
 h1 {
   text-align: center;
   font-size: 28px;
-  margin: 50px auto 30px auto; /* Añadir margen superior e inferior */
-  width: 100%; /* Asegurar que ocupa el ancho completo */
+  margin: 50px auto 30px auto; /* Margen superior e inferior */
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -169,7 +186,7 @@ h1 {
 }
 
 .logo-footer {
-  height: 40px;
+  height: 30px; /* Tamaño reducido del logo en el footer */
   margin-bottom: 10px;
 }
 
@@ -220,12 +237,28 @@ h1 {
 
 /* Estilos responsivos */
 @media (max-width: 768px) {
+  /* Centrar las tarjetas de certificados en pantallas pequeñas */
   .certificados-container {
-      flex-direction: column;
-      align-items: center; /* Centra las tarjetas en pantallas pequeñas */
+    flex-direction: column;
+    align-items: center;
   }
 
   .certificado-card {
-      width: 100%; /* En pantallas pequeñas, ocupar todo el ancho */
+    width: 100%; /* Ocupar todo el ancho disponible en pantallas pequeñas */
+  }
+
+  /* Ajuste de navbar en pantallas pequeñas */
+  .nav-enlaces {
+    gap: 15px; /* Aumentar el espacio entre los botones */
+  }
+
+  /* Ajustes de tamaño de botón */
+  .btn {
+    padding: 10px 15px; /* Más padding en pantallas pequeñas */
+    font-size: 16px; /* Aumentar el tamaño de la fuente en botones */
+  }
+
+  .menu-desplegable ul li a {
+    font-size: 20px; /* Texto más grande en el menú desplegable */
   }
 }

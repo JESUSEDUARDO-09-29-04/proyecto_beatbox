@@ -17,59 +17,6 @@
   border-bottom: 1px solid #ddd;
 }
 
-.logo {
-  height: 50px;
-}
-
-.menu-icono {
-  background: none;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
-}
-
-/* Menú Hamburguesa */
-.menu-desplegable {
-  position: fixed;
-  top: 0;
-  right: -100%;
-  width: 80%;
-  max-width: 300px;
-  height: 100vh;
-  background-color: white;
-  transition: right 0.3s ease-in-out;
-  padding: 20px;
-  box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
-}
-
-.menu-desplegable.activo {
-  right: 0;
-}
-
-.btn-cerrar {
-  background: none;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
-  margin-left: auto;
-}
-
-.menu-desplegable ul {
-  list-style: none;
-  padding: 0;
-  margin-top: 20px;
-}
-
-.menu-desplegable ul li {
-  margin-bottom: 15px;
-}
-
-.menu-desplegable ul li a {
-  text-decoration: none;
-  color: black;
-  font-size: 18px;
-}
-
 /* Contenedor del Formulario e Imagen */
 .formulario-imagen {
   display: flex;
@@ -99,7 +46,7 @@
 /* Ajustar márgenes entre los campos del formulario */
 .formulario label {
   font-weight: bold;
-  margin-bottom: 5px; /* Reducir espacio debajo del label */
+  margin-bottom: 1px; /* Reducir espacio debajo del label */
 }
 
 .formulario input {
@@ -173,4 +120,96 @@
 }
 .fortaleza-fuerte {
   color: green;
+}
+.password-field {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+.recaptcha-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.password-field input {
+  width: 100%;
+  padding-right: 45px; /* Añadir espacio para el icono */
+  
+
+}
+
+.show-password-btn {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(25%); /* Centrando completamente en el eje Y */
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 30px; /* Ajusta el tamaño del icono */
+  color: #555;
+  padding: 0; /* Elimina cualquier padding adicional */
+  line-height: 1; /* Asegura que la altura de la línea no altere el tamaño del icono */
+  display: flex;
+  align-items: center; /* Centrar verticalmente si hay contenido adicional */
+  justify-content: center;
+}
+.btn-inicio {
+  background-color: #ff8800;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 6px 8px; /* Tamaño reducido para los botones */
+  cursor: pointer;
+  font-size: 14px; /* Texto más pequeño */
+  transition: background-color 0.3s ease;
+}
+.nav-enlaces {
+  display: flex;
+  align-items: center;
+  gap: 5px; /* Ajusta el espacio entre el botón de registro y el menú hamburguesa */
+}
+/* Media Query para Pantallas Pequeñas */
+@media (max-width: 768px) {
+  .formulario-imagen {
+    flex-direction: column; /* Cambia de fila a columna */
+    align-items: center; /* Asegura que el formulario esté centrado */
+    gap: 20px; /* Añade espacio entre el formulario y la imagen */
+  }
+
+  /* Ajustar el formulario para que ocupe el 90% del ancho en pantallas pequeñas */
+  .formulario {
+    width: 90%;
+    padding: 20px; /* Reduce el padding */
+  }
+
+  /* Ajustar el tamaño de la imagen lateral */
+  .imagen-lateral {
+    width: 90%; /* Asegura que la imagen también sea responsiva */
+    height: 200px; /* Establecer una altura adecuada para la imagen */
+  }
+
+  /* Asegurar que los botones en el header se mantengan en la misma línea */
+  .navbar .nav-enlaces {
+    flex-direction: row; /* Asegura que el botón de iniciar sesión y el icono del menú se alineen horizontalmente */
+    gap: 10px; /* Ajusta el espacio entre los botones */
+  }
+}
+/* Otros ajustes para pantallas más pequeñas (hasta 576px de ancho) */
+@media (max-width: 576px) {
+.formulario {
+  width: 100%; /* Ocupa todo el ancho en pantallas más pequeñas */
+  padding: 15px; /* Reduce aún más el padding */
+}
+
+.imagen-lateral {
+  width: 100%; /* Asegura que la imagen ocupe todo el ancho disponible */
+  height: 150px; /* Ajusta la altura de la imagen */
+}
+
+.btn-iniciar, .btn-registrar {
+  padding: 10px; /* Ajustar el padding de los botones para pantallas pequeñas */
+  font-size: 14px; /* Reducir el tamaño de fuente de los botones */
+}
 }
