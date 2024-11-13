@@ -1,31 +1,9 @@
-/* Contenedor General */
-.contenedor-inicio-sesion {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    font-family: 'Arial', sans-serif;
-    background-color: #f4f4f4;
-  }
-  
-  /* Navbar */
-  .navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-    background-color: white;
-    border-bottom: 1px solid #ddd;
-  }
-  
-
-  
   /* Contenedor del Formulario e Imagen */
   .formulario-imagen {
     display: flex;
     flex: 1;
     height: calc(100vh - 100px); /* Resta espacio del header y footer */
   }
-  
   /* Formulario - 40% del ancho */
   .formulario {
     width: 40%;
@@ -35,20 +13,17 @@
     padding: 100px;
     gap: 20px;
   }
-  
   .formulario h2 {
     margin-bottom: 10px;
     font-size: 24px;
     text-align: center;
   }
-  
   .formulario input {
     padding: 8px;
     border-radius: 5px;
     border: 1px solid #ddd;
     font-size: 16px;
   }
-  
   .btn-iniciar {
     background-color: #ff8800;
     color: white;
@@ -82,52 +57,7 @@
     color: #666;
   }
   
-  /* Footer */
-  .footer {
-    background-color: black;
-    color: white;
-    text-align: center;
-    padding: 30px 0;
-  }
   
-  .logo-footer {
-    height: 40px;
-    margin-bottom: 10px;
-  }
-  
-  .linea-separacion {
-    width: 80%;
-    margin: 10px auto;
-    border-top: 1px solid white;
-  }
-  
-  .redes-sociales {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    margin-top: 10px;
-  }
-  
-  .footer-secciones {
-    display: flex;
-    justify-content: center;
-    gap: 50px;
-    margin-top: 20px;
-  }
-  
-  .footer-secciones ul {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .footer-secciones a {
-    color: white;
-    text-decoration: none;
-  }
-  
-  .footer-secciones a:hover {
-    text-decoration: underline;
-  }
   
   /* Media Query para Pantallas Pequeñas */
   @media (max-width: 768px) {
@@ -201,56 +131,4 @@
   display: flex;
   align-items: center;
   gap: 5px; /* Ajusta el espacio entre el botón de registro y el menú hamburguesa */
-}
-/* Estilo para el campo select (Tipo de Usuario) */
-.formulario select {
-  padding: 8px; /* Mismo padding que el input */
-  border-radius: 5px; /* Mismo borde redondeado que el input */
-  border: 1px solid #ddd; /* Mismo borde que el input */
-  font-size: 16px; /* Mismo tamaño de fuente que el input */
-  appearance: none; /* Elimina el estilo predeterminado del navegador */
-  background-color: white; /* Fondo blanco */
-  color: black; /* Texto negro */
-  width: 100%; /* Asegura que el select ocupe todo el ancho disponible */
-}
-
-/* Estilo para el select cuando esté enfocado */
-.formulario select:focus {
-  outline: none; /* Elimina el contorno predeterminado */
-  border-color: #008cba; /* Cambia el borde cuando está enfocado */
-}
-
-/* Icono del select para pantallas pequeñas */
-.formulario select::after {
-  content: '▼'; /* Añadir una flecha hacia abajo */
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  pointer-events: none;
-}
-/* Estilo para el contenedor select */
-.select-field {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-.select-field select {
-  width: 100%;
-  padding: 8px;
-  border-radius: 5px;
-  border: 1px solid #ddd;
-  font-size: 16px;
-  appearance: none; /* Eliminar el estilo predeterminado del select */
-  background-color: white;
-  color: black;
-}
-
-/* Posicionamiento del ícono */
-.icono-select {
-  position: absolute;
-  right: 10px; /* Ajusta el espacio entre el ícono y el borde */
-  pointer-events: none; /* Evitar que el ícono interfiera con el uso del select */
-  color: #888;
 }

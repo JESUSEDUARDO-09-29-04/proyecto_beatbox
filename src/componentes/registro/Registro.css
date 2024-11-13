@@ -1,22 +1,3 @@
-/* Contenedor general */
-.registro-contenedor {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  font-family: 'Arial', sans-serif;
-  background-color: #f4f4f4;
-}
-
-/* Navbar */
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 20px;
-  background-color: white;
-  border-bottom: 1px solid #ddd;
-}
-
 /* Contenedor del Formulario e Imagen */
 .formulario-imagen {
   display: flex;
@@ -86,35 +67,7 @@
   color: #666;
 }
 
-/* Footer */
-.footer {
-  background-color: black;
-  color: white;
-  text-align: center;
-  padding: 20px 0;
-}
 
-.logo-footer {
-  height: 40px;
-  margin-bottom: 10px;
-}
-
-.linea-separacion {
-  width: 80%;
-  margin: 10px auto;
-  border-top: 1px solid white;
-}
-
-.redes-sociales {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  margin-top: 10px;
-}
-
-.footer-secciones {
-  margin-top: 20px;
-}
 .fortaleza-debil {
   color: red;
 }

@@ -3,11 +3,13 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useContext } from 'react';
 import Home from './componentes/home/Home';
 import HomeUsuarioLogueado from './componentes/home_login/HomeUsuarioLogueado';
-import HomeUsuarioAdmin from './componentes/home_admin/Home_Admin';
+import HomeUsuarioAdmin from "./componentes/admin/home_admin/Home_Admin";
+import UsuarioAdmin from "./componentes/admin/usuarios_admin/UsuariosAdmin";
 import InicioSesion from './componentes/inicio_sesion/InicioSesion';
 import Registro from './componentes/registro/Registro';
 import RecuperarContrasena from './componentes/recuperar_contrasena/RecuperarContrasena';
 import VerificarCorreo from './componentes/verificar_correo/VerificarCorreo';
+import CrudDeslinde from './componentes/Crud_Deslinde/CrudDeslinde';
 import CambiarContrasena from './componentes/cambiar_contraseña/CambiarContrasena';
 import { ThemeContext } from './context/ThemeContext'; // Asegúrate que la ruta sea correcta
 import './App.css';
@@ -27,6 +29,8 @@ const App = () => {
           <Route path="/recuperar-contrasena" element={<RecuperarContrasena />} />
           <Route path="/verificar-correo" element={<VerificarCorreo />} />
           <Route path="/cambiar_contraseña" element={<CambiarContrasena />} />
+          <Route path="/crud_deslinde" element={<CrudDeslinde />} />
+          <Route path="/usuario_admin" element={<UsuarioAdmin />} />
         </Routes>
       </Router>
       {/* Botón flotante para cambiar el tema */}

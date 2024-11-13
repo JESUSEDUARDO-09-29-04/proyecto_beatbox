@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import './Home_admin.css';
-import logo from '../../assets/logo.png';
+import '../../home/Home.css';
+import logo from '../../../assets/logo.png';
 import { useNavigate, Link } from 'react-router-dom';
 
 
@@ -13,8 +13,7 @@ const HomeUsuarioAdmin = () => {
     // Verificar si el token existe en localStorage
     const token = localStorage.getItem('token');
     const storedUsername = localStorage.getItem('user');
-    const storedRole = localStorage.getItem('role');
-    if (!token || !storedUsername || storedRole !== "admin") {
+    if (!token || !storedUsername) {
       // Si no hay token o nombre de usuario, redirige a la página de inicio de sesión
       navigate('/iniciar-sesion');
     } else {
@@ -32,12 +31,11 @@ const HomeUsuarioAdmin = () => {
   const manejarCerrarSesion = () => {
     localStorage.removeItem('token'); // Elimina el token del localStorage
     localStorage.removeItem('user');  // Elimina el nombre del usuario
-    localStorage.removeItem('role'); // Elimina el rol de usuario
     navigate('/iniciar-sesion'); // Redirige a la página de inicio de sesión.
   };
 
   return (
-    <div className="contenedor-home">
+    <div className="contenedor">
       {/* Navbar */}
       <header className="navbar">
         <img src={logo} alt="Logo Beatbox" className="logo" />
@@ -53,7 +51,17 @@ const HomeUsuarioAdmin = () => {
           </button>
         </nav>
       </header>
-      
+      {/* Menú Desplegable */}
+      <div className={`menu-desplegable ${menuAbierto ? 'activo' : ''}`}>
+        <button className="btn-cerrar" onClick={toggleMenu}>✖</button>
+        <ul>
+          <li><a onClick={() => navigate('/')}>Inicio</a></li>
+          <li><a href="#">Usuarios</a></li>
+          <li><a href="#">Documentos</a></li>
+          <li><a href="#">Empresa</a></li>
+          <li><a href="#">Incidencias</a></li>
+        </ul>
+      </div>
 
       {/* Sección de Certificados */}
       <main className="contenido-principal">

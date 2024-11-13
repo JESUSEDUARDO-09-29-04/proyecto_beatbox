@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; 
 import './Registro.css'; 
+import '../home/Home.css';
 import logo from '../../assets/logo.png';
 import axios from 'axios';
 import { Link } from 'react-router-dom';  

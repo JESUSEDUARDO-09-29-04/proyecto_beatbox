@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import './CambiarContrasena.css';
+import '../home/Home.css';
 import logo from '../../assets/logo.png';
 import { FaEye, FaEyeSlash } from 'react-icons/fa'; // Para los iconos de contraseña
 import '@fortawesome/fontawesome-free/css/all.min.css';
@@ -102,7 +103,7 @@ const CambiarContrasena = () => {
   };
 
   return (
-    <div className="contenedor-cambiar-contrasena">
+    <div className="contenedor">
       {/* Header */}
       <header className="navbar">
         <img src={logo} alt="Logo Beatbox" className="logo" />

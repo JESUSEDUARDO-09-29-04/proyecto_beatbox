@@ -13,7 +13,7 @@ const Home = () => {
   };
 
   return (
-    <div className="contenedor-home">
+    <div className="contenedor">
       {/* Navbar */}
       <header className="navbar">
         <img src={logo} alt="Logo Beatbox" className="logo" />

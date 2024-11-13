@@ -1,6 +1,11 @@
 /* Contenedor general */
-.contenedor-home {
-  font-family: 'Arial', sans-serif;
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #000; /* Cambia este color al que desees */
+}
+.contenedor {
+  font-family: 'Roboto', sans-serif;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -233,6 +238,11 @@ h1 {
 .footer-secciones ul li a {
   text-decoration: none;
   color: white;
+}
+.linea-separacion {
+  width: 80%;
+  margin: 10px auto;
+  border-top: 1px solid white;
 }
 
 /* Estilos responsivos */

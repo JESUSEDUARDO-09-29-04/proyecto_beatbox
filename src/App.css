@@ -330,3 +330,202 @@
 .footer h2 {
   color: white !important; /* Mantener blanco en ambos temas */
 }
+/* Media Query para Pantallas Pequeñas */
+@media (max-width: 768px) {
+  .formulario-imagen {
+    flex-direction: column; /* Cambia de fila a columna */
+    align-items: center; /* Asegura que el formulario esté centrado */
+    gap: 20px; /* Añade espacio entre el formulario y la imagen */
+  }
+
+  /* Ajustar el formulario para que ocupe el 90% del ancho en pantallas pequeñas */
+  .formulario {
+    width: 90%;
+    padding: 20px; /* Reduce el padding */
+  }
+
+  /* Ajustar el tamaño de la imagen lateral */
+  .imagen-lateral {
+    width: 90%; /* Asegura que la imagen también sea responsiva */
+    height: 200px; /* Establecer una altura adecuada para la imagen */
+  }
+
+  /* Asegurar que los botones en el header se mantengan en la misma línea */
+  .navbar .nav-enlaces {
+    flex-direction: row; /* Asegura que el botón de iniciar sesión y el icono del menú se alineen horizontalmente */
+    gap: 10px; /* Ajusta el espacio entre los botones */
+  }
+}
+/* Otros ajustes para pantallas más pequeñas (hasta 576px de ancho) */
+@media (max-width: 576px) {
+.formulario {
+  width: 100%; /* Ocupa todo el ancho en pantallas más pequeñas */
+  padding: 15px; /* Reduce aún más el padding */
+}
+
+.imagen-lateral {
+  width: 100%; /* Asegura que la imagen ocupe todo el ancho disponible */
+  height: 150px; /* Ajusta la altura de la imagen */
+}
+
+.btn-iniciar, .btn-registrar {
+  padding: 10px; /* Ajustar el padding de los botones para pantallas pequeñas */
+  font-size: 14px; /* Reducir el tamaño de fuente de los botones */
+}
+}
+/* Estilos responsivos */
+@media (max-width: 768px) {
+  /* Centrar las tarjetas de certificados en pantallas pequeñas */
+  .certificados-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .certificado-card {
+    width: 100%; /* Ocupar todo el ancho disponible en pantallas pequeñas */
+  }
+
+  /* Ajuste de navbar en pantallas pequeñas */
+  .nav-enlaces {
+    gap: 15px; /* Aumentar el espacio entre los botones */
+  }
+
+  /* Ajustes de tamaño de botón */
+  .btn {
+    padding: 10px 15px; /* Más padding en pantallas pequeñas */
+    font-size: 16px; /* Aumentar el tamaño de la fuente en botones */
+  }
+
+  .menu-desplegable ul li a {
+    font-size: 20px; /* Texto más grande en el menú desplegable */
+  }
+}
+/* Media Query para Pantallas Pequeñas */
+@media (max-width: 768px) {
+  .formulario-imagen {
+    flex-direction: column; /* Cambia de fila a columna */
+    align-items: center; /* Asegura que el formulario esté centrado */
+    gap: 20px; /* Añade espacio entre el formulario y la imagen */
+  }
+
+  /* Ajustar el formulario para que ocupe el 90% del ancho en pantallas pequeñas */
+  .formulario {
+    width: 90%;
+    padding: 20px; /* Reduce el padding */
+  }
+
+  /* Ajustar el tamaño de la imagen lateral */
+  .imagen-lateral {
+    width: 90%; /* Asegura que la imagen también sea responsiva */
+    height: 200px; /* Establecer una altura adecuada para la imagen */
+  }
+
+  /* Asegurar que los botones en el header se mantengan en la misma línea */
+  .navbar .nav-enlaces {
+    flex-direction: row; /* Asegura que el botón de iniciar sesión y el icono del menú se alineen horizontalmente */
+    gap: 10px; /* Ajusta el espacio entre los botones */
+  }
+}
+/* Otros ajustes para pantallas más pequeñas (hasta 576px de ancho) */
+@media (max-width: 576px) {
+.formulario {
+  width: 100%; /* Ocupa todo el ancho en pantallas más pequeñas */
+  padding: 15px; /* Reduce aún más el padding */
+}
+
+.imagen-lateral {
+  width: 100%; /* Asegura que la imagen ocupe todo el ancho disponible */
+  height: 150px; /* Ajusta la altura de la imagen */
+}
+
+.btn-iniciar, .btn-registrar {
+  padding: 10px; /* Ajustar el padding de los botones para pantallas pequeñas */
+  font-size: 14px; /* Reducir el tamaño de fuente de los botones */
+}
+}
+/* Media Query para Pantallas Pequeñas */
+@media (max-width: 768px) {
+  .formulario-imagen {
+    flex-direction: column; /* Cambia de fila a columna */
+    align-items: center; /* Asegura que el formulario esté centrado */
+    gap: 20px; /* Añade espacio entre el formulario y la imagen */
+  }
+
+  /* Ajustar el formulario para que ocupe el 90% del ancho en pantallas pequeñas */
+  .formulario {
+    width: 90%;
+    padding: 20px; /* Reduce el padding */
+  }
+
+  /* Ajustar el tamaño de la imagen lateral */
+  .imagen-lateral {
+    width: 90%; /* Asegura que la imagen también sea responsiva */
+    height: 200px; /* Establecer una altura adecuada para la imagen */
+  }
+
+  /* Asegurar que los botones en el header se mantengan en la misma línea */
+  .navbar .nav-enlaces {
+    flex-direction: row; /* Asegura que el botón de iniciar sesión y el icono del menú se alineen horizontalmente */
+    gap: 10px; /* Ajusta el espacio entre los botones */
+  }
+}
+/* Otros ajustes para pantallas más pequeñas (hasta 576px de ancho) */
+@media (max-width: 576px) {
+.formulario {
+  width: 100%; /* Ocupa todo el ancho en pantallas más pequeñas */
+  padding: 15px; /* Reduce aún más el padding */
+}
+
+.imagen-lateral {
+  width: 100%; /* Asegura que la imagen ocupe todo el ancho disponible */
+  height: 150px; /* Ajusta la altura de la imagen */
+}
+
+.btn-iniciar, .btn-registrar {
+  padding: 10px; /* Ajustar el padding de los botones para pantallas pequeñas */
+  font-size: 14px; /* Reducir el tamaño de fuente de los botones */
+}
+}
+/* Media Query para Pantallas Pequeñas */
+@media (max-width: 768px) {
+  .formulario-imagen {
+    flex-direction: column; /* Cambia de fila a columna */
+    align-items: center; /* Asegura que el formulario esté centrado */
+    gap: 20px; /* Añade espacio entre el formulario y la imagen */
+  }
+
+  /* Ajustar el formulario para que ocupe el 90% del ancho en pantallas pequeñas */
+  .formulario {
+    width: 90%;
+    padding: 20px; /* Reduce el padding */
+  }
+
+  /* Ajustar el tamaño de la imagen lateral */
+  .imagen-lateral {
+    width: 90%; /* Asegura que la imagen también sea responsiva */
+    height: 200px; /* Establecer una altura adecuada para la imagen */
+  }
+
+  /* Asegurar que los botones en el header se mantengan en la misma línea */
+  .navbar .nav-enlaces {
+    flex-direction: row; /* Asegura que el botón de iniciar sesión y el icono del menú se alineen horizontalmente */
+    gap: 10px; /* Ajusta el espacio entre los botones */
+  }
+}
+/* Otros ajustes para pantallas más pequeñas (hasta 576px de ancho) */
+@media (max-width: 576px) {
+.formulario {
+  width: 100%; /* Ocupa todo el ancho en pantallas más pequeñas */
+  padding: 15px; /* Reduce aún más el padding */
+}
+
+.imagen-lateral {
+  width: 100%; /* Asegura que la imagen ocupe todo el ancho disponible */
+  height: 150px; /* Ajusta la altura de la imagen */
+}
+
+.btn-iniciar, .btn-registrar {
+  padding: 10px; /* Ajustar el padding de los botones para pantallas pequeñas */
+  font-size: 14px; /* Reducir el tamaño de fuente de los botones */
+}
+}
