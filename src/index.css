@@ -6,8 +6,10 @@
     box-sizing: border-box;
   }
   
-  body {
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%; /* Asegura que el body ocupe toda la altura */
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
   }
-  

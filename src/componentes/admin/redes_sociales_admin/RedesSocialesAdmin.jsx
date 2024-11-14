@@ -1,35 +1,42 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import '../../home/Home.css';
 import logo from '../../../assets/logo.png';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import AdminMenu from '../adminMenu';
 
-
-const HomeUsuarioAdmin = () => {
-  const [menuAbierto, setMenuAbierto] = useState(false);
+const RedesSocialesAdmin = () => {
   const navigate = useNavigate();
+  const [menuAbierto, setMenuAbierto] = useState(false); // State for menu visibility
 
-  
+  // Sample user data with initial block status
+  const [usuarios, setUsuarios] = useState([
+    { id: 1, nombre: "Usuario 1", email: "usuario1@correo.com", fechaCreacion: "Nov 1, 2024", rol: "Administrador", bloqueado: false },
+    { id: 2, nombre: "Usuario 2", email: "usuario2@correo.com", fechaCreacion: "Nov 3, 2024", rol: "Usuario", bloqueado: true },
+    // More users can be added here
+  ]);
+
+  // Function to handle logout
+  const manejarCerrarSesion = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    navigate('/iniciar-sesion');
+  };
+
+  // Function to toggle user block status
+  const toggleBlockStatus = (userId) => {
+    setUsuarios((prevUsuarios) =>
+      prevUsuarios.map((usuario) =>
+        usuario.id === userId ? { ...usuario, bloqueado: !usuario.bloqueado } : usuario
+      )
+    );
+  };
+  // Function to toggle the hamburger menu
   const toggleMenu = () => {
     setMenuAbierto(!menuAbierto);
   };
-
-  // Función para cerrar sesión
-  const manejarCerrarSesion = () => {
-    //localStorage.removeItem('token'); // Elimina el token del localStorage
-   // localStorage.removeItem('user');  // Elimina el nombre del usuario
-    navigate('/iniciar-sesion'); // Redirige a la página de inicio de sesión.
-  };
-
   return (
     <div className="contenedor">
-      <AdminMenu />
-
-      {/* Sección de Certificados */}
-      <main className="contenido-principal">
-        
-      </main>
-
+       <AdminMenu />
       {/* Footer */}
       <footer className="footer">
         <img src={logo} alt="Logo Beatbox" className="logo-footer" />
@@ -57,4 +64,4 @@ const HomeUsuarioAdmin = () => {
   );
 };
 
-export default HomeUsuarioAdmin;
+export default RedesSocialesAdmin;

@@ -1,0 +1,44 @@
+/* AdminMenu.css */
+.menu-desplegable {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 80%;
+    max-width: 300px;
+    height: 100%;
+    background-color: white;
+    z-index: 1000;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    padding: 20px;
+    overflow-y: auto;
+  }
+  
+  .menu-desplegable.activo {
+    transform: translateX(0);
+  }
+  
+  .submenu {
+    padding-left: 20px;
+    list-style: none;
+  }
+  
+  .submenu li {
+    margin-bottom: 10px;
+  }
+  
+  .menu-icono {
+    font-size: 24px;
+    cursor: pointer;
+  }
+  
+  .btn-cerrar {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 24px;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+  

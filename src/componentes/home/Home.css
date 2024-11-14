@@ -1,8 +1,8 @@
 /* Contenedor general */
-body {
+body, html {
   margin: 0;
   padding: 0;
-  background-color: #000; /* Cambia este color al que desees */
+  overflow-x: hidden;
 }
 .contenedor {
   font-family: 'Roboto', sans-serif;
