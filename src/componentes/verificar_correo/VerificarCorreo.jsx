@@ -4,6 +4,8 @@ import './VerificarCorreo.css';
 import '../home/Home.css';
 import logo from '../../assets/logo.png'; // Ruta del logo
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import '../inicio_sesion/InicioSesion.css';
+import jim from '../../assets/jim.png';
 
 const VerificarCorreo = () => {
   const [codigo, setCodigo] = useState('');  // Estado para el OTP (código)
@@ -118,7 +120,7 @@ const VerificarCorreo = () => {
         </form>
 
         <div className="imagen-lateral">
-          <p>Aquí irá una imagen decorativa</p>
+        <img src={jim} alt="Imagen decorativa" />
         </div>
       </div>
 

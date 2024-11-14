@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
 import AdminMenu from '../adminMenu';
- // Ruta ajustada si AdminMenu está en el mismo nivel
 import './UsuariosAdmin.css';
 import '../../home/Home.css';
 import logo from '../../../assets/logo.png';
+
 const UsuariosAdmin = () => {
   const [usuarios, setUsuarios] = useState([
     { id: 1, nombre: "Usuario 1", email: "usuario1@correo.com", fechaCreacion: "Nov 1, 2024", rol: "Administrador", bloqueado: false },
     { id: 2, nombre: "Usuario 2", email: "usuario2@correo.com", fechaCreacion: "Nov 3, 2024", rol: "Usuario", bloqueado: true },
   ]);
 
+  // Función para alternar el estado de bloqueo
   const toggleBlockStatus = (userId) => {
     setUsuarios((prevUsuarios) =>
       prevUsuarios.map((usuario) =>
@@ -18,19 +19,32 @@ const UsuariosAdmin = () => {
     );
   };
 
+  // Función para agregar un nuevo usuario
+  const agregarUsuario = () => {
+    alert("Agregar Nuevo Usuario");
+  };
+
+  // Función para eliminar un usuario
+  const eliminarUsuario = (id) => {
+    const confirmar = window.confirm("¿Estás seguro de que deseas eliminar este usuario?");
+    if (confirmar) {
+      setUsuarios(usuarios.filter((usuario) => usuario.id !== id));
+    }
+  };
+
   return (
     <div className="contenedor">
-      <AdminMenu /> {/* Agrega el componente AdminMenu aquí */}
+      <AdminMenu />
 
       {/* Contenido Principal */}
       <main className="contenido-principal">
         <div className="usuarios-admin-contenedor">
           <header className="usuarios-admin-header">
             <h1>Usuarios Administrativos</h1>
-            <button className="btn-agregar">Agregar Nuevo Usuario</button>
+            <button className="btn-agregar" onClick={agregarUsuario}>Agregar Nuevo Usuario</button>
           </header>
           
-          <table className="usuarios-tabla">
+          <table className="tabla-admin">
             <thead>
               <tr>
                 <th>Nombre</th>
@@ -49,22 +63,25 @@ const UsuariosAdmin = () => {
                   <td data-label="Fecha de Creación">{usuario.fechaCreacion}</td>
                   <td data-label="Rol">{usuario.rol}</td>
                   <td data-label="Estado">
-                    <button className={`btn-estado ${usuario.bloqueado ? 'bloqueado' : 'activo'}`} onClick={() => toggleBlockStatus(usuario.id)}>
+                    <button
+                      className={`btn-estado ${usuario.bloqueado ? 'bloqueado' : 'activo'}`}
+                      onClick={() => toggleBlockStatus(usuario.id)}
+                    >
                       {usuario.bloqueado ? "Desbloquear" : "Bloquear"}
                     </button>
                   </td>
                   <td data-label="Acciones">
-                    <button className="btn-editar">Editar</button>
-                    <button className="btn-eliminar">Eliminar</button>
+                    <button className="btn-accion modificar">Editar</button>
+                    <button className="btn-accion eliminar" onClick={() => eliminarUsuario(usuario.id)}>Eliminar</button>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
-          {/* Footer */}
-      
         </div>
       </main>
+
+      {/* Footer */}
       <footer className="footer">
         <img src={logo} alt="Logo Beatbox" className="logo-footer" />
         <div className="linea-separacion"></div>

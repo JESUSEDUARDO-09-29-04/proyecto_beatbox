@@ -42,16 +42,7 @@ const AdminMenu = () => {
           <li><a onClick={() => { navigate('/usuario_admin'); toggleMenu(); }}>Usuarios</a></li>
           <li><a onClick={() => { navigate('/redes_sociales_admin'); toggleMenu(); }}>Redes Sociales</a></li>
           <li><a onClick={() => { navigate('/empresa_admin'); toggleMenu(); }}>Empresa</a></li>
-          <li>
-            <a href="#" onClick={toggleSubmenu}>Documentos</a>
-            {submenuAbierto && (
-              <ul className="submenu">
-                <li><a onClick={() => { navigate('/deslinde_admin'); setMenuAbierto(false); }}>Deslinde legal</a></li>
-                <li><a onClick={() => { navigate('/aviso_admin'); setMenuAbierto(false); }}>Aviso de privacidad</a></li>
-                <li><a onClick={() => { navigate('/politicas_admin'); setMenuAbierto(false); }}>Políticas de privacidad</a></li>
-              </ul>
-            )}
-          </li>
+          <li><a onClick={() => { navigate('/deslinde_admin'); toggleMenu(); }}>Documentos Regulatorios</a></li>
         </ul>
       </div>
     </div>

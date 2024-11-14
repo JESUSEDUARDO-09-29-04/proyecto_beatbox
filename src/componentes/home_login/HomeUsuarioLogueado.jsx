@@ -6,31 +6,53 @@ import { useNavigate, Link } from 'react-router-dom';
 
 const HomeUsuarioLogueado = () => {
   const [menuAbierto, setMenuAbierto] = useState(false);
-  const [username, setUsername] = useState(''); // Estado para almacenar el nombre del usuario
   const navigate = useNavigate();
 
-  useEffect(() => {
-    // Verificar si el token existe en localStorage
-    const token = localStorage.getItem('token');
-    const storedUsername = localStorage.getItem('user');
-    if (!token || !storedUsername ) {
-      // Si no hay token o nombre de usuario, redirige a la página de inicio de sesión
-      navigate('/iniciar-sesion');
-    } else {
-      // Si existe, almacena el nombre del usuario en el estado
-      setUsername(storedUsername);
-    }
-  }, [navigate]); // Se ejecuta al montar el componente
+useEffect(() => {
+
+  const verificarRol = async () => {
+
+    try {
+      const userResponse = await fetch('http://localhost:3000/auth/validate-user', {
+        method: 'GET',
+        credentials: 'include', // Incluye las cookies en la solicitud
+      });
+
+      
+      if (userResponse.ok) {
+        const userData = await userResponse.json();
+        const userRole = userData.role;
+
+        if (userRole !== 'user' ) {
+          navigate('/iniciar-sesion');
+        }else{
+
+          alert('Bienvenido');
+        }
+      }
+  
+  
+  } catch (error) {
+    console.error('Error de red al iniciar sesión', error);
+
+  
+}
+};
+
+verificarRol();
+}, [navigate]); // Se ejecuta al montar el componente
 
 
+
+
+  
   const toggleMenu = () => {
     setMenuAbierto(!menuAbierto);
   };
 
   // Función para cerrar sesión
   const manejarCerrarSesion = () => {
-    localStorage.removeItem('token'); // Elimina el token del localStorage
-    localStorage.removeItem('user');  // Elimina el nombre del usuario
+    
     navigate('/iniciar-sesion'); // Redirige a la página de inicio de sesión.
   };
 
@@ -39,7 +61,7 @@ const HomeUsuarioLogueado = () => {
       {/* Navbar */}
       <header className="navbar">
         <img src={logo} alt="Logo Beatbox" className="logo" />
-        <span>Bienvenido, {username} a Beatbox</span> {/* Mostrar el nombre del usuario */}
+        <span>Bienvenido, a Beatbox</span> {/* Mostrar el nombre del usuario */}
         <nav className="nav-enlaces">
           {/* Botón de cerrar sesión */}
           <button className="btn btn-inicio" onClick={manejarCerrarSesion}>
@@ -73,7 +95,6 @@ const HomeUsuarioLogueado = () => {
           {/* Tarjeta de Certificado 1 */}
           <div className="certificado-card">
             <div className="certificado-img-placeholder">Espacio para imagen del certificado</div>
-            <div className="certificado-logo-placeholder">Espacio para logo</div>
             <div className="certificado-descripcion">
               <h3>Certificado 1</h3>
               <p>Descripción del certificado. Aquí se muestra información relevante del certificado 1.</p>
@@ -83,7 +104,6 @@ const HomeUsuarioLogueado = () => {
           {/* Tarjeta de Certificado 2 */}
           <div className="certificado-card">
             <div className="certificado-img-placeholder">Espacio para imagen del certificado</div>
-            <div className="certificado-logo-placeholder">Espacio para logo</div>
             <div className="certificado-descripcion">
               <h3>Certificado 2</h3>
               <p>Descripción del certificado. Aquí se muestra información relevante del certificado 2.</p>
@@ -93,7 +113,6 @@ const HomeUsuarioLogueado = () => {
           {/* Tarjeta de Certificado 3 */}
           <div className="certificado-card">
             <div className="certificado-img-placeholder">Espacio para imagen del certificado</div>
-            <div className="certificado-logo-placeholder">Espacio para logo</div>
             <div className="certificado-descripcion">
               <h3>Certificado 3</h3>
               <p>Descripción del certificado. Aquí se muestra información relevante del certificado 3.</p>
@@ -101,6 +120,7 @@ const HomeUsuarioLogueado = () => {
           </div>
         </div>
       </main>
+
 
       {/* Footer */}
       <footer className="footer">

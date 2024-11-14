@@ -4,38 +4,53 @@ body, html {
   padding: 0;
   overflow-x: hidden;
 }
-.usuarios-tabla {
+
+.usuarios-admin-contenedor {
+  padding: 20px;
+  background-color: #f9f9f9;
+}
+
+.usuarios-admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.tabla-admin {
   width: 100%;
   border-collapse: collapse;
   margin-top: 10px;
-}
-
-.usuarios-tabla th, .usuarios-tabla td {
-  padding: 12px;
-  text-align: left;
-  border-bottom: 1px solid #ddd;
-}
-
-.usuarios-tabla th {
-  background-color: #f2f2f2;
-}
-
-.usuarios-tabla tbody tr:hover {
   background-color: #f9f9f9;
+}
+
+.tabla-admin th, .tabla-admin td {
+  padding: 10px;
+  text-align: center;
+  border: 1px solid #ddd;
+}
+
+.tabla-admin th {
+  background-color: #ff6600;
+  color: white;
+}
+
+.tabla-admin tbody tr:hover {
+  background-color: #f1f1f1;
 }
 
 /* Responsive Table Styling */
 @media (max-width: 768px) {
-  .usuarios-tabla, .usuarios-tabla thead, .usuarios-tabla tbody, .usuarios-tabla th, .usuarios-tabla td, .usuarios-tabla tr {
+  .tabla-admin, .tabla-admin thead, .tabla-admin tbody, .tabla-admin th, .tabla-admin td, .tabla-admin tr {
     display: block;
     width: 100%;
   }
 
-  .usuarios-tabla thead {
-    display: none; /* Hide table headers on small screens */
+  .tabla-admin thead {
+    display: none; /* Oculta los encabezados en pantallas pequeñas */
   }
 
-  .usuarios-tabla tr {
+  .tabla-admin tr {
     margin-bottom: 15px;
     border: 1px solid #ddd;
     border-radius: 5px;
@@ -43,7 +58,7 @@ body, html {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   }
 
-  .usuarios-tabla td {
+  .tabla-admin td {
     display: flex;
     justify-content: space-between;
     padding: 8px 10px;
@@ -54,12 +69,12 @@ body, html {
     box-sizing: border-box;
   }
 
-  .usuarios-tabla td:last-child {
+  .tabla-admin td:last-child {
     border-bottom: 0;
   }
 
-  .usuarios-tabla td::before {
-    content: attr(data-label); /* Use the data-label attribute for responsive labels */
+  .tabla-admin td::before {
+    content: attr(data-label); /* Usa el atributo data-label para etiquetas responsivas */
     position: absolute;
     left: 10px;
     font-weight: bold;
@@ -78,86 +93,53 @@ body, html {
 }
 
 .btn-agregar:hover {
-  background-color: #0056b3;
+  background-color: #ffb300;
 }
 
-.btn-editar, .btn-eliminar, .btn-estado {
+.btn-accion {
   padding: 5px 10px;
   margin-right: 5px;
   border: none;
-  border-radius: 4px;
+  border-radius: 5px;
   cursor: pointer;
   font-size: 14px;
-}
-
-.btn-editar {
-  background-color: #28a745;
   color: white;
 }
 
-.btn-eliminar {
-  background-color: #dc3545;
+.btn-accion.modificar {
+  background-color: #4CAF50;
+}
+
+.btn-accion.eliminar {
+  background-color: #f44336;
+}
+
+.btn-accion.modificar:hover {
+  background-color: #45a049;
+}
+
+.btn-accion.eliminar:hover {
+  background-color: #e53935;
+}
+
+/* Estado de usuarios */
+.btn-estado {
+  padding: 5px 10px;
+  font-size: 14px;
   color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
 .btn-estado.activo {
-  background-color: #4caf50;
-  color: #fff;
+  background-color: #4CAF50;
 }
 
 .btn-estado.bloqueado {
   background-color: #dc3545;
-  color: #fff;
 }
 
-/* Hover Effects */
-.btn-editar:hover {
-  background-color: #218838;
-}
-
-.btn-eliminar:hover {
-  background-color: #c82333;
-}
-/* Menú Desplegable */
-.menu-desplegable {
-  position: fixed;
-  top: 0;
-  right: -100%;
-  width: 80%; /* O 100% si quieres que ocupe todo el ancho */
-  height: 100%;
-  background-color: white;
-  z-index: 1000;
-  transition: transform 0.3s ease;
-  overflow-y: auto;
-  padding: 20px;
-}
-
-.menu-desplegable.activo {
-  right: 0;
-}
-
-/* Botón para cerrar el menú */
-.btn-cerrar {
-  background: none;
-  border: none;
-  font-size: 24px; /* Tamaño del icono de cerrar */
-  cursor: pointer;
-  margin-left: auto;
-}
-
-/* Lista del menú */
-.menu-desplegable ul {
-  list-style: none;
-  padding: 0;
-  margin-top: 20px;
-}
-
-.menu-desplegable ul li {
-  margin-bottom: 15px; /* Espacio entre los elementos del menú */
-}
-
-.menu-desplegable ul li a {
-  text-decoration: none;
-  color: black;
-  font-size: 18px; /* Tamaño del texto dentro del menú */
+.btn-estado.activo:hover, .btn-estado.bloqueado:hover {
+  opacity: 0.8;
 }

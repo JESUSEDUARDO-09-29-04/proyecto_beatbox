@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './Home.css';
 import logo from '../../assets/logo.png'; // Ruta del logo
+import c1 from '../../assets/c1.png'; // Ruta del logo
 import { useNavigate } from 'react-router-dom';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
@@ -14,6 +15,7 @@ const Home = () => {
 
   return (
     <div className="contenedor">
+      <div>
       {/* Navbar */}
       <header className="navbar">
         <img src={logo} alt="Logo Beatbox" className="logo" />
@@ -46,6 +48,7 @@ const Home = () => {
           <li><a href="#">Contáctanos</a></li>
         </ul>
       </div>
+    </div>
 
       {/* Sección de Certificados */}
       <main className="contenido-principal">
@@ -55,7 +58,6 @@ const Home = () => {
           {/* Tarjeta de Certificado 1 */}
           <div className="certificado-card">
             <div className="certificado-img-placeholder">Espacio para imagen del certificado</div>
-            <div className="certificado-logo-placeholder">Espacio para logo</div>
             <div className="certificado-descripcion">
               <h3>Certificado 1</h3>
               <p>Descripción del certificado. Aquí se muestra información relevante del certificado 1.</p>
@@ -65,7 +67,6 @@ const Home = () => {
           {/* Tarjeta de Certificado 2 */}
           <div className="certificado-card">
             <div className="certificado-img-placeholder">Espacio para imagen del certificado</div>
-            <div className="certificado-logo-placeholder">Espacio para logo</div>
             <div className="certificado-descripcion">
               <h3>Certificado 2</h3>
               <p>Descripción del certificado. Aquí se muestra información relevante del certificado 2.</p>
@@ -75,7 +76,6 @@ const Home = () => {
           {/* Tarjeta de Certificado 3 */}
           <div className="certificado-card">
             <div className="certificado-img-placeholder">Espacio para imagen del certificado</div>
-            <div className="certificado-logo-placeholder">Espacio para logo</div>
             <div className="certificado-descripcion">
               <h3>Certificado 3</h3>
               <p>Descripción del certificado. Aquí se muestra información relevante del certificado 3.</p>

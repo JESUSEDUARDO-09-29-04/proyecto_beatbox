@@ -1,134 +1,142 @@
-  /* Contenedor del Formulario e Imagen */
+/* Contenedor del Formulario e Imagen */
+.formulario-imagen {
+  display: flex;
+  flex: 1;
+  align-items: center; /* Centra verticalmente el contenido dentro del contenedor */
+  justify-content: center; /* Centra horizontalmente el contenido dentro del contenedor */
+  min-height: calc(25vh - 50px); /* Asegura espacio igual entre header y footer */
+  gap: 20px;
+}
+
+/* Formulario - 40% del ancho */
+.formulario {
+  width: 40%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 50px;
+  gap: 20px;
+}
+
+.formulario h2 {
+  margin-bottom: 10px;
+  font-size: 24px;
+  text-align: center;
+}
+
+.formulario input {
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  font-size: 16px;
+}
+
+.btn-iniciar {
+  background-color: #ff8800;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+.btn-iniciar:hover {
+  background-color: #e06f00;
+}
+
+.olvidaste-contrasena {
+  text-align: center;
+  color: #008cba;
+  text-decoration: none;
+}
+
+/* Imagen Lateral - Tamaño fijo */
+.imagen-lateral {
+  width: 640px;
+  height: 426px;
+  background-color: #e0e0e0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  color: #666;
+  overflow: hidden; /* Oculta cualquier contenido que exceda las dimensiones */
+}
+
+.imagen-lateral p {
+  text-align: center;
+}
+
+/* Media Query para Pantallas Pequeñas */
+@media (max-width: 768px) {
   .formulario-imagen {
-    display: flex;
-    flex: 1;
-    height: calc(100vh - 100px); /* Resta espacio del header y footer */
-  }
-  /* Formulario - 40% del ancho */
-  .formulario {
-    width: 40%;
-    display: flex;
     flex-direction: column;
-    justify-content: center;
-    padding: 100px;
-    gap: 20px;
-  }
-  .formulario h2 {
-    margin-bottom: 10px;
-    font-size: 24px;
-    text-align: center;
-  }
-  .formulario input {
-    padding: 8px;
-    border-radius: 5px;
-    border: 1px solid #ddd;
-    font-size: 16px;
-  }
-  .btn-iniciar {
-    background-color: #ff8800;
-    color: white;
-    border: none;
-    padding: 12px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s;
-  }
-  
-  .btn-iniciar:hover {
-    background-color: #e06f00;
-  }
-  
-  .olvidaste-contrasena {
-    text-align: center;
-    color: #008cba;
-    text-decoration: none;
-  }
-  
-  /* Imagen - 60% del ancho */
-  .imagen-lateral {
-    width: 60%;
-    background-color: #e0e0e0;
-    display: flex;
-    justify-content: center;
     align-items: center;
-    padding: 20px;
-    font-size: 18px;
-    color: #666;
-  }
-  
-  
-  
-  /* Media Query para Pantallas Pequeñas */
-  @media (max-width: 768px) {
-    .formulario-imagen {
-      flex-direction: column; /* Cambia de fila a columna */
-      align-items: center; /* Asegura que el formulario esté centrado */
-      gap: 20px; /* Añade espacio entre el formulario y la imagen */
-    }
-  
-    /* Ajustar el formulario para que ocupe el 90% del ancho en pantallas pequeñas */
-    .formulario {
-      width: 90%;
-      padding: 20px; /* Reduce el padding */
-    }
-  
-    /* Ajustar el tamaño de la imagen lateral */
-    .imagen-lateral {
-      width: 90%; /* Asegura que la imagen también sea responsiva */
-      height: 200px; /* Establecer una altura adecuada para la imagen */
-    }
-  
-    /* Asegurar que los botones en el header se mantengan en la misma línea */
-    .navbar .nav-enlaces {
-      flex-direction: row; /* Asegura que el botón de iniciar sesión y el icono del menú se alineen horizontalmente */
-      gap: 10px; /* Ajusta el espacio entre los botones */
-    }
-  }
-  /* Otros ajustes para pantallas más pequeñas (hasta 576px de ancho) */
-@media (max-width: 576px) {
-  .formulario {
-    width: 100%; /* Ocupa todo el ancho en pantallas más pequeñas */
-    padding: 15px; /* Reduce aún más el padding */
+    gap: 20px;
+    min-height: auto; /* Permite el ajuste dinámico en pantallas pequeñas */
   }
 
+  .formulario {
+    width: 90%;
+    padding: 20px;
+  }
+
+  /* Ocultar la imagen lateral en pantallas pequeñas */
   .imagen-lateral {
-    width: 100%; /* Asegura que la imagen ocupe todo el ancho disponible */
-    height: 150px; /* Ajusta la altura de la imagen */
+    display: none;
+  }
+
+  .navbar .nav-enlaces {
+    flex-direction: row;
+    gap: 10px;
+  }
+}
+
+/* Otros ajustes para pantallas aún más pequeñas (hasta 576px de ancho) */
+@media (max-width: 576px) {
+  .formulario {
+    width: 100%;
+    padding: 15px;
   }
 
   .btn-iniciar, .btn-registrar {
-    padding: 10px; /* Ajustar el padding de los botones para pantallas pequeñas */
-    font-size: 14px; /* Reducir el tamaño de fuente de los botones */
-  }
-}
-  .links {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 10px;
-  }
-  
-  .links a {
-    color: #008cba;
-    text-decoration: none;
+    padding: 10px;
     font-size: 14px;
   }
-  
-  .links a:hover {
-    text-decoration: underline;
-  }
-  .btn-registrarse {
-    background-color: #ff8800;
-    color: white;
-    border: none;
-    border-radius: 20px;
-    padding: 6px 8px; /* Tamaño reducido para los botones */
-    cursor: pointer;
-    font-size: 14px; /* Texto más pequeño */
-    transition: background-color 0.3s ease;
 }
+
+/* Links de la parte inferior */
+.links {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.links a {
+  color: #008cba;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.links a:hover {
+  text-decoration: underline;
+}
+
+.btn-registrarse {
+  background-color: #ff8800;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 6px 8px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
 .nav-enlaces {
   display: flex;
   align-items: center;
-  gap: 5px; /* Ajusta el espacio entre el botón de registro y el menú hamburguesa */
+  gap: 5px;
 }

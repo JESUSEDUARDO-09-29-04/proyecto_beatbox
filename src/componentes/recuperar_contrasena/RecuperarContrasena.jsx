@@ -4,6 +4,8 @@ import './RecuperarContrasena.css';
 import '../home/Home.css';
 import logo from '../../assets/logo.png'; // Ruta del logo
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import '../inicio_sesion/InicioSesion.css';
+import jim from '../../assets/jim.png';
 
 
 const RecuperarContrasena = () => {
@@ -100,7 +102,7 @@ const RecuperarContrasena = () => {
         </form>
 
         <div className="imagen-lateral">
-          <p>Aquí irá una imagen decorativa</p>
+        <img src={jim} alt="Imagen decorativa" />
         </div>
       </div>
 

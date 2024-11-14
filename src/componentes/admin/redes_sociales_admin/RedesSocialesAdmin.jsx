@@ -3,47 +3,86 @@ import '../../home/Home.css';
 import logo from '../../../assets/logo.png';
 import { useNavigate } from 'react-router-dom';
 import AdminMenu from '../adminMenu';
-
+import { FaFacebook } from 'react-icons/fa';  // Importa el ícono de Facebook
+import './RedesSocialesAdmin.css';
 const RedesSocialesAdmin = () => {
   const navigate = useNavigate();
-  const [menuAbierto, setMenuAbierto] = useState(false); // State for menu visibility
+  const [menuAbierto, setMenuAbierto] = useState(false);
+  const [facebookLink, setFacebookLink] = useState('https://facebook.com/tu-pagina'); // Estado para el enlace de Facebook
+  const [loading, setLoading] = useState(false); // Estado para el estado de carga
 
-  // Sample user data with initial block status
-  const [usuarios, setUsuarios] = useState([
-    { id: 1, nombre: "Usuario 1", email: "usuario1@correo.com", fechaCreacion: "Nov 1, 2024", rol: "Administrador", bloqueado: false },
-    { id: 2, nombre: "Usuario 2", email: "usuario2@correo.com", fechaCreacion: "Nov 3, 2024", rol: "Usuario", bloqueado: true },
-    // More users can be added here
-  ]);
-
-  // Function to handle logout
   const manejarCerrarSesion = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     navigate('/iniciar-sesion');
   };
 
-  // Function to toggle user block status
-  const toggleBlockStatus = (userId) => {
-    setUsuarios((prevUsuarios) =>
-      prevUsuarios.map((usuario) =>
-        usuario.id === userId ? { ...usuario, bloqueado: !usuario.bloqueado } : usuario
-      )
-    );
-  };
-  // Function to toggle the hamburger menu
   const toggleMenu = () => {
     setMenuAbierto(!menuAbierto);
   };
+
+  // Función para manejar el cambio del enlace de Facebook
+  const handleFacebookLinkChange = (e) => {
+    setFacebookLink(e.target.value);
+  };
+
+  // Función para actualizar el enlace en la base de datos
+  const actualizarEnlaceFacebook = async () => {
+    setLoading(true);
+    try {
+      // Aquí reemplaza con tu API de actualización
+      const response = await fetch('/api/enlaces/facebook', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ link: facebookLink }),
+      });
+
+      if (response.ok) {
+        alert('El enlace de Facebook se ha actualizado correctamente');
+      } else {
+        alert('Hubo un error al actualizar el enlace');
+      }
+    } catch (error) {
+      alert('Error de red al actualizar el enlace');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="contenedor">
-       <AdminMenu />
+      <AdminMenu />
+
+      {/* Sección para actualizar el enlace de Facebook */}
+      <div className="admin-redes">
+        <h2>Actualizar Enlace de Redes Sociales</h2>
+        
+        <div className="red-social">
+          <FaFacebook size={30} color="black" /> {/* Icono de Facebook en color negro */}
+          <input
+            type="text"
+            value={facebookLink}
+            onChange={handleFacebookLinkChange}
+            placeholder="Ingrese el nuevo enlace de Facebook"
+            className="input-enlace"
+          />
+          <button onClick={actualizarEnlaceFacebook} disabled={loading} className="btn-actualizar">
+            {loading ? 'Actualizando...' : 'Actualizar enlace'}
+          </button>
+        </div>
+      </div>
+
       {/* Footer */}
       <footer className="footer">
         <img src={logo} alt="Logo Beatbox" className="logo-footer" />
         <div className="linea-separacion"></div>
         <h2>Síguenos</h2>
         <div className="redes-sociales">
-          <a href="#"><i className="fab fa-facebook"></i></a>
+          <a href={facebookLink} target="_blank" rel="noopener noreferrer">
+            <i className="fab fa-facebook"></i>
+          </a>
           <a href="#"><i className="fab fa-instagram"></i></a>
           <a href="#"><i className="fab fa-twitter"></i></a>
           <a href="#"><i className="fab fa-youtube"></i></a>

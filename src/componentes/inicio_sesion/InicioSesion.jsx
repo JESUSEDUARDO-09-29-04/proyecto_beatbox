@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import './InicioSesion.css';
 import '../home/Home.css';
 import logo from '../../assets/logo.png';
+import jim from '../../assets/jim.png';
 import { FaEye, FaEyeSlash, FaChevronDown } from 'react-icons/fa';  // Importar los íconos de mostrar/ocultar contraseña.
 import { jwtDecode } from 'jwt-decode';
 
@@ -17,40 +18,6 @@ const InicioSesion = () => {
   const [bloqueado, setBloqueado] = useState(false); // Nuevo estado para saber si la cuenta está bloqueada
   const [tiempoRestante, setTiempoRestante] = useState(0); // Estado para controlar el tiempo restante del bloqueo
 
-  const MAX_INTENTOS = 5;
-  const TIEMPO_BLOQUEO = 5 * 60 * 1000; // 5 minutos en milisegundos
-
-  useEffect(() => {
-    const intentosFallidos = localStorage.getItem('intentosFallidos') || 0;
-    const tiempoBloqueo = localStorage.getItem('tiempoBloqueo');
-    const ahora = new Date().getTime();
-
-    if (tiempoBloqueo && ahora < tiempoBloqueo) {
-      setBloqueado(true);
-      setTiempoRestante(Math.ceil((tiempoBloqueo - ahora) / 1000));
-    }
-  }, []);
-
-  useEffect(() => {
-    let interval = null;
-
-    if (bloqueado && tiempoRestante > 0) {
-      interval = setInterval(() => {
-        setTiempoRestante((prev) => {
-          if (prev <= 1) {
-            setBloqueado(false);
-            localStorage.removeItem('intentosFallidos');
-            localStorage.removeItem('tiempoBloqueo');
-            return 0;
-          }
-          return prev - 1;
-        });
-      }, 1000);
-    }
-
-    return () => clearInterval(interval);
-  }, [bloqueado, tiempoRestante]);
-
   const toggleMenu = () => setMenuAbierto(!menuAbierto);
 
   // Función para manejar el envío del formulario
@@ -64,48 +31,47 @@ const InicioSesion = () => {
     }
 
     const requestBody = {
-      usuario: usuario,
-      contraseña: contrasena
+      usuario,
+      contraseña: contrasena,
     };
 
     try {
-      const response = await fetch('https://beatbox-blond.vercel.app/auth/login', {
+      const loginResponse = await fetch('http://localhost:3000/auth/login', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include', // Incluye cookies en la solicitud
         body: JSON.stringify(requestBody),
       });
 
-      const data = await response.json();
+      if (loginResponse.ok) {
+        // Verificación del rol del usuario mediante la ruta /validate-user
+        const userResponse = await fetch('http://localhost:3000/auth/validate-user', {
+          method: 'GET',
+          credentials: 'include', // Asegura el envío de la cookie
+        });
 
+        if (userResponse.ok) {
+          const userData = await userResponse.json();
+          const userRole = userData.role;
 
-      if (response.ok) {
-        //Se decodifica el token
-        const decodeToken= jwtDecode(data.token);
-
-        // Inicio de sesión exitoso, reiniciar intentos fallidos
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('user', usuario);
-        
-
-        // Redirigir según el tipo de usuario
-        if(decodeToken.role === 'user') {
-          navigate('/home-login');
+          // Redirige según el rol del usuario
+          if (userRole === 'user') {
+            navigate('/home-login');
+          } else if (userRole === 'admin') {
+            navigate('/home-admin');
+          } else {
+            setError('Rol desconocido, acceso denegado');
+          }
         } else {
-          navigate('/home-admin');
+          setError('Error al obtener datos del usuario');
         }
       } else {
-        manejarIntentoFallido(); // Solo se maneja un intento fallido si el login falla
-        setError(data.message || 'Error al iniciar sesión');
+        setError('Credenciales incorrectas');
       }
     } catch (error) {
-      manejarIntentoFallido(); // Manejar intento fallido en caso de error de red
       setError('Error de red al iniciar sesión');
     }
   };
-
-  
 
   return (
     <div className="contenedor">
@@ -191,7 +157,7 @@ const InicioSesion = () => {
         </form>
 
         <div className="imagen-lateral">
-          <p>Aquí irá una imagen decorativa</p>
+          <img src={jim} alt="Imagen decorativa" />
         </div>
       </div>
 

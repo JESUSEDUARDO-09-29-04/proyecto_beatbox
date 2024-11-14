@@ -10,21 +10,27 @@ const EmpresaAdmin = () => {
   const navigate = useNavigate();
   const [menuAbierto, setMenuAbierto] = useState(false);
 
-  // Company data state
+  // Estado para los datos de la empresa con valores iniciales
   const [empresa, setEmpresa] = useState({
-    logo: logo,
+    logo: logo || "", // Usar logo o una cadena vacía
     eslogan: "",
     mision: "",
     vision: "",
     tiempoBloqueo: 0,
   });
 
-  // Load company data from backend
+  // Cargar datos de la empresa desde el backend
   useEffect(() => {
     const fetchEmpresaData = async () => {
       try {
         const response = await axios.get('/api/empresa');
-        setEmpresa(response.data);
+        setEmpresa({
+          logo: response.data.logo || "", // Logo o cadena vacía
+          eslogan: response.data.eslogan || "", // Cadena vacía si es undefined
+          mision: response.data.mision || "",
+          vision: response.data.vision || "",
+          tiempoBloqueo: response.data.tiempoBloqueo ?? 0, // 0 si es undefined o null
+        });
       } catch (error) {
         console.error("Error fetching company data:", error);
       }
@@ -33,7 +39,7 @@ const EmpresaAdmin = () => {
     fetchEmpresaData();
   }, []);
 
-  // Handle input changes
+  // Manejar cambios en los inputs
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setEmpresa((prevEmpresa) => ({
@@ -42,7 +48,7 @@ const EmpresaAdmin = () => {
     }));
   };
 
-  // Update field in the backend
+  // Actualizar un campo específico en el backend
   const actualizarCampo = async (campo) => {
     try {
       await axios.put(`/api/empresa/${campo}`, { [campo]: empresa[campo] });
@@ -53,7 +59,7 @@ const EmpresaAdmin = () => {
     }
   };
 
-  // Save all changes function
+  // Guardar todos los cambios
   const guardarCambios = async () => {
     try {
       await axios.put('/api/empresa', empresa);
@@ -64,7 +70,7 @@ const EmpresaAdmin = () => {
     }
   };
 
-  // Toggle menu function
+  // Alternar el menú
   const toggleMenu = () => {
     setMenuAbierto(!menuAbierto);
   };
@@ -73,7 +79,7 @@ const EmpresaAdmin = () => {
     <div className="contenedor">
       <AdminMenu />
 
-      {/* Main Content for Company Data */}
+      {/* Contenido principal de la empresa */}
       <main className="contenido-principal">
         <div className="empresa-admin-contenedor">
           <header className="empresa-admin-header">
@@ -101,7 +107,7 @@ const EmpresaAdmin = () => {
                   <input
                     type="text"
                     name="eslogan"
-                    value={empresa.eslogan}
+                    value={empresa.eslogan || ""}
                     onChange={handleInputChange}
                     className="input-empresa"
                   />
@@ -117,7 +123,7 @@ const EmpresaAdmin = () => {
                 <td>
                   <textarea
                     name="mision"
-                    value={empresa.mision}
+                    value={empresa.mision || ""}
                     onChange={handleInputChange}
                     className="input-empresa"
                   />
@@ -133,7 +139,7 @@ const EmpresaAdmin = () => {
                 <td>
                   <textarea
                     name="vision"
-                    value={empresa.vision}
+                    value={empresa.vision || ""}
                     onChange={handleInputChange}
                     className="input-empresa"
                   />
@@ -150,7 +156,7 @@ const EmpresaAdmin = () => {
                   <input
                     type="number"
                     name="tiempoBloqueo"
-                    value={empresa.tiempoBloqueo}
+                    value={empresa.tiempoBloqueo ?? 0}
                     onChange={handleInputChange}
                     className="input-empresa"
                   />

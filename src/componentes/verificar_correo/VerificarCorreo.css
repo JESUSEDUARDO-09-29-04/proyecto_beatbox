@@ -1,36 +1,4 @@
 
-/* Contenedor del Formulario e Imagen */
-.formulario-imagen {
-  display: flex;
-  flex: 1;
-  height: calc(100vh - 100px); /* Ajustar el alto del contenedor */
-}
-
-/* Formulario */
-.formulario {
-  width: 50%;
-  padding: 50px;
-  display: flex;
-  flex-direction: column;
-}
-
-.formulario h2 {
-  margin-bottom: 20px;
-  text-align: center;
-}
-
-.formulario p {
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-.formulario input {
-  padding: 10px;
-  border-radius: 5px;
-  border: 1px solid #ddd;
-  margin-bottom: 20px;
-}
-
 .btn-verificar {
   background-color: #ff8800;
   color: white;
@@ -38,17 +6,6 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
-}
-
-.imagen-lateral {
-  width: 50%;
-  background-color: #e0e0e0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-  font-size: 18px;
-  color: #666;
 }
 
 /* Media Query para Pantallas Pequeñas */

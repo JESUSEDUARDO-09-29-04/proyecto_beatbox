@@ -10,7 +10,49 @@ body, html {
   display: flex;
   flex-direction: column;
 }
+/* Menú Desplegable */
+.menu-desplegable {
+  position: fixed;
+  top: 0;
+  right: -100%;
+  width: 80%; /* Reducir el ancho del menú */
+  max-width: 300px; /* Tamaño máximo del menú */
+  height: 100vh;
+  background-color: white;
+  transition: right 0.3s ease-in-out;
+  padding: 20px;
+  box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+}
 
+.menu-desplegable.activo {
+  right: 0;
+}
+
+/* Botón para cerrar el menú */
+.btn-cerrar {
+  background: none;
+  border: none;
+  font-size: 24px; /* Tamaño del icono de cerrar */
+  cursor: pointer;
+  margin-left: auto;
+}
+
+/* Lista del menú */
+.menu-desplegable ul {
+  list-style: none;
+  padding: 0;
+  margin-top: 20px;
+}
+
+.menu-desplegable ul li {
+  margin-bottom: 15px; /* Espacio entre los elementos del menú */
+}
+
+.menu-desplegable ul li a {
+  text-decoration: none;
+  color: black;
+  font-size: 18px; /* Tamaño del texto dentro del menú */
+}
 /* Navbar */
 .navbar {
   display: flex;
@@ -62,49 +104,7 @@ body, html {
   cursor: pointer;
 }
 
-/* Menú Desplegable */
-.menu-desplegable {
-  position: fixed;
-  top: 0;
-  right: -100%;
-  width: 80%; /* Reducir el ancho del menú */
-  max-width: 300px; /* Tamaño máximo del menú */
-  height: 100vh;
-  background-color: white;
-  transition: right 0.3s ease-in-out;
-  padding: 20px;
-  box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
-}
 
-.menu-desplegable.activo {
-  right: 0;
-}
-
-/* Botón para cerrar el menú */
-.btn-cerrar {
-  background: none;
-  border: none;
-  font-size: 24px; /* Tamaño del icono de cerrar */
-  cursor: pointer;
-  margin-left: auto;
-}
-
-/* Lista del menú */
-.menu-desplegable ul {
-  list-style: none;
-  padding: 0;
-  margin-top: 20px;
-}
-
-.menu-desplegable ul li {
-  margin-bottom: 15px; /* Espacio entre los elementos del menú */
-}
-
-.menu-desplegable ul li a {
-  text-decoration: none;
-  color: black;
-  font-size: 18px; /* Tamaño del texto dentro del menú */
-}
 
 /* Sección de Certificados */
 .certificados-container {

@@ -1,44 +1,71 @@
 /* AdminMenu.css */
+
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  background-color: #fff;
+}
+
+.menu-icono {
+  font-size: 24px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  display: block; /* Siempre muestra el ícono de menú */
+}
+
+/* Estilos para el menú desplegable */
 .menu-desplegable {
-    position: fixed;
-    top: 0;
-    right: -100%;
-    width: 80%;
-    max-width: 300px;
-    height: 100%;
-    background-color: white;
-    z-index: 1000;
-    transform: translateX(-100%);
-    transition: transform 0.3s ease;
-    padding: 20px;
-    overflow-y: auto;
-  }
-  
-  .menu-desplegable.activo {
-    transform: translateX(0);
-  }
-  
-  .submenu {
-    padding-left: 20px;
-    list-style: none;
-  }
-  
-  .submenu li {
-    margin-bottom: 10px;
-  }
-  
+  position: fixed;
+  top: 0;
+  right: -100%; /* Mantiene el menú oculto fuera de la pantalla */
+  width: 80%;
+  max-width: 300px;
+  height: 100%;
+  background-color: white;
+  z-index: 1000;
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+  padding: 20px;
+  overflow-y: auto;
+  box-shadow: -2px 0px 5px rgba(0, 0, 0, 0.3); /* Sombra para diferenciar el menú */
+}
+
+.menu-desplegable.activo {
+  transform: translateX(0); /* Hace que el menú se deslice desde la derecha */
+}
+
+.submenu {
+  padding-left: 20px;
+  list-style: none;
+  margin-top: 10px;
+}
+
+.submenu li {
+  margin-bottom: 15px;
+}
+
+.btn-cerrar {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* Ajustes en pantallas pequeñas */
+@media (max-width: 768px) {
   .menu-icono {
-    font-size: 24px;
-    cursor: pointer;
+    display: block; /* Siempre muestra el ícono de menú */
   }
-  
-  .btn-cerrar {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    font-size: 24px;
-    background: none;
-    border: none;
-    cursor: pointer;
+
+  /* Estilos específicos para asegurar buena visibilidad en pantallas pequeñas */
+  .menu-desplegable {
+    width: 100%; /* Ocupa el ancho completo de la pantalla */
+    max-width: 100%; /* Asegura que no exceda el ancho */
   }
-  
+}
