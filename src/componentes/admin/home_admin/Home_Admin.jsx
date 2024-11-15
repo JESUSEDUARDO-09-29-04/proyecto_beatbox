@@ -14,10 +14,20 @@ const HomeUsuarioAdmin = () => {
     const verificarRol = async () => {
   
       try {
-        const userResponse = await fetch('http://localhost:3000/auth/validate-user', {
+        //ruta local const userResponse = await fetch('http://localhost:3000/auth/validate-user', {
+ 
+        const userResponse = await fetch('https://beatbox-blond.vercel.app/auth/validate-user', {
           method: 'GET',
           credentials: 'include', // Incluye las cookies en la solicitud
         });
+
+        if (!userResponse.ok) {
+          navigate('/iniciar-sesion');
+            
+          if(navigate('/iniciar-sesion') === ""){
+            alert('Error al verificar usuario');
+          }
+        }
 
           if (userResponse.ok){
           const userData = await userResponse.json();
@@ -26,7 +36,7 @@ const HomeUsuarioAdmin = () => {
           if (userRole !== 'admin' ) {
             navigate('/iniciar-sesion');
           }else{
-            
+
             alert('Bienvenido');
           }
         }

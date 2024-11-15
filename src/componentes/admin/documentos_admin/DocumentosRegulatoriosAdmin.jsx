@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect  } from 'react';
 import '../../home/Home.css';
 import './DocumentosRegulatoriosAdmin.css'; // Asegúrate de crear este archivo CSS para los estilos específicos
 import logo from '../../../assets/logo.png';
@@ -7,34 +7,130 @@ import AdminMenu from '../adminMenu';
 
 const DocumentosRegulatoriosAdmin = () => {
   const navigate = useNavigate();
-  const [menuAbierto, setMenuAbierto] = useState(false);
+  const [documentos, setDocumentos] = useState([]);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [documentoId, setDocumentoId] = useState(null);
 
-  // Estado para los documentos
-  const [documentos, setDocumentos] = useState([
-    { id: 1, tipo: "Políticas de privacidad", descripcion: "Descripción del documento de Políticas de Privacidad", version: "1.0", fechaInicio: "2024-10-10", fechaFin: null, vigente: true },
-    { id: 2, tipo: "Deslinde", descripcion: "Descripción del documento de Deslinde", version: "1.0", fechaInicio: "2024-10-10", fechaFin: null, vigente: false },
-    { id: 3, tipo: "Aviso de privacidad", descripcion: "Descripción del documento de aviso de privacidad", version: "1.0", fechaInicio: "2024-10-10", fechaFin: null, vigente: false },
-    // Más documentos
-  ]);
+  const [formDataCrear, setFormDataCrear] = useState({ tipo: '', descripcion: '' });
+  const [formDataEditar, setFormDataEditar] = useState({ descripcion: '' });
 
-  // Función para agregar un nuevo documento
-  const agregarDocumento = () => {
-    // Lógica para agregar un nuevo documento
-    alert("Agregar nuevo documento");
+  useEffect(() => {
+    const cargarDocumentos = async () => {
+      try {
+        const response = await fetch('https://beatbox-blond.vercel.app/documentos', {
+          method: 'GET',
+          credentials: 'include',
+        });
+        if (response.ok) {
+          const data = await response.json();
+          // Verificar si 'data' es un array
+          setDocumentos(Array.isArray(data) ? data : []);
+        } else {
+          console.error('Error en la respuesta del servidor:', response.status);
+          setDocumentos([]);
+        }
+      } catch (error) {
+        console.error('Error al cargar documentos:', error);
+        setDocumentos([]);
+      }
+    };
+    cargarDocumentos();
+  }, []);
+  
+  // Abrir el modal de creación
+  const abrirModalCrear = () => {
+    setFormDataCrear({ tipo: '', descripcion: '' });
+    setIsEditing(false);
+    setModalVisible(true);
   };
 
-  // Función para modificar un documento
-  const modificarDocumento = (id) => {
-    // Lógica para modificar el documento con el ID proporcionado
-    alert(`Modificar documento con ID: ${id}`);
+  // Abrir el modal de edición
+  const abrirModalEditar = (documento) => {
+    setFormDataEditar({ descripcion: documento.descripcion });
+    setDocumentoId(documento._id);
+    setIsEditing(true);
+    setModalVisible(true);
   };
 
-  // Función para eliminar un documento
-  const eliminarDocumento = (id) => {
-    const confirmar = window.confirm("¿Estás seguro de que deseas eliminar este documento?");
-    if (confirmar) {
-      setDocumentos(documentos.filter((doc) => doc.id !== id));
-      alert(`Documento con ID: ${id} eliminado`);
+  const cerrarModal = () => {
+    setModalVisible(false);
+    setFormDataCrear({ tipo: '', descripcion: '' });
+    setFormDataEditar({ descripcion: '' });
+  };
+
+  // Manejar cambios en el formulario de creación
+  const handleChangeCrear = (e) => {
+    setFormDataCrear({ ...formDataCrear, [e.target.name]: e.target.value });
+  };
+
+  // Manejar cambios en el formulario de edición
+  const handleChangeEditar = (e) => {
+    setFormDataEditar({ ...formDataEditar, [e.target.name]: e.target.value });
+  };
+
+  // Enviar el formulario de creación
+  const handleFormSubmitCrear = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch('https://beatbox-blond.vercel.app/documentos', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formDataCrear),
+        credentials: 'include',
+      });
+      const data = await response.json();
+
+      if (response.ok) {
+        setDocumentos([...documentos, data]);
+        cerrarModal();
+      } else {
+        console.error('Error en el servidor:', data);
+      }
+    } catch (error) {
+      console.error('Error de red:', error);
+    }
+  };
+
+  // Enviar el formulario de edición
+  const handleFormSubmitEditar = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch(`https://beatbox-blond.vercel.app/documentos/${documentoId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formDataEditar),
+        credentials: 'include',
+      });
+      const data = await response.json();
+
+      if (response.ok) {
+        setDocumentos(documentos.map((doc) => (doc._id === documentoId ? data : doc)));
+        cerrarModal();
+      } else {
+        console.error('Error en el servidor:', data);
+      }
+    } catch (error) {
+      console.error('Error de red:', error);
+    }
+  };
+
+  const eliminarDocumento = async (id) => {
+    const confirmar = window.confirm('¿Estás seguro de que deseas eliminar este documento?');
+    if (!confirmar) return;
+
+    try {
+      const response = await fetch(`https://beatbox-blond.vercel.app/documentos/${id}`, {
+        method: 'DELETE',
+        credentials: 'include',
+      });
+      if (response.ok) {
+        setDocumentos((prevDocs) => prevDocs.filter((doc) => doc._id !== id));
+      } else {
+        console.error('Error al eliminar documento');
+      }
+    } catch (error) {
+      console.error('Error de red al eliminar documento:', error);
     }
   };
 
@@ -47,7 +143,7 @@ const DocumentosRegulatoriosAdmin = () => {
         <div className="deslinde-admin-contenedor">
           <header className="deslinde-admin-header">
             <h1>Filtro de documentos por tipo o vigentes</h1>
-            <button className="btn-agregar" onClick={agregarDocumento}>Agregar nuevo documento</button>
+            <button className="btn-agregar" onClick={abrirModalCrear}>Agregar nuevo documento</button>
           </header>
 
           {/* Tabla de documentos */}
@@ -64,25 +160,19 @@ const DocumentosRegulatoriosAdmin = () => {
               </tr>
             </thead>
             <tbody>
-              {documentos.map((documento) => (
-                <tr key={documento.id}>
+              {Array.isArray(documentos) && documentos.map((documento) => (
+                <tr key={documento._id}>
                   <td>{documento.tipo}</td>
                   <td>{documento.descripcion}</td>
                   <td>{documento.version}</td>
-                  <td>{documento.fechaInicio}</td>
-                  <td>{documento.fechaFin || "N/A"}</td>
-                  <td>{documento.vigente ? "Sí" : "No"}</td>
+                  <td>{new Date(documento.fechaInicio).toLocaleDateString()}</td>
+                  <td>{documento.fechaFin ? new Date(documento.fechaFin).toLocaleDateString() : 'N/A'}</td>
+                  <td>{documento.vigente ? 'Sí' : 'No'}</td>
                   <td>
-                    <button
-                      className="btn-modificar"
-                      onClick={() => modificarDocumento(documento.id)}
-                    >
+                    <button className="btn-modificar" onClick={() => abrirModalEditar(documento)}>
                       Modificar
                     </button>
-                    <button
-                      className="btn-eliminar"
-                      onClick={() => eliminarDocumento(documento.id)}
-                    >
+                    <button className="btn-eliminar" onClick={() => eliminarDocumento(documento._id)}>
                       Eliminar
                     </button>
                   </td>
@@ -92,7 +182,46 @@ const DocumentosRegulatoriosAdmin = () => {
           </table>
         </div>
       </main>
-
+      {modalVisible && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <h2>{isEditing ? 'Modificar Documento' : 'Agregar Documento'}</h2>
+            <form onSubmit={isEditing ? handleFormSubmitEditar : handleFormSubmitCrear}>
+              {!isEditing && (
+                <>
+                  <label>
+                    Tipo
+                    <select name="tipo" value={formDataCrear.tipo} onChange={handleChangeCrear} required>
+                      <option value="">Seleccione un tipo</option>
+                      <option value="Políticas de privacidad">Políticas de privacidad</option>
+                      <option value="Deslinde">Deslinde</option>
+                      <option value="Perfil de la Empresa">Perfil de la Empresa</option>
+                      <option value="Términos y condiciones">Términos y condiciones</option>
+                    </select>
+                  </label>
+                </>
+              )}
+              <label>
+                Descripción
+                <textarea
+                  name="descripcion"
+                  value={isEditing ? formDataEditar.descripcion : formDataCrear.descripcion}
+                  onChange={isEditing ? handleChangeEditar : handleChangeCrear}
+                  required
+                />
+              </label>
+              <div className="button-group">
+                <button type="submit" className="btn-guardar">
+                  {isEditing ? 'Guardar Cambios' : 'Agregar Documento'}
+                </button>
+                <button type="button" className="btn-cancelar" onClick={cerrarModal}>
+                  Cancelar
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
       {/* Footer */}
       <footer className="footer">
         <img src={logo} alt="Logo Beatbox" className="logo-footer" />

@@ -13,12 +13,19 @@ useEffect(() => {
   const verificarRol = async () => {
 
     try {
-      const userResponse = await fetch('http://localhost:3000/auth/validate-user', {
+      const userResponse = await fetch('https://beatbox-blond.vercel.app/auth/validate-user', {
         method: 'GET',
         credentials: 'include', // Incluye las cookies en la solicitud
       });
 
-      
+      if (!userResponse.ok) {
+        navigate('/iniciar-sesion');
+          
+        if(navigate('/iniciar-sesion') === ""){
+          alert('Error al verificar usuario');
+        }
+      }
+
       if (userResponse.ok) {
         const userData = await userResponse.json();
         const userRole = userData.role;
@@ -40,20 +47,30 @@ useEffect(() => {
 };
 
 verificarRol();
-}, [navigate]); // Se ejecuta al montar el componente
+}, [navigate]);
 
 
-
-
-  
   const toggleMenu = () => {
     setMenuAbierto(!menuAbierto);
   };
 
   // Función para cerrar sesión
-  const manejarCerrarSesion = () => {
-    
-    navigate('/iniciar-sesion'); // Redirige a la página de inicio de sesión.
+  const manejarCerrarSesion = async () => {
+    try {
+      const response = await fetch('https://beatbox-blond.vercel.app/auth/logout', {
+        method: 'POST',
+        credentials: 'include', // Incluye las cookies en la solicitud
+      }); 
+
+      if (response.ok) {
+        navigate('/iniciar-sesion'); // Redirige a la página de inicio de sesión si la respuesta es exitosa
+      } else {
+        console.error('Error al cerrar sesión');
+        alert('Error al cerrar sesión');
+      }
+    } catch (error) {
+      console.error('Error de red al cerrar sesión', error);
+    }
   };
 
   return (

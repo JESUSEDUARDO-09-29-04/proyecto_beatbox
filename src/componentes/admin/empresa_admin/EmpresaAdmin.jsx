@@ -24,13 +24,7 @@ const EmpresaAdmin = () => {
     const fetchEmpresaData = async () => {
       try {
         const response = await axios.get('/api/empresa');
-        setEmpresa({
-          logo: response.data.logo || "", // Logo o cadena vacía
-          eslogan: response.data.eslogan || "", // Cadena vacía si es undefined
-          mision: response.data.mision || "",
-          vision: response.data.vision || "",
-          tiempoBloqueo: response.data.tiempoBloqueo ?? 0, // 0 si es undefined o null
-        });
+        setEmpresa(response.data);
       } catch (error) {
         console.error("Error fetching company data:", error);
       }
@@ -38,7 +32,6 @@ const EmpresaAdmin = () => {
 
     fetchEmpresaData();
   }, []);
-
   // Manejar cambios en los inputs
   const handleInputChange = (e) => {
     const { name, value } = e.target;

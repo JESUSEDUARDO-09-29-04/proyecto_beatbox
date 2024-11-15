@@ -36,7 +36,7 @@ const InicioSesion = () => {
     };
 
     try {
-      const loginResponse = await fetch('http://localhost:3000/auth/login', {
+      const loginResponse = await fetch('https://beatbox-blond.vercel.app/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include', // Incluye cookies en la solicitud
@@ -45,7 +45,7 @@ const InicioSesion = () => {
 
       if (loginResponse.ok) {
         // Verificación del rol del usuario mediante la ruta /validate-user
-        const userResponse = await fetch('http://localhost:3000/auth/validate-user', {
+        const userResponse = await fetch('https://beatbox-blond.vercel.app/auth/validate-user', {
           method: 'GET',
           credentials: 'include', // Asegura el envío de la cookie
         });

@@ -247,7 +247,7 @@ const Registro = () => {
             Registrar
           </button>
           <div className="links">
-            <a className="iniciar-sesion">¿Ya tienes una cuenta? Iniciar sesión.</a>
+          <Link to="/iniciar-sesion" className="olvidaste-contrasena">¿Ya tienes una cuenta? Iniciar sesión.</Link>
           </div>
         </form>
 
