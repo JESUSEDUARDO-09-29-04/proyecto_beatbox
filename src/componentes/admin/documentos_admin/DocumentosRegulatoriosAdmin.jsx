@@ -22,17 +22,10 @@ const DocumentosRegulatoriosAdmin = () => {
           method: 'GET',
           credentials: 'include',
         });
-        if (response.ok) {
-          const data = await response.json();
-          // Verificar si 'data' es un array
-          setDocumentos(Array.isArray(data) ? data : []);
-        } else {
-          console.error('Error en la respuesta del servidor:', response.status);
-          setDocumentos([]);
-        }
+        const data = await response.json();
+        setDocumentos(data);
       } catch (error) {
         console.error('Error al cargar documentos:', error);
-        setDocumentos([]);
       }
     };
     cargarDocumentos();
@@ -160,7 +153,7 @@ const DocumentosRegulatoriosAdmin = () => {
               </tr>
             </thead>
             <tbody>
-              {Array.isArray(documentos) && documentos.map((documento) => (
+              {documentos.map((documento) => (
                 <tr key={documento._id}>
                   <td>{documento.tipo}</td>
                   <td>{documento.descripcion}</td>

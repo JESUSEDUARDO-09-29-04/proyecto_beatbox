@@ -1,34 +1,75 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AdminMenu from '../adminMenu';
 import './UsuariosAdmin.css';
 import '../../home/Home.css';
 import logo from '../../../assets/logo.png';
 
 const UsuariosAdmin = () => {
-  const [usuarios, setUsuarios] = useState([
-    { id: 1, nombre: "Usuario 1", email: "usuario1@correo.com", fechaCreacion: "Nov 1, 2024", rol: "Administrador", bloqueado: false },
-    { id: 2, nombre: "Usuario 2", email: "usuario2@correo.com", fechaCreacion: "Nov 3, 2024", rol: "Usuario", bloqueado: true },
-  ]);
+  const [usuarios, setUsuarios] = useState([]); // Lista de usuarios
 
-  // Función para alternar el estado de bloqueo
-  const toggleBlockStatus = (userId) => {
-    setUsuarios((prevUsuarios) =>
-      prevUsuarios.map((usuario) =>
-        usuario.id === userId ? { ...usuario, bloqueado: !usuario.bloqueado } : usuario
-      )
-    );
+
+
+  useEffect(() => {
+    const cargarUsuarios = async () => {
+      try {
+        const response = await fetch('https://beatbox-blond.vercel.app/usuarios', {
+          method: 'GET',
+          credentials: 'include',
+        });
+        const data = await response.json();
+        setUsuarios(data);
+      } catch (error) {
+        console.error('Error al cargar usuarios:', error);
+      }
+    };
+    cargarUsuarios();
+  }, []);
+
+  const eliminarUsuario = async (userId, userName) => {
+    const confirmacion = window.confirm(`¿Estás seguro de que deseas eliminar a ${userName}?`);
+    if (!confirmacion) return;
+
+    try {
+      const response = await fetch(`https://beatbox-blond.vercel.app/usuarios/${userId}`, {
+        method: 'DELETE',
+        credentials: 'include',
+      });
+      
+      if (response.ok) {
+        setUsuarios((prevUsuarios) => prevUsuarios.filter((usuario) => usuario._id !== userId));
+        alert(`El usuario ${userName} ha sido eliminado exitosamente.`);
+      } else {
+        console.error('Error al eliminar usuario');
+      }
+    } catch (error) {
+      console.error('Error de red al eliminar usuario:', error);
+    }
   };
 
-  // Función para agregar un nuevo usuario
-  const agregarUsuario = () => {
-    alert("Agregar Nuevo Usuario");
-  };
+  // Bloqueo/desbloqueo con duración anual
+  const toggleBloqueoUsuario = async (userId, bloqueado) => {
+    const endpoint = bloqueado 
+      ? `https://beatbox-blond.vercel.app/incidents/unblock/${userId}`
+      : `https://beatbox-blond.vercel.app/block/${userId}`;
 
-  // Función para eliminar un usuario
-  const eliminarUsuario = (id) => {
-    const confirmar = window.confirm("¿Estás seguro de que deseas eliminar este usuario?");
-    if (confirmar) {
-      setUsuarios(usuarios.filter((usuario) => usuario.id !== id));
+    try {
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        credentials: 'include',
+      });
+
+      if (response.ok) {
+        setUsuarios((prevUsuarios) =>
+          prevUsuarios.map((usuario) =>
+            usuario._id === userId ? { ...usuario, bloqueado: !usuario.bloqueado } : usuario
+          )
+        );
+        alert(`El usuario ha sido ${bloqueado ? 'desbloqueado' : 'bloqueado'} exitosamente.`);
+      } else {
+        console.error('Error al cambiar estado de bloqueo');
+      }
+    } catch (error) {
+      console.error('Error de red al cambiar estado de bloqueo:', error);
     }
   };
 
@@ -41,7 +82,7 @@ const UsuariosAdmin = () => {
         <div className="usuarios-admin-contenedor">
           <header className="usuarios-admin-header">
             <h1>Usuarios Administrativos</h1>
-            <button className="btn-agregar" onClick={agregarUsuario}>Agregar Nuevo Usuario</button>
+            
           </header>
           
           <table className="tabla-admin">
@@ -51,28 +92,29 @@ const UsuariosAdmin = () => {
                 <th>Email</th>
                 <th>Fecha de Creación</th>
                 <th>Rol</th>
-                <th>Estado</th>
-                <th>Acciones</th>
               </tr>
             </thead>
             <tbody>
               {usuarios.map((usuario) => (
-                <tr key={usuario.id}>
-                  <td data-label="Nombre">{usuario.nombre}</td>
-                  <td data-label="Email">{usuario.email}</td>
-                  <td data-label="Fecha de Creación">{usuario.fechaCreacion}</td>
-                  <td data-label="Rol">{usuario.rol}</td>
-                  <td data-label="Estado">
+                <tr key={usuario._id}>
+                  <td data-label="Nombre">{usuario.usuario}</td>
+                  <td data-label="Email">{usuario.correo_Electronico}</td>
+                  <td style={{ color: usuario.role === 'admin' ? 'green' : 'black' }}>
+                    {usuario.role}
+                  </td>
+                  <td>
                     <button
                       className={`btn-estado ${usuario.bloqueado ? 'bloqueado' : 'activo'}`}
-                      onClick={() => toggleBlockStatus(usuario.id)}
+                      onClick={() => toggleBloqueoUsuario(usuario._id, usuario.bloqueado)}
                     >
-                      {usuario.bloqueado ? "Desbloquear" : "Bloquear"}
+                      {usuario.bloqueado ? 'Desbloquear' : 'Bloquear'}
                     </button>
-                  </td>
-                  <td data-label="Acciones">
-                    <button className="btn-accion modificar">Editar</button>
-                    <button className="btn-accion eliminar" onClick={() => eliminarUsuario(usuario.id)}>Eliminar</button>
+                    <button
+                      className="btn-eliminar"
+                      onClick={() => eliminarUsuario(usuario._id, usuario.usuario)}
+                    >
+                      Eliminar
+                    </button>
                   </td>
                 </tr>
               ))}
