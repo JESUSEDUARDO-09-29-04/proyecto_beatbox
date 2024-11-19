@@ -1,145 +1,167 @@
-/* General Table Styling */
-body, html {
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
+.btn-estado.activo {
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
-.usuarios-admin-contenedor {
-  padding: 20px;
-  background-color: #f9f9f9;
+.btn-estado.activo:hover {
+  background-color: #4caf4fc3;
 }
 
-.usuarios-admin-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
+/* Button style when user is blocked */
+.btn-estado.bloqueado {
+  background-color: #ff850a;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
-.tabla-admin {
+.btn-estado.bloqueado:hover {
+  background-color: #ff840aa3;
+}
+
+  
+  .usuarios-admin-contenedor {
+    flex: 1; 
+    margin-bottom: 10px; /* Espacio inferior para separar la tabla del footer */
+  }
+  
+  /* Estilo del footer */
+  .footer {
+    background-color: black;
+    color: white;
+    padding: 10px;
+    text-align: center;
+    margin-top: 20px; 
+  }
+  
+  .button-group {
+      display: flex;
+      gap: 15px; 
+    }
+    
+    /* Tabla base */
+.usuarios-tabla {
   width: 100%;
-  border-collapse: collapse;
-  margin-top: 10px;
-  background-color: #f9f9f9;
+  border-collapse: collapse; /* Elimina espacios entre bordes */
+  margin-top: 20px;
+  background-color: #fff;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  color: #333;
 }
 
-.tabla-admin th, .tabla-admin td {
-  padding: 10px;
+.usuarios-tabla th,
+.usuarios-tabla td {
   text-align: center;
-  border: 1px solid #ddd;
+  padding: 10px;
+  border: 1px solid #ddd; /* Bordes suaves */
 }
 
-.tabla-admin th {
-  background-color: #ff6600;
+.usuarios-tabla thead th {
+  background-color: #ff6600; /* Fondo naranja para encabezados */
   color: white;
+  font-weight: bold;
+  text-transform: uppercase;
 }
 
-.tabla-admin tbody tr:hover {
-  background-color: #f1f1f1;
+.usuarios-tabla tbody tr:nth-child(even) {
+  background-color: #f9f9f9; /* Fila alternada */
 }
 
-/* Responsive Table Styling */
+.usuarios-tabla tbody tr:hover {
+  background-color: #f1f1f1; /* Color de fondo al pasar el ratón */
+}
+
+/* Colores del rol */
+.usuarios-tabla td.rol {
+  font-weight: bold;
+}
+
+/* "admin" siempre es verde */
+.usuarios-tabla td.rol.admin {
+  color: #29b529;
+}
+
+/* "usuario" cambia según el tema */
+.app.light .usuarios-tabla td.rol.usuario {
+  color: black; /* Negro para tema claro */
+}
+
+.app.dark .usuarios-tabla td.rol.usuario {
+  color: white; /* Blanco para tema oscuro */
+}
+
+/* Responsividad */
 @media (max-width: 768px) {
-  .tabla-admin, .tabla-admin thead, .tabla-admin tbody, .tabla-admin th, .tabla-admin td, .tabla-admin tr {
+  .usuarios-tabla {
     display: block;
-    width: 100%;
+    overflow-x: auto; /* Permite desplazamiento horizontal si es necesario */
+    white-space: nowrap;
   }
 
-  .tabla-admin thead {
+  .usuarios-tabla thead {
     display: none; /* Oculta los encabezados en pantallas pequeñas */
   }
 
-  .tabla-admin tr {
-    margin-bottom: 15px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
+  .usuarios-tabla tbody tr {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+    border: 1px solid #ddd; /* Opcional: Bordes alrededor de cada fila */
     padding: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff; /* Ajustar para modo claro */
   }
 
-  .tabla-admin td {
+  .usuarios-tabla tbody tr td {
     display: flex;
     justify-content: space-between;
-    padding: 8px 10px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-    position: relative;
-    padding-left: 50%;
-    box-sizing: border-box;
+    padding: 5px 10px;
+    border: none; /* Quita los bordes entre las celdas */
   }
 
-  .tabla-admin td:last-child {
-    border-bottom: 0;
-  }
-
-  .tabla-admin td::before {
-    content: attr(data-label); /* Usa el atributo data-label para etiquetas responsivas */
-    position: absolute;
-    left: 10px;
+  .usuarios-tabla tbody tr td::before {
+    content: attr(data-label); /* Muestra el encabezado como etiqueta */
     font-weight: bold;
-    text-transform: capitalize;
+    text-transform: uppercase;
+    margin-right: 10px;
+    color: #555;
+  }
+
+  /* Ajustes para tema oscuro */
+  .app.dark .usuarios-tabla tbody tr {
+    background-color: #333333; /* Fondo oscuro */
+  }
+
+  .app.dark .usuarios-tabla tbody tr td::before {
+    color: #cccccc; /* Etiquetas claras en modo oscuro */
   }
 }
-
-/* Button Styles */
-.btn-agregar {
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  cursor: pointer;
-  border-radius: 4px;
+/* Estilos del modal en modo oscuro */
+.app.dark .modal {
+  background-color: #333333;
+  color: #ffffff;
 }
 
-.btn-agregar:hover {
-  background-color: #ffb300;
+.app.dark .modal textarea,
+.app.dark .modal select,
+.app.dark .modal input[type="text"] {
+  background-color: #444444;
+  color: #ffffff;
+  border: 1px solid #555555;
 }
 
-.btn-accion {
-  padding: 5px 10px;
-  margin-right: 5px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 14px;
-  color: white;
+.app.dark .modal .btn-guardar {
+  background-color: #28a745;
+  color: #ffffff;
 }
 
-.btn-accion.modificar {
-  background-color: #4CAF50;
-}
-
-.btn-accion.eliminar {
-  background-color: #f44336;
-}
-
-.btn-accion.modificar:hover {
-  background-color: #45a049;
-}
-
-.btn-accion.eliminar:hover {
-  background-color: #e53935;
-}
-
-/* Estado de usuarios */
-.btn-estado {
-  padding: 5px 10px;
-  font-size: 14px;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.btn-estado.activo {
-  background-color: #4CAF50;
-}
-
-.btn-estado.bloqueado {
+.app.dark .modal .btn-cancelar {
   background-color: #dc3545;
-}
-
-.btn-estado.activo:hover, .btn-estado.bloqueado:hover {
-  opacity: 0.8;
+  color: #ffffff;
 }

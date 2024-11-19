@@ -24,17 +24,17 @@ const InicioSesion = () => {
   const manejarEnvio = async (e) => {
     e.preventDefault();
     setError('');
-
+  
     if (bloqueado) {
       setError(`Cuenta bloqueada. Espera ${tiempoRestante} segundos antes de intentar nuevamente.`);
       return;
     }
-
+  
     const requestBody = {
       usuario,
       contraseña: contrasena,
     };
-
+  
     try {
       const loginResponse = await fetch('https://beatbox-blond.vercel.app/auth/login', {
         method: 'POST',
@@ -42,18 +42,18 @@ const InicioSesion = () => {
         credentials: 'include', // Incluye cookies en la solicitud
         body: JSON.stringify(requestBody),
       });
-
+  
       if (loginResponse.ok) {
         // Verificación del rol del usuario mediante la ruta /validate-user
         const userResponse = await fetch('https://beatbox-blond.vercel.app/auth/validate-user', {
           method: 'GET',
           credentials: 'include', // Asegura el envío de la cookie
         });
-
+  
         if (userResponse.ok) {
           const userData = await userResponse.json();
           const userRole = userData.role;
-
+  
           // Redirige según el rol del usuario
           if (userRole === 'user') {
             navigate('/home-login');
@@ -66,7 +66,13 @@ const InicioSesion = () => {
           setError('Error al obtener datos del usuario');
         }
       } else {
-        setError('Credenciales incorrectas');
+        // Manejo de errores específicos
+        const errorData = await loginResponse.json();
+        if (loginResponse.status === 403) {
+          setError(errorData.message || 'Cuenta bloqueada');
+        } else {
+          setError('Credenciales incorrectas');
+        }
       }
     } catch (error) {
       setError('Error de red al iniciar sesión');

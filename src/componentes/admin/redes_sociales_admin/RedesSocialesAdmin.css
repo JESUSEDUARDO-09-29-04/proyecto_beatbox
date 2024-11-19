@@ -1,37 +1,232 @@
-.admin-redes {
-    margin: 100px 20px 20px; /* Aumenta el margen superior a 40px para separarlo del header */
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 10px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+.redes-sociales-tabla {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.redes-sociales-tabla th, .redes-sociales-tabla td {
+  text-align: center;
+  padding: 10px;
+  border: 1px solid #ddd;
+}
+
+.redes-sociales-tabla th {
+  background-color: #ff6600;
+  color: white;
+}
+
+.redes-sociales-tabla tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.redes-sociales-tabla tbody tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* Botón de Agregar Red Social */
+.btn-agregar {
+  background-color: #f0ad4e;
+  color: white;
+  border: none;
+  width: 10%;
+  height: auto;
+  border-radius: 5px;
+  font-size: 14px; /* Ajustar el tamaño de la fuente */
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+btn-agregar:hover {
+  background-color: #ec971f;
+}
+
+.input-grande {
+  width: 80%;       /* Ancho completo */
+  padding: 10px;     /* Espaciado interno */
+  font-size: 16px;   /* Tamaño de fuente */
+  border-radius: 5px; /* Bordes redondeados */
+  border: 1px solid #ddd; /* Borde ligero */
+}
+
+.modal .button-group {
+  display: flex;
+  justify-content: center; /* Centra los botones */
+  gap: 10px; /* Espaciado uniforme entre los botones */
+  margin-top: 20px;
+}
+
+.modal .button-group button {
+  padding: 6px 12px;
+  font-size: 14px;
+  border-radius: 5px;
+  width: 100px; /* Asigna un ancho fijo a ambos botones */
+  text-align: center; /* Centra el texto dentro del botón */
+}
+
+.modal .button-group .btn-guardar {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.modal .button-group .btn-guardar:hover {
+  background-color: #218838;
+}
+
+.modal .button-group .btn-cancelar {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.modal .button-group .btn-cancelar:hover {
+  background-color: #c82333;
+}
+
+
+.btn-modificar {
+  background-color: #007bff;
+}
+
+.btn-modificar:hover {
+  background-color: #0056b3;
+}
+
+.btn-eliminar {
+  background-color: #dc3545;
+}
+
+.btn-eliminar:hover {
+  background-color: #c82333;
+}
+/* Estilo base para las filas */
+.redes-sociales-tabla tbody tr {
+  background-color: #ffffff; /* Fondo claro para modo normal */
+}
+
+.redes-sociales-tabla tbody tr[data-tipo="instagram"] {
+  background-color: #f9f9f9; /* Fondo específico para Instagram */
+}
+
+/* Modo oscuro: Cambia el fondo de las filas */
+.app.dark .redes-sociales-tabla tbody tr {
+  background-color: #333333; /* Fondo oscuro general */
+}
+
+.app.dark .redes-sociales-tabla tbody tr[data-tipo="instagram"] {
+  background-color: #444444; /* Fondo específico para Instagram en modo oscuro */
+}
+
+/* Hover (Opcional, si quieres que se comporte igual en ambos temas) */
+.redes-sociales-tabla tbody tr:hover {
+  background-color: #f1f1f1; /* Fondo claro al pasar el cursor */
+}
+
+.app.dark .redes-sociales-tabla tbody tr:hover {
+  background-color: #555555; /* Fondo oscuro al pasar el cursor */
+}
+/* Estilos específicos para pantallas pequeñas */
+@media (max-width: 768px) {
+  /* Oculta la estructura de tabla para dispositivos pequeños */
+  .redes-sociales-tabla {
+    display: block; /* Convertir la tabla en un bloque */
   }
-  
-  .red-social {
+
+  .redes-sociales-tabla thead {
+    display: none; /* Ocultar el encabezado */
+  }
+
+  .redes-sociales-tabla tbody tr {
     display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-top: 10px;
-  }
-  
-  .input-enlace {
-    flex: 1;
-    padding: 8px;
-    font-size: 16px;
-    border: 1px solid #ddd;
+    flex-direction: column; /* Convertir cada fila en un bloque */
+    margin-bottom: 15px; /* Espaciado entre bloques */
+    border: 1px solid #ddd; /* Añadir borde para cada bloque */
+    background-color: var(--bg-color, #f9f9f9); /* Fondo dinámico basado en el tema */
     border-radius: 5px;
+    padding: 10px;
   }
-  
-  .btn-actualizar {
-    padding: 8px 12px;
-    background-color: #28a745;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+
+  .redes-sociales-tabla tbody tr td {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border: none; /* Quitar bordes entre celdas */
   }
-  
-  .btn-actualizar:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
+
+  .redes-sociales-tabla tbody tr td::before {
+    content: attr(data-label); /* Mostrar la etiqueta */
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-right: 10px;
+   
   }
-  
+
+  /* Ajustar botones */
+  .redes-sociales-tabla tbody tr td .btn-modificar,
+  .redes-sociales-tabla tbody tr td .btn-eliminar {
+    width: 48%; /* Botones ocupan la mitad del ancho */
+    margin: 2px 0;
+  }
+}
+/* Ajuste responsivo para el botón */
+@media (max-width: 768px) {
+  .btn-agregar {
+    width: 100%; /* Ocupa todo el ancho disponible */
+    text-align: center;
+  }
+}
+/* Ajuste del botón y texto en modo oscuro */
+.app.dark .btn-agregar { /* Fondo oscuro */
+  color: Darck; /* Texto blanco */
+}
+
+.app.dark .btn-agregar:hover {
+  background-color: #555555; /* Fondo más claro al pasar el cursor */
+}
+
+/* Ajuste del texto en modo oscuro */
+.app.dark .redes-sociales-tabla tbody tr td {
+  color: white; /* Asegura que el texto sea visible */
+}
+
+.app.dark .redes-sociales-tabla tbody tr td a {
+  color: #1e90ff; /* Azul claro para los enlaces */
+}
+
+.app.dark .redes-sociales-tabla tbody tr td a:hover {
+  color: #63b8ff; /* Azul más claro al pasar el cursor */
+}
+
+/* Ajuste responsivo */
+@media (max-width: 768px) {
+  .btn-agregar {
+    width: 100%; /* Ocupa todo el ancho disponible en pantallas pequeñas */
+    text-align: center;
+  }
+}
+/* Estilos del modal en modo oscuro */
+.app.dark .modal {
+  background-color: #333333;
+  color: #ffffff;
+}
+
+.app.dark .modal textarea,
+.app.dark .modal select,
+.app.dark .modal input[type="text"] {
+  background-color: #444444;
+  color: #ffffff;
+  border: 1px solid #555555;
+}
+
+.app.dark .modal .btn-guardar {
+  background-color: #28a745;
+  color: #ffffff;
+}
+
+.app.dark .modal .btn-cancelar {
+  background-color: #dc3545;
+  color: #ffffff;
+}

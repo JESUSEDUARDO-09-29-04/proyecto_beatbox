@@ -529,3 +529,55 @@
   font-size: 14px; /* Reducir el tamaño de fuente de los botones */
 }
 }
+/* Tema claro */
+.app.light .redes-sociales-tabla {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+/* Tema oscuro */
+.app.dark .redes-sociales-tabla {
+  background-color: #242323;
+  color: #ffffff;
+}
+
+/* Hover en modo oscuro */
+.app.dark .redes-sociales-tabla tbody tr:hover {
+  background-color: #333333;
+}
+
+
+.app.light .usuarios-tabla thead th {
+  background-color: #ff6600; /* Encabezados en naranja */
+  color: #ffffff; /* Texto blanco */
+}
+
+.app.light .usuarios-tabla tbody tr:nth-child(even) {
+  background-color: #f9f9f9; /* Fondo alternado claro */
+}
+
+.app.light .usuarios-tabla tbody tr:hover {
+  background-color: #f1f1f1; /* Fondo gris claro al hover */
+}
+
+/* Tabla en tema oscuro */
+.app.dark .usuarios-tabla {
+  background-color: #242323; /* Fondo oscuro */
+  color: #ffffff; /* Texto blanco */
+  border-color: #444444; /* Bordes más oscuros */
+}
+
+.app.dark .usuarios-tabla thead th {
+  background-color: #333333; /* Fondo oscuro para encabezados */
+  color: #ffffff; /* Texto blanco */
+}
+
+.app.dark .usuarios-tabla tbody tr:nth-child(even) {
+  background-color: #3a3a3a; /* Fondo alternado oscuro */
+}
+
+.app.dark .usuarios-tabla tbody tr:hover {
+  background-color: #444444; /* Fondo más claro al hover */
+}
+
+

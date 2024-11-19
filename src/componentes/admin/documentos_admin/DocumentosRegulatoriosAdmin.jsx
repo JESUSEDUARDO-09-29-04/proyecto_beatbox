@@ -1,6 +1,6 @@
-import React, { useState, useEffect  } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../../home/Home.css';
-import './DocumentosRegulatoriosAdmin.css'; // Asegúrate de crear este archivo CSS para los estilos específicos
+import './DocumentosRegulatoriosAdmin.css';
 import logo from '../../../assets/logo.png';
 import { useNavigate } from 'react-router-dom';
 import AdminMenu from '../adminMenu';
@@ -8,12 +8,54 @@ import AdminMenu from '../adminMenu';
 const DocumentosRegulatoriosAdmin = () => {
   const navigate = useNavigate();
   const [documentos, setDocumentos] = useState([]);
+  const [filtro, setFiltro] = useState('vigentes'); // Default: "vigentes"
+  const [tiposDisponibles, setTiposDisponibles] = useState([]); // Tipos de documentos para filtrar
+  const [tipoSeleccionado, setTipoSeleccionado] = useState(''); // Tipo seleccionado
   const [modalVisible, setModalVisible] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [documentoId, setDocumentoId] = useState(null);
-
   const [formDataCrear, setFormDataCrear] = useState({ tipo: '', descripcion: '' });
   const [formDataEditar, setFormDataEditar] = useState({ descripcion: '' });
+  const [disableDefaultOption, setDisableDefaultOption] = useState(false); 
+
+  useEffect(() => {
+    const verificarRol = async () => {
+  
+      try {
+        //ruta local const userResponse = await fetch('http://localhost:3000/auth/validate-user', {
+        const userResponse = await fetch('https://beatbox-blond.vercel.app/auth/validate-user', {
+          method: 'GET',
+          credentials: 'include', // Incluye las cookies en la solicitud
+        });
+
+        if (!userResponse.ok) {
+          navigate('/iniciar-sesion');
+            
+          if(navigate('/iniciar-sesion') === ""){
+            alert('Error al verificar usuario');
+          }
+        }
+
+          if (userResponse.ok){
+          const userData = await userResponse.json();
+          const userRole = userData.role;
+
+          if (userRole !== 'admin' ) {
+            navigate('/iniciar-sesion');
+          }
+        }
+      
+    
+    
+    } catch (error) {
+      console.error('Error de red al iniciar sesión', error);
+
+  }
+  };
+  
+  verificarRol();
+  }, [navigate]); 
+
 
   useEffect(() => {
     const cargarDocumentos = async () => {
@@ -24,21 +66,23 @@ const DocumentosRegulatoriosAdmin = () => {
         });
         const data = await response.json();
         setDocumentos(data);
+
+        // Extraer tipos únicos
+        const tipos = [...new Set(data.map((doc) => doc.tipo))];
+        setTiposDisponibles(tipos);
       } catch (error) {
         console.error('Error al cargar documentos:', error);
       }
     };
     cargarDocumentos();
   }, []);
-  
-  // Abrir el modal de creación
+
   const abrirModalCrear = () => {
     setFormDataCrear({ tipo: '', descripcion: '' });
     setIsEditing(false);
     setModalVisible(true);
   };
 
-  // Abrir el modal de edición
   const abrirModalEditar = (documento) => {
     setFormDataEditar({ descripcion: documento.descripcion });
     setDocumentoId(documento._id);
@@ -52,17 +96,14 @@ const DocumentosRegulatoriosAdmin = () => {
     setFormDataEditar({ descripcion: '' });
   };
 
-  // Manejar cambios en el formulario de creación
   const handleChangeCrear = (e) => {
     setFormDataCrear({ ...formDataCrear, [e.target.name]: e.target.value });
   };
 
-  // Manejar cambios en el formulario de edición
   const handleChangeEditar = (e) => {
     setFormDataEditar({ ...formDataEditar, [e.target.name]: e.target.value });
   };
 
-  // Enviar el formulario de creación
   const handleFormSubmitCrear = async (e) => {
     e.preventDefault();
     try {
@@ -85,7 +126,6 @@ const DocumentosRegulatoriosAdmin = () => {
     }
   };
 
-  // Enviar el formulario de edición
   const handleFormSubmitEditar = async (e) => {
     e.preventDefault();
     try {
@@ -118,7 +158,9 @@ const DocumentosRegulatoriosAdmin = () => {
         credentials: 'include',
       });
       if (response.ok) {
-        setDocumentos((prevDocs) => prevDocs.filter((doc) => doc._id !== id));
+        setDocumentos((prevDocs) =>
+          prevDocs.map((doc) => (doc._id === id ? { ...doc, eliminado: true, fechaFin: new Date() } : doc))
+        );
       } else {
         console.error('Error al eliminar documento');
       }
@@ -127,19 +169,75 @@ const DocumentosRegulatoriosAdmin = () => {
     }
   };
 
+  const documentosFiltrados = () => {
+    if (filtro === 'vigentes') {
+      return documentos.filter((doc) => doc.vigente && !doc.eliminado);
+    } else if (filtro === 'tipo' && tipoSeleccionado) {
+      const documentosPorTipo = documentos.filter((doc) => doc.tipo === tipoSeleccionado);
+      return documentosPorTipo.sort((a, b) => {
+        if (a.vigente && !b.vigente) return -1;
+        if (!a.vigente && b.vigente) return 1;
+        if (a.eliminado && !b.eliminado) return 1;
+        return b.version.localeCompare(a.version); // Orden descendente por versión
+      });
+    } else if (filtro === 'historial') {
+      return documentos.sort((a, b) => {
+        if (a.tipo !== b.tipo) return a.tipo.localeCompare(b.tipo);
+        if (a.vigente && !b.vigente) return -1;
+        if (!a.vigente && b.vigente) return 1;
+        if (a.eliminado && !b.eliminado) return 1;
+        return b.version.localeCompare(a.version); // Orden descendente por versión
+      });
+    }
+    return [];
+  };
+
   return (
     <div className="contenedor">
       <AdminMenu />
 
-      {/* Contenido principal */}
       <main className="contenido-principal">
         <div className="deslinde-admin-contenedor">
           <header className="deslinde-admin-header">
-            <h1>Filtro de documentos por tipo o vigentes</h1>
-            <button className="btn-agregar" onClick={abrirModalCrear}>Agregar nuevo documento</button>
+            <h1>Gestión de Documentos Regulatorios</h1>
+            <button className="btn-agregar" onClick={abrirModalCrear}>
+              Agregar nuevo documento
+            </button>
           </header>
 
-          {/* Tabla de documentos */}
+          <div className="filtro-container">
+            <label htmlFor="filtro">Filtrar por:</label>
+            <select
+              id="filtro"
+              value={filtro}
+              onChange={(e) => setFiltro(e.target.value)}
+            >
+              <option value="vigentes">Vigentes</option>
+              <option value="tipo">Por tipo</option>
+              <option value="historial">Historial completo</option>
+            </select>
+
+            {filtro === 'tipo' && (
+              <select
+                id="tipo"
+                value={tipoSeleccionado}
+                onChange={(e) => {
+                  setTipoSeleccionado(e.target.value);
+                  setDisableDefaultOption(true); // Deshabilita la opción por defecto
+                }}
+              >
+                <option value="" disabled={disableDefaultOption}>
+                  Seleccione un tipo
+                </option>
+                {tiposDisponibles.map((tipo) => (
+                  <option key={tipo} value={tipo}>
+                    {tipo}
+                  </option>
+                ))}
+              </select>
+            )}
+          </div>
+
           <table className="deslinde-tabla">
             <thead>
               <tr>
@@ -153,21 +251,38 @@ const DocumentosRegulatoriosAdmin = () => {
               </tr>
             </thead>
             <tbody>
-              {documentos.map((documento) => (
-                <tr key={documento._id}>
-                  <td>{documento.tipo}</td>
-                  <td>{documento.descripcion}</td>
-                  <td>{documento.version}</td>
-                  <td>{new Date(documento.fechaInicio).toLocaleDateString()}</td>
-                  <td>{documento.fechaFin ? new Date(documento.fechaFin).toLocaleDateString() : 'N/A'}</td>
-                  <td>{documento.vigente ? 'Sí' : 'No'}</td>
-                  <td>
-                    <button className="btn-modificar" onClick={() => abrirModalEditar(documento)}>
-                      Modificar
-                    </button>
-                    <button className="btn-eliminar" onClick={() => eliminarDocumento(documento._id)}>
-                      Eliminar
-                    </button>
+              {documentosFiltrados().map((documento) => (
+                <tr
+                  key={documento._id}
+                  style={{ backgroundColor: documento.eliminado ? 'yellow' : 'transparent' }}
+                >
+                  <td data-label="Tipo">{documento.tipo}</td>
+                  <td data-label="Descripción">{documento.descripcion}</td>
+                  <td data-label="Versión">{documento.version}</td>
+                  <td data-label="Fecha de inicio">{new Date(documento.fechaInicio).toLocaleDateString()}</td>
+                  <td data-label="Fecha fin">
+                    {documento.fechaFin
+                      ? new Date(documento.fechaFin).toLocaleDateString()
+                      : 'N/A'}
+                  </td>
+                  <td data-label="Vigencia">{documento.vigente ? 'Sí' : 'No'}</td>
+                  <td data-label="Acciones">
+                    {!documento.eliminado && documento.vigente && (
+                      <button
+                        className="btn-modificar"
+                        onClick={() => abrirModalEditar(documento)}
+                      >
+                        Modificar
+                      </button>
+                    )}
+                    {!documento.vigente && !documento.eliminado && (
+                      <button
+                        className="btn-eliminar"
+                        onClick={() => eliminarDocumento(documento._id)}
+                      >
+                        Eliminar
+                      </button>
+                    )}
                   </td>
                 </tr>
               ))}
@@ -175,6 +290,7 @@ const DocumentosRegulatoriosAdmin = () => {
           </table>
         </div>
       </main>
+
       {modalVisible && (
         <div className="modal-overlay">
           <div className="modal">
@@ -184,12 +300,20 @@ const DocumentosRegulatoriosAdmin = () => {
                 <>
                   <label>
                     Tipo
-                    <select name="tipo" value={formDataCrear.tipo} onChange={handleChangeCrear} required>
+                    <select
+                      name="tipo"
+                      value={formDataCrear.tipo}
+                      onChange={handleChangeCrear}
+                      required
+                    >
                       <option value="">Seleccione un tipo</option>
-                      <option value="Políticas de privacidad">Políticas de privacidad</option>
+                      <option value="Políticas de privacidad">
+                        Políticas de privacidad
+                      </option>
                       <option value="Deslinde">Deslinde</option>
-                      <option value="Perfil de la Empresa">Perfil de la Empresa</option>
-                      <option value="Términos y condiciones">Términos y condiciones</option>
+                      <option value="Términos y condiciones">
+                        Términos y condiciones
+                      </option>
                     </select>
                   </label>
                 </>
@@ -198,7 +322,9 @@ const DocumentosRegulatoriosAdmin = () => {
                 Descripción
                 <textarea
                   name="descripcion"
-                  value={isEditing ? formDataEditar.descripcion : formDataCrear.descripcion}
+                  value={
+                    isEditing ? formDataEditar.descripcion : formDataCrear.descripcion
+                  }
                   onChange={isEditing ? handleChangeEditar : handleChangeCrear}
                   required
                 />
@@ -215,25 +341,39 @@ const DocumentosRegulatoriosAdmin = () => {
           </div>
         </div>
       )}
-      {/* Footer */}
+
       <footer className="footer">
         <img src={logo} alt="Logo Beatbox" className="logo-footer" />
         <div className="linea-separacion"></div>
         <h2>Síguenos</h2>
         <div className="redes-sociales">
-          <a href="#"><i className="fab fa-facebook"></i></a>
-          <a href="#"><i className="fab fa-instagram"></i></a>
-          <a href="#"><i className="fab fa-twitter"></i></a>
-          <a href="#"><i className="fab fa-youtube"></i></a>
+          <a href="#">
+            <i className="fab fa-facebook"></i>
+          </a>
+          <a href="#">
+            <i className="fab fa-instagram"></i>
+          </a>
+          <a href="#">
+            <i className="fab fa-twitter"></i>
+          </a>
+          <a href="#">
+            <i className="fab fa-youtube"></i>
+          </a>
         </div>
         <div className="linea-separacion"></div>
         <div className="footer-secciones">
           <div>
             <h3>Beatbox</h3>
             <ul>
-              <li><a href="#">Quiénes somos</a></li>
-              <li><a href="#">Contáctanos</a></li>
-              <li><a href="#">Aviso de Privacidad</a></li>
+              <li>
+                <a href="#">Quiénes somos</a>
+              </li>
+              <li>
+                <a href="#">Contáctanos</a>
+              </li>
+              <li>
+                <a href="#">Aviso de Privacidad</a>
+              </li>
             </ul>
           </div>
         </div>

@@ -1,0 +1,167 @@
+/* Contenedor principal */
+.incidentes-contenedor {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Ajusta las columnas dinámicamente */
+  gap: 20px; /* Espaciado entre tarjetas */
+  padding: 20px; /* Espaciado interno del contenedor */
+  margin: 0 auto; /* Centrar el contenedor */
+  width: 100%; /* Ocupa todo el ancho del contenedor */
+  box-sizing: border-box; /* Incluir padding dentro del ancho */
+}
+
+
+/* Botón en cada tarjeta */
+.btn-ver-incidencias {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+  width: 80%; /* Botón ancho */
+}
+
+/* Tabla base */
+.incidentes-tabla {
+  width: 100%;
+  border-collapse: collapse; /* Elimina espacios entre bordes */
+  margin-top: 20px;
+  background-color: #ffffff; /* Fondo blanco por defecto */
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  color: #333; /* Texto oscuro */
+}
+
+/* Encabezados */
+.incidentes-tabla th {
+  background-color: #ff6600; /* Fondo azul */
+  color: white; /* Texto blanco */
+  text-transform: uppercase;
+  padding: 10px;
+  border: 1px solid #ddd; /* Bordes suaves */
+}
+
+/* Filas alternadas */
+.incidentes-tabla tbody tr:nth-child(even) {
+  background-color: #f9f9f9; /* Fila alternada clara */
+}
+
+/* Hover */
+.incidentes-tabla tbody tr:hover {
+  background-color: #f1f1f1; /* Fondo gris claro al pasar el cursor */
+}
+
+/* Celdas */
+.incidentes-tabla td {
+  padding: 10px;
+  text-align: center;
+  border: 1px solid #ddd; /* Bordes suaves */
+}
+
+/* Columna específica de roles */
+.incidentes-tabla td.rol {
+  font-weight: bold;
+}
+
+/* "admin" siempre verde */
+.incidentes-tabla td.rol.admin {
+  color: #32cd32; /* Verde */
+}
+
+/* "usuario" cambia según el tema */
+.app.light .incidentes-tabla td.rol.usuario {
+  color: black; /* Negro en tema claro */
+}
+
+.app.dark .incidentes-tabla td.rol.usuario {
+  color: white; /* Blanco en tema oscuro */
+}
+
+/* Tema oscuro */
+.app.dark .incidentes-tabla {
+  background-color: #242323; /* Fondo oscuro */
+  color: white; /* Texto blanco */
+  border-color: #444; /* Bordes oscuros */
+}
+
+.app.dark .incidentes-tabla th {
+  background-color: #333; /* Fondo oscuro para encabezados */
+  color: white; /* Texto blanco */
+}
+
+.app.dark .incidentes-tabla tbody tr:nth-child(even) {
+  background-color: #3a3a3a; /* Fondo alternado oscuro */
+}
+
+.app.dark .incidentes-tabla tbody tr:hover {
+  background-color: #444444; /* Fondo más claro al hover */
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+  .incidentes-tabla {
+    display: block;
+    overflow-x: auto; /* Permite desplazamiento horizontal si es necesario */
+    white-space: nowrap;
+  }
+
+  .incidentes-tabla thead {
+    display: none; /* Oculta los encabezados en pantallas pequeñas */
+  }
+
+  .incidentes-tabla tbody tr {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+    border: 1px solid #ddd; /* Bordes alrededor de cada fila */
+    padding: 10px;
+    background-color: #ffffff; /* Fondo claro */
+  }
+
+  .app.dark .incidentes-tabla tbody tr {
+    background-color: #333333; /* Fondo oscuro */
+  }
+
+  .incidentes-tabla tbody tr td {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 10px;
+    border: none; /* Quita bordes entre celdas */
+  }
+
+  .incidentes-tabla tbody tr td::before {
+    content: attr(data-label); /* Etiqueta basada en el encabezado */
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-right: 10px;
+    color: #555;
+  }
+
+  .app.dark .incidentes-tabla tbody tr td::before {
+    color: #cccccc; /* Etiquetas claras en modo oscuro */
+  }
+}
+/* Estilos del modal en modo oscuro */
+.app.dark .modal {
+  background-color: #333333;
+  color: #ffffff;
+}
+
+.app.dark .modal textarea,
+.app.dark .modal select,
+.app.dark .modal input[type="text"] {
+  background-color: #444444;
+  color: #ffffff;
+  border: 1px solid #555555;
+}
+
+.app.dark .modal .btn-guardar {
+  background-color: #28a745;
+  color: #ffffff;
+}
+
+.app.dark .modal .btn-cancelar {
+  background-color: #dc3545;
+  color: #ffffff;
+}

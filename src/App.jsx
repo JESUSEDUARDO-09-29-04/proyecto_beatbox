@@ -1,5 +1,5 @@
 // src/App.jsx
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import { useContext } from 'react';
 import Home from './componentes/home/Home';
 import HomeUsuarioLogueado from './componentes/home_login/HomeUsuarioLogueado';
@@ -14,7 +14,7 @@ import UsuarioAdmin from "./componentes/admin/usuarios_admin/UsuariosAdmin";
 import RedesSocialesAdmin from "./componentes/admin/redes_sociales_admin/RedesSocialesAdmin";
 import EmpresaAdmin from "./componentes/admin/empresa_admin/EmpresaAdmin";
 import DocumentosRegulatoriosAdmin from "./componentes/admin/documentos_admin/DocumentosRegulatoriosAdmin";
-
+import IncidentesAdmim from "./componentes/admin/incidentes_admin/incidentesAdmin";
 
 import './App.css';
 
@@ -37,6 +37,7 @@ const App = () => {
           <Route path="/redes_sociales_admin" element={<RedesSocialesAdmin />} />
           <Route path="/empresa_admin" element={<EmpresaAdmin />} />
           <Route path="/deslinde_admin" element={<DocumentosRegulatoriosAdmin />} />
+          <Route path="/incidentes_admin" element={<IncidentesAdmim />} />
         </Routes>
       </Router>
       {/* Botón flotante para cambiar el tema */}

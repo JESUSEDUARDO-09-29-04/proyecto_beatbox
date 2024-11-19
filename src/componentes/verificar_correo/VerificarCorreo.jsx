@@ -7,6 +7,7 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import '../inicio_sesion/InicioSesion.css';
 import jim from '../../assets/jim.png';
 
+
 const VerificarCorreo = () => {
   const [codigo, setCodigo] = useState('');  // Estado para el OTP (código)
   const [correo, setCorreo] = useState('');  // Estado para el correo electrónico
