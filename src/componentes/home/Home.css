@@ -215,46 +215,28 @@ h1 {
   color: #ff8800;
 }
 
-.footer-secciones {
-  display: flex;
-  justify-content: center;
-  gap: 50px;
-  margin-top: 20px;
-}
-
-.footer-secciones h3 {
-  margin-bottom: 10px;
-}
-
-.footer-secciones ul {
-  list-style: none;
-  padding: 0;
-}
-
-.footer-secciones ul li {
-  margin-bottom: 5px;
-}
-
-.footer-secciones ul li a {
-  text-decoration: none;
-  color: white;
-}
-.linea-separacion {
-  width: 80%;
-  margin: 10px auto;
-  border-top: 1px solid white;
-}
-
 /* Estilos responsivos */
 @media (max-width: 768px) {
   /* Centrar las tarjetas de certificados en pantallas pequeñas */
-  .certificados-container {
-    flex-direction: column;
+   .certificados-container {
+    flex-direction: column; /* Cambiar a columna */
     align-items: center;
+    gap: 20px; /* Separación uniforme entre tarjetas */
+    padding: 20px;
   }
 
   .certificado-card {
-    width: 100%; /* Ocupar todo el ancho disponible en pantallas pequeñas */
+    flex: 1 1 20%;
+    min-width: 280px; /* Ancho mínimo */
+    max-width: 300px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
   }
 
   /* Ajuste de navbar en pantallas pequeñas */

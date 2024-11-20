@@ -275,10 +275,6 @@ color: white;
     color: #cccccc; /* Color claro para etiquetas en modo oscuro */
   }
 
-  .btn-modificar, .btn-eliminar {
-    width: 100%; /* Botones ocupan todo el ancho */
-    margin: 5px 0;
-  }
 }
 
 /* Responsividad para botones y encabezados */

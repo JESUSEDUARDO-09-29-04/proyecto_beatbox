@@ -2,8 +2,8 @@
 .formulario-imagen {
   display: flex;
   flex: 1;
-  align-items: center; /* Centra verticalmente el contenido dentro del contenedor */
-  justify-content: center; /* Centra horizontalmente el contenido dentro del contenedor */
+  align-items: center; /* Centra verticalmente el contenido */
+  justify-content: center; /* Centra horizontalmente el contenido */
   min-height: calc(25vh - 50px); /* Asegura espacio igual entre header y footer */
   gap: 20px;
 }
@@ -16,6 +16,8 @@
   justify-content: center;
   padding: 50px;
   gap: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Agrega sombra para resaltar */
+  border-radius: 10px; /* Bordes redondeados */
 }
 
 .formulario h2 {
@@ -70,34 +72,33 @@
 }
 
 /* Media Query para Pantallas Pequeñas */
+/* Ajustes de formulario en pantallas pequeñas */
 @media (max-width: 768px) {
   .formulario-imagen {
     flex-direction: column;
     align-items: center;
     gap: 20px;
-    min-height: auto; /* Permite el ajuste dinámico en pantallas pequeñas */
+    padding: 0 20px; /* Agrega margen igual a los lados */
+    min-height: auto;
   }
 
   .formulario {
-    width: 90%;
+    width: 100%;
+    max-width: 400px; /* Ancho máximo para centrar */
     padding: 20px;
+    box-sizing: border-box; /* Incluye el padding dentro del ancho */
   }
 
-  /* Ocultar la imagen lateral en pantallas pequeñas */
+  /* Ajusta las imágenes y oculta si es necesario */
   .imagen-lateral {
     display: none;
-  }
-
-  .navbar .nav-enlaces {
-    flex-direction: row;
-    gap: 10px;
   }
 }
 
 /* Otros ajustes para pantallas aún más pequeñas (hasta 576px de ancho) */
 @media (max-width: 576px) {
   .formulario {
-    width: 100%;
+    width: 100%; /* Ocupar todo el ancho disponible */
     padding: 15px;
   }
 

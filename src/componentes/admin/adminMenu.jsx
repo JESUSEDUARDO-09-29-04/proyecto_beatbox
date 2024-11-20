@@ -39,9 +39,6 @@ const AdminMenu = () => {
         <img src={logo} alt="Logo Beatbox" className="logo" />
         <span>Bienvenido, Admin a Beatbox</span>
         <nav className="nav-enlaces">
-          <button className="btn btn-inicio" onClick={manejarCerrarSesion}>
-            Cerrar sesión
-          </button>
           <button className="menu-icono" onClick={toggleMenu}>
             ☰
           </button>

@@ -4,6 +4,7 @@ import './IncidentesAdmin.css';
 import logo from '../../../assets/logo.png';
 import { useNavigate } from 'react-router-dom';
 import AdminMenu from '../adminMenu';
+import FooterH from '../../FooterH';
 
 const IncidentesAdmin = () => {
   const [usuarios, setUsuarios] = useState([]);
@@ -158,25 +159,7 @@ const IncidentesAdmin = () => {
         </div>
       )}
 
-      <footer className="footer">
-        <img src={logo} alt="Logo Beatbox" className="logo-footer" />
-        <div className="linea-separacion"></div>
-        <h2>Síguenos</h2>
-        <div className="redes-sociales">
-          <a href="#"><i className="fab fa-facebook"></i></a>
-          <a href="#"><i className="fab fa-instagram"></i></a>
-          <a href="#"><i className="fab fa-twitter"></i></a>
-          <a href="#"><i className="fab fa-youtube"></i></a>
-        </div>
-        <div className="linea-separacion"></div>
-        <div className="footer-secciones">
-          <ul>
-            <li><a href="#">Quiénes somos</a></li>
-            <li><a href="#">Contáctanos</a></li>
-            <li><a href="#">Aviso de Privacidad</a></li>
-          </ul>
-        </div>
-      </footer>
+<FooterH />
     </div>
   );
 };

@@ -2,11 +2,55 @@ import React, { useState, useEffect } from 'react';
 import '../home/Home.css';
 import logo from '../../assets/logo.png';
 import { useNavigate, Link } from 'react-router-dom';
+import FooterH from '../FooterH';
 
 
 const HomeUsuarioLogueado = () => {
   const [menuAbierto, setMenuAbierto] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+
+    const verificarRol = async () => {
+  
+      try {
+        //ruta local const userResponse = await fetch('http://localhost:3000/auth/validate-user', {
+ 
+        const userResponse = await fetch('https://beatbox-blond.vercel.app/auth/validate-user', {
+          method: 'GET',
+          credentials: 'include', // Incluye las cookies en la solicitud
+        });
+
+        if (!userResponse.ok) {
+          navigate('/iniciar-sesion');
+            
+          if(navigate('/iniciar-sesion') === ""){
+            alert('Error al verificar usuario');
+          }
+        }
+
+          if (userResponse.ok){
+          const userData = await userResponse.json();
+          const userRole = userData.role;
+
+          if (userRole !== 'admin' ) {
+            navigate('/iniciar-sesion');
+          }else{
+
+            alert('Bienvenido');
+          }
+        }
+      
+    
+    
+    } catch (error) {
+      console.error('Error de red al iniciar sesión', error);
+
+  }
+  };
+  
+  verificarRol();
+  }, [navigate]);
 
 useEffect(() => {
 
@@ -96,11 +140,10 @@ verificarRol();
         <button className="btn-cerrar" onClick={toggleMenu}>✖</button>
         <ul>
           <li><a onClick={() => navigate('/')}>Inicio</a></li>
-          <li><a href="#">Gimnasios</a></li>
-          <li><a href="#">Planes</a></li>
-          <li><a href="#">Sustentabilidad</a></li>
-          <li><a href="#">Blog</a></li>
-          <li><a href="#">Contáctanos</a></li>
+            <li><a href="#">Suscripciones</a></li>
+            <li><a href="#">Horarios</a></li>
+            <li><a href="#">Perfil de usuario</a></li>
+            <li><a href="#">Contáctanos</a></li>
         </ul>
       </div>
 
@@ -140,28 +183,7 @@ verificarRol();
 
 
       {/* Footer */}
-      <footer className="footer">
-        <img src={logo} alt="Logo Beatbox" className="logo-footer" />
-        <div className="linea-separacion"></div>
-        <h2>Síguenos</h2>
-        <div className="redes-sociales">
-          <a href="#"><i className="fab fa-facebook"></i></a>
-          <a href="#"><i className="fab fa-instagram"></i></a>
-          <a href="#"><i className="fab fa-twitter"></i></a>
-          <a href="#"><i className="fab fa-youtube"></i></a>
-        </div>
-        <div className="linea-separacion"></div>
-        <div className="footer-secciones">
-          <div>
-            <h3>Beatbox</h3>
-            <ul>
-              <li><a href="#">Quiénes somos</a></li>
-              <li><a href="#">Contáctanos</a></li>
-              <li><a href="#">Aviso de Privacidad</a></li>
-            </ul>
-          </div>
-        </div>
-      </footer>
+      <FooterH />
     </div>
   );
 };

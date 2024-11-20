@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import './InicioSesion.css';
 import '../home/Home.css';
@@ -6,7 +6,7 @@ import logo from '../../assets/logo.png';
 import jim from '../../assets/jim.png';
 import { FaEye, FaEyeSlash, FaChevronDown } from 'react-icons/fa';  // Importar los íconos de mostrar/ocultar contraseña.
 import { jwtDecode } from 'jwt-decode';
-
+import FooterH from '../FooterH';
 
 const InicioSesion = () => {
   const navigate = useNavigate();
@@ -99,11 +99,11 @@ const InicioSesion = () => {
       <div className={`menu-desplegable ${menuAbierto ? 'activo' : ''}`}>
         <button className="btn-cerrar" onClick={toggleMenu}>✖</button>
         <ul>
-          <li><Link to="/">Inicio</Link></li>
-          <li><a href="#">Gimnasios</a></li>
-          <li><a href="#">Planes</a></li>
-          <li><a href="#">Blog</a></li>
-          <li><a href="#">Contáctanos</a></li>
+        <li><Link to="/">Inicio</Link></li>
+            <li><a href="#">Suscripciones</a></li>
+            <li><a href="#">Horarios</a></li>
+            <li><a href="#">Perfil de usuario</a></li>
+            <li><a href="#">Contáctanos</a></li>
         </ul>
       </div>
 
@@ -157,7 +157,7 @@ const InicioSesion = () => {
           </button>
 
           <div className="links">
-            <Link to="/recuperar-contrasena" className="olvidaste-contrasena">¿Olvidaste tu contraseña?</Link>
+          <Link to="/recuperar-contrasena" className="olvidaste-contrasena">¿Olvidaste tu contraseña?</Link>
             <Link to="/registro" className="registrarme">Registrarme</Link>
           </div>
         </form>
@@ -168,25 +168,7 @@ const InicioSesion = () => {
       </div>
 
       {/* Footer */}
-      <footer className="footer">
-        <img src={logo} alt="Logo Beatbox" className="logo-footer" />
-        <div className="linea-separacion"></div>
-        <h2>Síguenos</h2>
-        <div className="redes-sociales">
-          <a href="#"><i className="fab fa-facebook"></i></a>
-          <a href="#"><i className="fab fa-instagram"></i></a>
-          <a href="#"><i className="fab fa-twitter"></i></a>
-          <a href="#"><i className="fab fa-youtube"></i></a>
-        </div>
-        <div className="linea-separacion"></div>
-        <div className="footer-secciones">
-          <ul>
-            <li><a href="#">Quiénes somos</a></li>
-            <li><a href="#">Contáctanos</a></li>
-            <li><a href="#">Aviso de Privacidad</a></li>
-          </ul>
-        </div>
-      </footer>
+      <FooterH />
     </div>
   );
 };

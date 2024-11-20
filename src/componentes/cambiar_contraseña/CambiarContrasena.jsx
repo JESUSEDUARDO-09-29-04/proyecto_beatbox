@@ -5,6 +5,7 @@ import '../home/Home.css';
 import logo from '../../assets/logo.png';
 import { FaEye, FaEyeSlash } from 'react-icons/fa'; // Para los iconos de contraseña
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import FooterH from '../FooterH';
 
 const CambiarContrasena = () => {
   const [contrasena, setContrasena] = useState('');
@@ -18,7 +19,6 @@ const CambiarContrasena = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
   const location = useLocation();
-
   // Obtener el token de la URL
   const queryParams = new URLSearchParams(location.search);
   const token = queryParams.get('token');
@@ -116,12 +116,11 @@ const CambiarContrasena = () => {
       <div className={`menu-desplegable ${menuAbierto ? 'activo' : ''}`}>
         <button className="btn-cerrar" onClick={toggleMenu}>✖</button>
         <ul>
-          <li><Link to="/" onClick={toggleMenu}>Inicio</Link></li>
-          <li><Link to="/gimnasios" onClick={toggleMenu}>Gimnasios</Link></li>
-          <li><Link to="/planes" onClick={toggleMenu}>Planes</Link></li>
-          <li><Link to="/sustentabilidad" onClick={toggleMenu}>Sustentabilidad</Link></li>
-          <li><Link to="/blog" onClick={toggleMenu}>Blog</Link></li>
-          <li><Link to="/contacto" onClick={toggleMenu}>Contáctanos</Link></li>
+        <li><Link to="/">Inicio</Link></li>
+            <li><a href="#">Suscripciones</a></li>
+            <li><a href="#">Horarios</a></li>
+            <li><a href="#">Perfil de usuario</a></li>
+            <li><a href="#">Contáctanos</a></li>
         </ul>
       </div>
 
@@ -188,25 +187,7 @@ const CambiarContrasena = () => {
       </form>
 
       {/* Footer */}
-      <footer className="footer">
-        <img src={logo} alt="Logo Beatbox" className="logo-footer" />
-        <div className="linea-separacion"></div>
-        <h2>Síguenos</h2>
-        <div className="redes-sociales">
-          <a href="#"><i className="fab fa-facebook"></i></a>
-          <a href="#"><i className="fab fa-instagram"></i></a>
-          <a href="#"><i className="fab fa-twitter"></i></a>
-          <a href="#"><i className="fab fa-youtube"></i></a>
-        </div>
-        <div className="linea-separacion"></div>
-        <div className="footer-secciones">
-          <ul>
-            <li><a href="#">Quiénes somos</a></li>
-            <li><a href="#">Contáctanos</a></li>
-            <li><a href="#">Aviso de Privacidad</a></li>
-          </ul>
-        </div>
-      </footer>
+      <FooterH />
     </div>
   );
 };

@@ -1,191 +1,367 @@
 import React, { useState, useEffect } from 'react';
 import '../../home/Home.css';
 import './EmpresaAdmin.css';
-import logo from '../../../assets/logo.png';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import AdminMenu from '../adminMenu';
+import CloudinaryUploadWidget from './CloudinaryUploadWidget';
+import { useNavigate } from 'react-router-dom';
+import FooterH from '../../FooterH';
 
 const EmpresaAdmin = () => {
+  const [perfil, setPerfil] = useState([]);
+  const [configuracion, setConfiguracion] = useState([]);
+  const [campoSeleccionado, setCampoSeleccionado] = useState(null);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [nuevoValor, setNuevoValor] = useState('');
+  const [tituloModal, setTituloModal] = useState('');
+  const [logoVigente, setLogoVigente] = useState(null);
+  const [logos, setLogos] = useState([]);
+  const [logosModalVisible, setLogosModalVisible] = useState(false);
   const navigate = useNavigate();
-  const [menuAbierto, setMenuAbierto] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
-  // Estado para los datos de la empresa con valores iniciales
-  const [empresa, setEmpresa] = useState({
-    logo: logo || "", // Usar logo o una cadena vacía
-    eslogan: "",
-    mision: "",
-    vision: "",
-    tiempoBloqueo: 0,
-  });
-
-  // Cargar datos de la empresa desde el backend
+  const nombresCampos = {
+    eslogan: 'Eslogan',
+    mision: 'Misión',
+    vision: 'Visión',
+    maxFailedAttempts: 'Intentos Fallidos',
+    lockTimeMinutes: 'Tiempo de Bloqueo (min)',
+  };
+ useEffect(() => {
+    // Detectar si el body tiene la clase 'dark'
+    const darkModeEnabled = document.body.classList.contains('dark');
+    setIsDarkMode(darkModeEnabled);
+  }, []);
   useEffect(() => {
-    const fetchEmpresaData = async () => {
+    const verificarRol = async () => {
       try {
-        const response = await axios.get('/api/empresa');
-        setEmpresa(response.data);
+        const userResponse = await fetch('https://beatbox-blond.vercel.app/auth/validate-user', {
+          method: 'GET',
+          credentials: 'include',
+        });
+
+        if (!userResponse.ok) {
+          navigate('/iniciar-sesion');
+        } else {
+          const userData = await userResponse.json();
+          const userRole = userData.role;
+
+          if (userRole !== 'admin') {
+            navigate('/iniciar-sesion');
+          }
+        }
       } catch (error) {
-        console.error("Error fetching company data:", error);
+        console.error('Error al verificar el rol:', error);
       }
     };
 
-    fetchEmpresaData();
+    verificarRol();
+  }, [navigate]);
+
+  useEffect(() => {
+    const fetchLogoVigente = async () => {
+      try {
+        const response = await fetch('https://beatbox-blond.vercel.app/logos/vigente', {
+          method: 'GET',
+          credentials: 'include',
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setLogoVigente(data.link);
+        }
+      } catch (error) {
+        console.error('Error al cargar el logo vigente:', error);
+      }
+    };
+
+    const fetchPerfil = async () => {
+      try {
+        const response = await fetch('https://beatbox-blond.vercel.app/perfil-empresa', {
+          method: 'GET',
+          credentials: 'include',
+        });
+        const data = await response.json();
+        const perfilSinId = Object.entries(data).filter(([campo]) => campo !== '_id' && campo !== 'updatedAt');
+        setPerfil(perfilSinId);
+      } catch (error) {
+        console.error('Error al cargar el perfil:', error);
+      }
+    };
+
+    const fetchConfiguracion = async () => {
+      try {
+        const response = await fetch('https://beatbox-blond.vercel.app/configuracion', {
+          method: 'GET',
+          credentials: 'include',
+        });
+        const data = await response.json();
+        setConfiguracion(Object.entries(data).filter(([campo]) => campo !== '_id'));
+      } catch (error) {
+        console.error('Error al cargar configuración:', error);
+      }
+    };
+
+    fetchLogoVigente();
+    fetchPerfil();
+    fetchConfiguracion();
   }, []);
-  // Manejar cambios en los inputs
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setEmpresa((prevEmpresa) => ({
-      ...prevEmpresa,
-      [name]: value,
-    }));
+
+  const abrirModal = (campo, valorActual, seccion) => {
+    setCampoSeleccionado({ campo, seccion });
+    setNuevoValor(valorActual);
+    const nombreCampo = nombresCampos[campo] || campo;
+    setTituloModal(`Modificar ${nombreCampo}`);
+    setModalVisible(true);
   };
 
-  // Actualizar un campo específico en el backend
-  const actualizarCampo = async (campo) => {
+  const cerrarModal = () => {
+    setCampoSeleccionado(null);
+    setNuevoValor('');
+    setModalVisible(false);
+  };
+
+  const actualizarCampo = async () => {
+    const { campo, seccion } = campoSeleccionado;
+    const url =
+      seccion === 'perfil'
+        ? `https://beatbox-blond.vercel.app/perfil-empresa/${campo}`
+        : `https://beatbox-blond.vercel.app/configuracion/${campo}`;
+
     try {
-      await axios.put(`/api/empresa/${campo}`, { [campo]: empresa[campo] });
-      alert(`${campo.charAt(0).toUpperCase() + campo.slice(1)} actualizado exitosamente`);
+      const response = await fetch(url, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ valor: nuevoValor }),
+      });
+
+      if (response.ok) {
+        alert(`${nombresCampos[campo] || campo} actualizado exitosamente`);
+
+        if (seccion === 'perfil') {
+          setPerfil((prev) =>
+            prev.map(([key, valor]) => (key === campo ? [key, nuevoValor] : [key, valor]))
+          );
+        } else {
+          setConfiguracion((prev) =>
+            prev.map(([key, valor]) => (key === campo ? [key, nuevoValor] : [key, valor]))
+          );
+        }
+
+        cerrarModal();
+      } else {
+        alert('Error al actualizar el campo');
+      }
     } catch (error) {
-      console.error(`Error updating ${campo}:`, error);
-      alert(`Hubo un error al actualizar ${campo}`);
+      console.error('Error al actualizar:', error);
+      alert('Error de red al actualizar el campo');
     }
   };
 
-  // Guardar todos los cambios
-  const guardarCambios = async () => {
+  const handleUpload = async (url) => {
     try {
-      await axios.put('/api/empresa', empresa);
-      alert('Todos los cambios han sido guardados exitosamente');
+      const response = await fetch('https://beatbox-blond.vercel.app/logos', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ link: url }),
+      });
+
+      if (response.ok) {
+        const newLogo = await response.json();
+        setLogoVigente(newLogo.link);
+        alert('Logo subido y configurado como vigente.');
+      }
     } catch (error) {
-      console.error("Error saving all changes:", error);
-      alert('Hubo un error al guardar los cambios');
+      console.error('Error al subir el logo:', error);
     }
   };
 
-  // Alternar el menú
-  const toggleMenu = () => {
-    setMenuAbierto(!menuAbierto);
+  const fetchAllLogos = async () => {
+    try {
+      const response = await fetch('https://beatbox-blond.vercel.app/logos', {
+        method: 'GET',
+        credentials: 'include',
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setLogos(data);
+      }
+    } catch (error) {
+      console.error('Error al cargar los logos:', error);
+    }
+  };
+
+  const setLogoAsVigente = async (id) => {
+    try {
+      const response = await fetch(`https://beatbox-blond.vercel.app/logos/${id}/vigente`, {
+        method: 'PATCH',
+        credentials: 'include',
+      });
+
+      if (response.ok) {
+        const updatedLogo = await response.json();
+        setLogoVigente(updatedLogo.link);
+        alert('Logo configurado como vigente.');
+        fetchAllLogos();
+      }
+    
+    } catch (error) {
+      console.error('Error al establecer el logo vigente:', error);
+    }
+  };
+
+  const deleteLogo = async (id) => {
+    try {
+      const response = await fetch(`https://beatbox-blond.vercel.app/logos/${id}`, {
+        method: 'DELETE',
+        credentials: 'include',
+      });
+
+      if (response.ok) {
+        alert('Logo eliminado correctamente.');
+        fetchAllLogos();
+      }
+    } catch (error) {
+      console.error('Error al eliminar el logo:', error);
+    }
   };
 
   return (
-    <div className="contenedor">
+    <div className={`contenedor ${isDarkMode ? 'dark' : ''}`}>
       <AdminMenu />
-
-      {/* Contenido principal de la empresa */}
       <main className="contenido-principal">
-        <div className="empresa-admin-contenedor">
-          <header className="empresa-admin-header">
-            <h1>Administración de la Empresa</h1>
-            <button className="btn-guardar" onClick={guardarCambios}>Guardar Cambios</button>
-          </header>
+        <div className="cuadro-contenedor">
+          <div className="cuadro">
+            <h2>Subir Logotipo</h2>
+            {logoVigente ? (
+              <img src={logoVigente} alt="Logotipo Vigente" className="logo-preview" />
+            ) : (
+              <div className="logo-preview">No hay logotipo vigente</div>
+            )}
+            <CloudinaryUploadWidget onUpload={handleUpload} />
+            <button
+              className="btn-ver-todos"
+              onClick={() => {
+                fetchAllLogos();
+                setLogosModalVisible(true);
+              }}
+            >
+              Mostrar Todos los Logos
+            </button>
+          </div>
 
-          <table className="empresa-tabla">
-            <tbody>
-              {/* Logo */}
-              <tr className="empresa-item">
-                <td><label>Logotipo de la empresa:</label></td>
-                <td>
-                  <img src={empresa.logo} alt="Logotipo de la empresa" className="logo-empresa" />
-                </td>
-                <td>
-                  <button className="btn-actualizar" onClick={() => actualizarCampo('logo')}>Actualizar</button>
-                </td>
-              </tr>
+          <div className="row">
+            <div className="cuadro">
+              <h2>Perfil de la Empresa</h2>
+              <table className="tabla-perfil">
+                <tbody>
+                  {perfil.map(([campo, valor]) => (
+                    <tr key={campo}>
+                      <td>{nombresCampos[campo] || campo}:</td>
+                      <td>
+                        <input type="text" value={valor} readOnly className="input-perfil" />
+                      </td>
+                      <td>
+                        <button
+                          className="btn-actualizar"
+                          onClick={() => abrirModal(campo, valor, 'perfil')}
+                        >
+                          Modificar
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
 
-              {/* Eslogan */}
-              <tr className="empresa-item">
-                <td><label>Eslogan:</label></td>
-                <td>
-                  <input
-                    type="text"
-                    name="eslogan"
-                    value={empresa.eslogan || ""}
-                    onChange={handleInputChange}
-                    className="input-empresa"
-                  />
-                </td>
-                <td>
-                  <button className="btn-actualizar" onClick={() => actualizarCampo('eslogan')}>Actualizar</button>
-                </td>
-              </tr>
-
-              {/* Misión */}
-              <tr className="empresa-item">
-                <td><label>Misión:</label></td>
-                <td>
-                  <textarea
-                    name="mision"
-                    value={empresa.mision || ""}
-                    onChange={handleInputChange}
-                    className="input-empresa"
-                  />
-                </td>
-                <td>
-                  <button className="btn-actualizar" onClick={() => actualizarCampo('mision')}>Actualizar</button>
-                </td>
-              </tr>
-
-              {/* Visión */}
-              <tr className="empresa-item">
-                <td><label>Visión:</label></td>
-                <td>
-                  <textarea
-                    name="vision"
-                    value={empresa.vision || ""}
-                    onChange={handleInputChange}
-                    className="input-empresa"
-                  />
-                </td>
-                <td>
-                  <button className="btn-actualizar" onClick={() => actualizarCampo('vision')}>Actualizar</button>
-                </td>
-              </tr>
-
-              {/* Tiempo de Bloqueo */}
-              <tr className="empresa-item">
-                <td><label>Tiempo de Bloqueo de Usuarios (días):</label></td>
-                <td>
-                  <input
-                    type="number"
-                    name="tiempoBloqueo"
-                    value={empresa.tiempoBloqueo ?? 0}
-                    onChange={handleInputChange}
-                    className="input-empresa"
-                  />
-                </td>
-                <td>
-                  <button className="btn-actualizar" onClick={() => actualizarCampo('tiempoBloqueo')}>Actualizar</button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </main>
-
-      {/* Footer */}
-      <footer className="footer">
-        <img src={logo} alt="Logo Beatbox" className="logo-footer" />
-        <div className="linea-separacion"></div>
-        <h2>Síguenos</h2>
-        <div className="redes-sociales">
-          <a href="#"><i className="fab fa-facebook"></i></a>
-          <a href="#"><i className="fab fa-instagram"></i></a>
-          <a href="#"><i className="fab fa-twitter"></i></a>
-          <a href="#"><i className="fab fa-youtube"></i></a>
-        </div>
-        <div className="linea-separacion"></div>
-        <div className="footer-secciones">
-          <div>
-            <h3>Beatbox</h3>
-            <ul>
-              <li><a href="#">Quiénes somos</a></li>
-              <li><a href="#">Contáctanos</a></li>
-              <li><a href="#">Aviso de Privacidad</a></li>
-            </ul>
+            <div className="cuadro">
+              <h2>Configuración de Bloqueo</h2>
+              <table className="tabla-configuracion">
+                <tbody>
+                  {configuracion.map(([campo, valor]) => (
+                    <tr key={campo}>
+                      <td>{nombresCampos[campo] || campo}:</td>
+                      <td>
+                        <input type="text" value={valor} readOnly className="input-configuracion" />
+                      </td>
+                      <td>
+                        <button
+                          className="btn-actualizar"
+                          onClick={() => abrirModal(campo, valor, 'configuracion')}
+                        >
+                          Modificar
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
-      </footer>
+
+        {modalVisible && (
+          <div className="modal-overlay">
+            <div className="modal">
+              <button className="modal-close" onClick={cerrarModal}>
+                &times;
+              </button>
+              <h2 className="h2-modal">
+                Modificar {nombresCampos[campoSeleccionado?.campo] || campoSeleccionado?.campo}
+              </h2>
+              <textarea
+                value={nuevoValor}
+                onChange={(e) => setNuevoValor(e.target.value)}
+                className="textarea-perfil"
+              />
+              <div className="button-group">
+                <button className="btn-guardar" onClick={actualizarCampo}>
+                  Guardar
+                </button>
+                <button className="btn-cancelar" onClick={cerrarModal}>
+                  Cancelar
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {logosModalVisible && (
+          <div className="modal-overlay">
+            <div className="modal">
+              <button className="modal-close" onClick={() => setLogosModalVisible(false)}>
+                &times;
+              </button>
+              <h2>Todos los Logos</h2>
+              <div className="logos-grid">
+                {logos.map((logo) => (
+                  <div key={logo._id} className="logo-item">
+                    <img src={logo.link} alt="Logo" className="logo-thumbnail" />
+                    <div className="logo-buttons">
+                      <button
+                        className="btn-vigente"
+                        onClick={() => setLogoAsVigente(logo._id)}
+                      >
+                        Hacer Vigente
+                      </button>
+                      <button
+                        className="btn-eliminar"
+                        onClick={() => deleteLogo(logo._id)}
+                      >
+                        Eliminar
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+      </main>
+      <FooterH />
     </div>
   );
 };
