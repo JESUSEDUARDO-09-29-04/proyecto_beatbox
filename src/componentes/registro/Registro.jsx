@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; 
+import { json, useNavigate } from 'react-router-dom'; 
 import './Registro.css'; 
 import '../home/Home.css';
 import logo from '../../assets/logo.png';
@@ -13,6 +13,7 @@ const Registro = () => {
   const navigate = useNavigate();
   const [menuAbierto, setMenuAbierto] = useState(false);
   const [usuario, setUsuario] = useState('');
+  const [usuarioError, setUsuarioError] = useState('');
   const [correo, setCorreo] = useState('');
   const [correoError, setCorreoError] = useState('');
   const [correoSugerencias, setCorreoSugerencias] = useState([]);
@@ -37,6 +38,10 @@ const Registro = () => {
     e.preventDefault();
     setError('');
 
+    const trimmedPassword = contrasena.trim();
+    const trimmedConfirmPassword = confirmarContrasena.trim();
+
+
     if (!correo || correoError) {
       setError('Por favor, ingresa un correo válido');
       return;
@@ -45,11 +50,15 @@ const Registro = () => {
       setError('El nombre de usuario no debe contener caracteres peligrosos');
       return;
     }
-    // Validar que las contraseñas coincidan
-    if (contrasena !== confirmarContrasena) {
-      setError('Las contraseñas no coinciden');
+    if (!usuario || usuarioError) {
+      setError('Por favor, ingresa un nombre de usuario válido');
       return;
     }
+    // Validar que las contraseñas coincidan
+    if (trimmedPassword !== trimmedConfirmPassword) {
+      setError('Las contraseñas no coinciden');
+      return;
+    }   
 
     // Validar fortaleza de la contraseña
     if (passwordStrength !== 'Fuerte') {
@@ -66,7 +75,7 @@ const Registro = () => {
     const datosUsuario = {
       correo_Electronico: correo,
       usuario: usuario,
-      contraseña: contrasena,
+      contraseña: trimmedPassword,
     };
 
     try {
@@ -80,12 +89,26 @@ const Registro = () => {
       const data = await response.json();
 
       if (response.ok) {
-        navigate('/verificar-correo');
+        localStorage.setItem("email", JSON.stringify(correo))
+        navigate('/verificar-correo', { state: { correo } });
       } else {
         setError(data.message || 'Error al registrarse');
       }
     } catch (error) {
       setError('Error de red al registrarse');
+    }
+  };
+
+  const handleUsuarioChange = (e) => {
+    const value = sanitizeInput(e.target.value);
+    setUsuario(value);
+
+    if (value.length < 6) {
+      setUsuarioError('El nombre de usuario debe tener al menos 6 caracteres');
+    } else if (value.length > 12) {
+      setUsuarioError('El nombre de usuario no debe superar los 12 caracteres');
+    } else {
+      setUsuarioError('');
     }
   };
 
@@ -183,8 +206,8 @@ const Registro = () => {
     const recomendaciones = [];
 
     // Longitud mínima
-    if (password.length < 8) {
-      recomendaciones.push('Debe tener al menos 8 caracteres');
+    if (password.length < 6) {
+      recomendaciones.push('Debe tener al menos 6 caracteres');
     }
 
     // Letras mayúsculas
@@ -338,7 +361,7 @@ const Registro = () => {
             id="usuario"
             placeholder="Ingresa tu nombre"
             value={usuario}
-            onChange={(e) => setUsuario(sanitizeInput(e.target.value))}
+            onChange={handleUsuarioChange}
             required
           />
 

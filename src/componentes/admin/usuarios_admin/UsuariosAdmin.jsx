@@ -172,14 +172,15 @@ const UsuariosAdmin = () => {
       </main>
 
       {modalVisible && (
-        <div className="modal-overlay">
-          <div className="modal">
-            <button className="modal-close" onClick={cerrarModal}>
-              &times;
-            </button>
-            <p>{modalMessage}</p>
-          </div>
-        </div>
+  <div className="custom-modal-overlay">
+  <div className="custom-modal">
+    <button className="custom-modal-close" onClick={cerrarModal}>
+      &times;
+    </button>
+    <h2>{modalMessage.includes("bloqueado") ? "Estado Actualizado" : "Acción Exitosa"}</h2>
+    <p>{modalMessage}</p>
+  </div>
+</div>
       )}
 
 <FooterH />

@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import '../../home/Home.css';
 import './RedesSocialesAdmin.css';
-import logo from '../../../assets/logo.png';
 import { useNavigate } from 'react-router-dom';
 import AdminMenu from '../adminMenu';
-import { FaFacebook, FaInstagram, FaTwitter,  } from 'react-icons/fa';
-import { FaXTwitter } from 'react-icons/fa6'; 
 import FooterH from '../../FooterH';
+import { FaFacebook, FaInstagram, FaTwitter } from 'react-icons/fa';
+import { FaXTwitter } from 'react-icons/fa6';
 
 const RedesSocialesAdmin = () => {
   const navigate = useNavigate();
@@ -15,6 +14,7 @@ const RedesSocialesAdmin = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({ tipo: '', link: '' });
   const [selectedRed, setSelectedRed] = useState(null);
+  const [error, setError] = useState(''); // Manejo de errores
 
   // Verificar si el usuario tiene el rol de admin
   useEffect(() => {
@@ -67,6 +67,7 @@ const RedesSocialesAdmin = () => {
     setIsEditing(!!red);
     setSelectedRed(red);
     setFormData(red ? { tipo: red.tipo, link: red.link } : { tipo: '', link: '' });
+    setError(''); // Limpiar errores al abrir el modal
   };
 
   // Cerrar modal
@@ -74,16 +75,37 @@ const RedesSocialesAdmin = () => {
     setModalVisible(false);
     setFormData({ tipo: '', link: '' });
     setSelectedRed(null);
+    setError('');
   };
 
   // Manejar cambio de input en formulario
   const handleChange = (e) => {
     const { name, value } = e.target;
+
+    // Validar que no haya código malicioso (evitar etiquetas <script>)
+    if (/<script.*?>.*?<\/script.*?>/gi.test(value)) {
+      setError('El enlace no puede contener etiquetas <script>.');
+      return;
+    }
+
     setFormData({ ...formData, [name]: value });
+    setError(''); // Limpiar error si la validación pasa
+  };
+
+  // Validar URL de Facebook
+  const isFacebookURL = (url) => {
+    const facebookRegex = /^(https?:\/\/)?(www\.)?facebook\.com\/[A-Za-z0-9_.-]+\/?$/;
+    return facebookRegex.test(url);
   };
 
   // Guardar red social (agregar o actualizar)
   const guardarRedSocial = async () => {
+    // Validar que el enlace sea de Facebook
+    if (!isFacebookURL(formData.link)) {
+      setError('El enlace debe ser una URL válida de Facebook.');
+      return;
+    }
+
     try {
       const url = isEditing
         ? `https://beatbox-blond.vercel.app/social/agregar`
@@ -141,7 +163,7 @@ const RedesSocialesAdmin = () => {
         return <FaFacebook />;
       case 'instagram':
         return <FaInstagram />;
-      case 'x': 
+      case 'x':
         return <FaXTwitter />;
       default:
         return null;
@@ -154,7 +176,7 @@ const RedesSocialesAdmin = () => {
       <main className="contenido-principal">
         <h1>Gestión de Redes Sociales</h1>
         <button className="btn-agregar" onClick={() => abrirModal()}>Agregar Red Social</button>
-        
+
         <table className="redes-sociales-tabla">
           <thead>
             <tr>
@@ -187,55 +209,67 @@ const RedesSocialesAdmin = () => {
       {modalVisible && (
         <div className="modal-overlay">
           <div className="modal">
-            <button className="modal-close" onClick={cerrarModal}>&times;</button>
+            <button className="modal-close" onClick={cerrarModal}>
+              &times;
+            </button>
             <h2>{isEditing ? 'Modificar Red Social' : 'Agregar Red Social'}</h2>
-            <form onSubmit={(e) => e.preventDefault()}>
-              <label>
-                Tipo:
+            <form onSubmit={(e) => e.preventDefault()} className="modal-form">
+              <div className="modal-field">
+                <label htmlFor="tipo">Tipo:</label>
                 {isEditing ? (
                   <input
                     type="text"
+                    id="tipo"
                     name="tipo"
                     value={formData.tipo}
-                    disabled // Tipo no puede cambiar en edición
+                    disabled
+                    className="input-disabled"
                   />
                 ) : (
                   <select
+                    id="tipo"
                     name="tipo"
                     value={formData.tipo}
                     onChange={handleChange}
                     required
+                    className="modal-input"
                   >
                     <option value="">Seleccione un tipo</option>
                     <option value="facebook">Facebook</option>
-                    <option value="instagram">Instagram</option>
-                    <option value="X">X</option> {/* Actualizado */}
-                    </select>
+                  </select>
                 )}
-              </label>
-              <label>
-                Enlace:
+              </div>
+              <div className="modal-field">
+                <label htmlFor="link">Enlace:</label>
                 <input
                   type="url"
+                  id="link"
                   name="link"
                   value={formData.link}
-                  className="input-grande"
                   onChange={handleChange}
                   required
+                  className="modal-input"
                 />
-              </label>
-              <div className="button-group">
-                <button className="btn-guardar" onClick={guardarRedSocial}>
+              </div>
+              {error && <p className="error-message">{error}</p>}
+              <div className="modal-buttons">
+                <button
+                  type="button"
+                  className="modal-btn green"
+                  onClick={guardarRedSocial}
+                >
                   {isEditing ? 'Guardar Cambios' : 'Agregar'}
                 </button>
-                <button className="btn-cancelar" onClick={cerrarModal}>Cancelar</button>
+                <button type="button" className="modal-btn red" onClick={cerrarModal}>
+                  Cancelar
+                </button>
               </div>
             </form>
           </div>
         </div>
       )}
 
-    <FooterH />
+      <FooterH />
     </div>
   );
 };

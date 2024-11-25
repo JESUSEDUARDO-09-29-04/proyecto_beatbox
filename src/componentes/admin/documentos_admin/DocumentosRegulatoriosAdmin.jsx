@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '../../home/Home.css';
 import './DocumentosRegulatoriosAdmin.css';
-import logo from '../../../assets/logo.png';
 import { useNavigate } from 'react-router-dom';
 import AdminMenu from '../adminMenu';
 import FooterH from '../../FooterH';
@@ -17,66 +16,59 @@ const DocumentosRegulatoriosAdmin = () => {
   const [documentoId, setDocumentoId] = useState(null);
   const [formDataCrear, setFormDataCrear] = useState({ tipo: '', descripcion: '' });
   const [formDataEditar, setFormDataEditar] = useState({ descripcion: '' });
-  const [disableDefaultOption, setDisableDefaultOption] = useState(false); 
+  const [disableDefaultOption, setDisableDefaultOption] = useState(false);
 
+  // Verificar rol
   useEffect(() => {
     const verificarRol = async () => {
-  
       try {
-        //ruta local const userResponse = await fetch('http://localhost:3000/auth/validate-user', {
         const userResponse = await fetch('https://beatbox-blond.vercel.app/auth/validate-user', {
           method: 'GET',
-          credentials: 'include', // Incluye las cookies en la solicitud
+          credentials: 'include',
         });
 
         if (!userResponse.ok) {
           navigate('/iniciar-sesion');
-            
-          if(navigate('/iniciar-sesion') === ""){
-            alert('Error al verificar usuario');
-          }
-        }
-
-          if (userResponse.ok){
+        } else {
           const userData = await userResponse.json();
-          const userRole = userData.role;
-
-          if (userRole !== 'admin' ) {
+          if (userData.role !== 'admin') {
             navigate('/iniciar-sesion');
           }
         }
-      
-    
-    
-    } catch (error) {
-      console.error('Error de red al iniciar sesión', error);
-
-  }
-  };
-  
-  verificarRol();
-  }, [navigate]); 
-
-
-  useEffect(() => {
-    const cargarDocumentos = async () => {
-      try {
-        const response = await fetch('https://beatbox-blond.vercel.app/documentos', {
-          method: 'GET',
-          credentials: 'include',
-        });
-        const data = await response.json();
-        setDocumentos(data);
-
-        // Extraer tipos únicos
-        const tipos = [...new Set(data.map((doc) => doc.tipo))];
-        setTiposDisponibles(tipos);
       } catch (error) {
-        console.error('Error al cargar documentos:', error);
+        console.error('Error de red al verificar usuario:', error);
       }
     };
-    cargarDocumentos();
+
+    verificarRol();
+  }, [navigate]);
+
+  // Cargar documentos
+  const cargarDocumentos = async () => {
+    try {
+      const response = await fetch('https://beatbox-blond.vercel.app/documentos', {
+        method: 'GET',
+        credentials: 'include',
+      });
+      const data = await response.json();
+      setDocumentos(data);
+
+      // Extraer tipos únicos
+      const tipos = [...new Set(data.map((doc) => doc.tipo))];
+      setTiposDisponibles(tipos);
+    } catch (error) {
+      console.error('Error al cargar documentos:', error);
+    }
+  };
+
+  useEffect(() => {
+    cargarDocumentos(); // Cargar documentos al cargar la página
   }, []);
+
+  // Función para limpiar las entradas y prevenir etiquetas <script>
+  const sanitizeInput = (input) => {
+    return input.replace(/<script.*?>.*?<\/script>/gi, '').trim();
+  };
 
   const abrirModalCrear = () => {
     setFormDataCrear({ tipo: '', descripcion: '' });
@@ -98,11 +90,13 @@ const DocumentosRegulatoriosAdmin = () => {
   };
 
   const handleChangeCrear = (e) => {
-    setFormDataCrear({ ...formDataCrear, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormDataCrear({ ...formDataCrear, [name]: sanitizeInput(value) });
   };
 
   const handleChangeEditar = (e) => {
-    setFormDataEditar({ ...formDataEditar, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormDataEditar({ ...formDataEditar, [name]: sanitizeInput(value) });
   };
 
   const handleFormSubmitCrear = async (e) => {
@@ -114,12 +108,12 @@ const DocumentosRegulatoriosAdmin = () => {
         body: JSON.stringify(formDataCrear),
         credentials: 'include',
       });
-      const data = await response.json();
 
       if (response.ok) {
-        setDocumentos([...documentos, data]);
+        await cargarDocumentos(); // Recargar la lista
         cerrarModal();
       } else {
+        const data = await response.json();
         console.error('Error en el servidor:', data);
       }
     } catch (error) {
@@ -136,12 +130,12 @@ const DocumentosRegulatoriosAdmin = () => {
         body: JSON.stringify(formDataEditar),
         credentials: 'include',
       });
-      const data = await response.json();
 
       if (response.ok) {
-        setDocumentos(documentos.map((doc) => (doc._id === documentoId ? data : doc)));
+        await cargarDocumentos(); // Recargar la lista
         cerrarModal();
       } else {
+        const data = await response.json();
         console.error('Error en el servidor:', data);
       }
     } catch (error) {
@@ -158,10 +152,9 @@ const DocumentosRegulatoriosAdmin = () => {
         method: 'DELETE',
         credentials: 'include',
       });
+
       if (response.ok) {
-        setDocumentos((prevDocs) =>
-          prevDocs.map((doc) => (doc._id === id ? { ...doc, eliminado: true, fechaFin: new Date() } : doc))
-        );
+        await cargarDocumentos(); // Recargar la lista
       } else {
         console.error('Error al eliminar documento');
       }
@@ -208,11 +201,7 @@ const DocumentosRegulatoriosAdmin = () => {
 
           <div className="filtro-container">
             <label htmlFor="filtro">Filtrar por:</label>
-            <select
-              id="filtro"
-              value={filtro}
-              onChange={(e) => setFiltro(e.target.value)}
-            >
+            <select id="filtro" value={filtro} onChange={(e) => setFiltro(e.target.value)}>
               <option value="vigentes">Vigentes</option>
               <option value="tipo">Por tipo</option>
               <option value="historial">Historial completo</option>
@@ -258,16 +247,16 @@ const DocumentosRegulatoriosAdmin = () => {
                   style={{ backgroundColor: documento.eliminado ? 'yellow' : 'transparent' }}
                 >
                   <td data-label="Tipo">{documento.tipo}</td>
-                  <td data-label="Descripción">{documento.descripcion}</td>
-                  <td data-label="Versión">{documento.version}</td>
-                  <td data-label="Fecha de inicio">{new Date(documento.fechaInicio).toLocaleDateString()}</td>
-                  <td data-label="Fecha fin">
+                  <td data-label="Descripcion">{documento.descripcion}</td>
+                  <td data-label="Version">{documento.version}</td>
+                  <td data-label="FechaIn">{new Date(documento.fechaInicio).toLocaleDateString()}</td>
+                  <td data-label="FechcaFin">
                     {documento.fechaFin
                       ? new Date(documento.fechaFin).toLocaleDateString()
                       : 'N/A'}
                   </td>
-                  <td data-label="Vigencia">{documento.vigente ? 'Sí' : 'No'}</td>
-                  <td data-label="Acciones">
+                  <td>{documento.vigente ? 'Sí' : 'No'}</td>
+                  <td data-label="Eliminado">
                     {!documento.eliminado && documento.vigente && (
                       <button
                         className="btn-modificar"
@@ -295,46 +284,36 @@ const DocumentosRegulatoriosAdmin = () => {
       {modalVisible && (
         <div className="modal-overlay">
           <div className="modal">
+            <button className="modal-close" onClick={cerrarModal}>
+              &times;
+            </button>
             <h2>{isEditing ? 'Modificar Documento' : 'Agregar Documento'}</h2>
             <form onSubmit={isEditing ? handleFormSubmitEditar : handleFormSubmitCrear}>
               {!isEditing && (
-                <>
-                  <label>
-                    Tipo
-                    <select
-                      name="tipo"
-                      value={formDataCrear.tipo}
-                      onChange={handleChangeCrear}
-                      required
-                    >
-                      <option value="">Seleccione un tipo</option>
-                      <option value="Políticas de privacidad">
-                        Políticas de privacidad
-                      </option>
-                      <option value="Deslinde">Deslinde</option>
-                      <option value="Términos y condiciones">
-                        Términos y condiciones
-                      </option>
-                    </select>
-                  </label>
-                </>
+                <label>
+                  Tipo
+                  <select name="tipo" value={formDataCrear.tipo} onChange={handleChangeCrear} required>
+                    <option value="">Seleccione un tipo</option>
+                    <option value="Políticas de privacidad">Políticas de privacidad</option>
+                    <option value="Deslinde">Deslinde</option>
+                    <option value="Términos y condiciones">Términos y condiciones</option>
+                  </select>
+                </label>
               )}
               <label>
                 Descripción
                 <textarea
                   name="descripcion"
-                  value={
-                    isEditing ? formDataEditar.descripcion : formDataCrear.descripcion
-                  }
+                  value={isEditing ? formDataEditar.descripcion : formDataCrear.descripcion}
                   onChange={isEditing ? handleChangeEditar : handleChangeCrear}
                   required
                 />
               </label>
-              <div className="button-group">
-                <button type="submit" className="btn-guardar">
+              <div className="modal-buttons">
+                <button type="submit" className="modal-btn green">
                   {isEditing ? 'Guardar Cambios' : 'Agregar Documento'}
                 </button>
-                <button type="button" className="btn-cancelar" onClick={cerrarModal}>
+                <button type="button" className="modal-btn red" onClick={cerrarModal}>
                   Cancelar
                 </button>
               </div>
@@ -343,7 +322,7 @@ const DocumentosRegulatoriosAdmin = () => {
         </div>
       )}
 
-    <FooterH />
+      <FooterH />
     </div>
   );
 };

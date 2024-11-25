@@ -15,7 +15,7 @@ const FooterH = () => {
     const fetchSocialLinks = async () => {
       try {
         // Redes sociales esperadas
-        const socialTypes = ['facebook', 'instagram', 'x'];
+        const socialTypes = ['facebook'];
         const fetchPromises = socialTypes.map(async (type) => {
           try {
             const response = await fetch(`https://beatbox-blond.vercel.app/social/ver/${type}`);

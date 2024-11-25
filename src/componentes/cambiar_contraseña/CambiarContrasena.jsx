@@ -135,8 +135,8 @@ const CambiarContrasena = () => {
     const recomendaciones = [];
 
     // Validaciones generales
-    if (password.length < 8) {
-      recomendaciones.push('Debe tener al menos 8 caracteres');
+    if (password.length < 6) {
+      recomendaciones.push('Debe tener al menos 6 caracteres');
     }
     if (!/[A-Z]/.test(password)) {
       recomendaciones.push('Debe tener al menos una letra mayúscula');

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import React, { useState, useEffect} from 'react';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import './VerificarCorreo.css';
 import '../home/Home.css';
 import logo from '../../assets/logo.png';
@@ -9,11 +9,22 @@ import jim from '../../assets/jim.png';
 import FooterH from '../FooterH';
 
 const VerificarCorreo = () => {
+  const location = useLocation();
   const [codigo, setCodigo] = useState('');  // Estado para el OTP (código)
+  const [correo, setCorreo] = useState(location.state?.correo || ''); // Inicializar con el correo recibido o vacío
   const [error, setError] = useState('');    // Estado para mostrar errores
   const [success, setSuccess] = useState(''); // Estado para mostrar éxito
   const [menuAbierto, setMenuAbierto] = useState(false);  // Estado del menú
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!correo) {
+      setError('No se detectó un correo electrónico. Por favor, regístrate primero.');
+      setTimeout(() => {
+        navigate('/registro'); // Redirigir a la página de registro
+      }, 3000); // Redirigir después de 3 segundos
+    }
+  }, [correo, navigate]);
 
   // Función para sanitizar la entrada del usuario
   const sanitizeInput = (input) => {
@@ -43,8 +54,10 @@ const VerificarCorreo = () => {
 
     // Crear los datos a enviar
     const datosVerificacion = {
-      otp: sanitizeInput(codigo),
+      correo_Electronico: correo,
+      otp: sanitizeInput(codigo)
     };
+
 
     try {
       // Hacer la solicitud POST al servidor
@@ -125,7 +138,7 @@ const VerificarCorreo = () => {
       </div>
 
       {/* Footer */}
-      <FooterH />
+      <FooterH /> 
     </div>
   );
 };

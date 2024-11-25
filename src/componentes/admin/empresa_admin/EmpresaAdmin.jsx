@@ -16,8 +16,10 @@ const EmpresaAdmin = () => {
   const [logoVigente, setLogoVigente] = useState(null);
   const [logos, setLogos] = useState([]);
   const [logosModalVisible, setLogosModalVisible] = useState(false);
+  const [error, setError] = useState(''); // Estado para errores
   const navigate = useNavigate();
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const sanitizedValue = String(nuevoValor).replace(/<\/?[^>]+(>|$)/gi, '').trim();
 
   const nombresCampos = {
     eslogan: 'Eslogan',
@@ -26,11 +28,13 @@ const EmpresaAdmin = () => {
     maxFailedAttempts: 'Intentos Fallidos',
     lockTimeMinutes: 'Tiempo de Bloqueo (min)',
   };
- useEffect(() => {
+
+  useEffect(() => {
     // Detectar si el body tiene la clase 'dark'
     const darkModeEnabled = document.body.classList.contains('dark');
     setIsDarkMode(darkModeEnabled);
   }, []);
+
   useEffect(() => {
     const verificarRol = async () => {
       try {
@@ -112,42 +116,59 @@ const EmpresaAdmin = () => {
     const nombreCampo = nombresCampos[campo] || campo;
     setTituloModal(`Modificar ${nombreCampo}`);
     setModalVisible(true);
+    setError(''); // Limpiar errores al abrir el modal
   };
 
   const cerrarModal = () => {
     setCampoSeleccionado(null);
     setNuevoValor('');
     setModalVisible(false);
+    setError('');
   };
 
   const actualizarCampo = async () => {
     const { campo, seccion } = campoSeleccionado;
+  
+    // Validar que no haya etiquetas <script> ni contenido malicioso
+    const sanitizedValue = nuevoValor.replace(/<script.*?>.*?<\/script>/gi, '').trim();
+  
+    if (sanitizedValue !== nuevoValor) {
+      setError('El campo contiene contenido no permitido (como etiquetas <script>). Por favor, corrige el texto.');
+      return;
+    }
+  
+    // Validar campos específicos
+    if ((campo === 'maxFailedAttempts' || campo === 'lockTimeMinutes') && Number(sanitizedValue) <= 0) {
+      setError('El valor debe ser mayor que 0.');
+      return;
+    }
+  
     const url =
       seccion === 'perfil'
         ? `https://beatbox-blond.vercel.app/perfil-empresa/${campo}`
         : `https://beatbox-blond.vercel.app/configuracion/${campo}`;
-
+  
     try {
       const response = await fetch(url, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({ valor: nuevoValor }),
+        body: JSON.stringify({ valor: sanitizedValue }),
       });
-
+  
       if (response.ok) {
         alert(`${nombresCampos[campo] || campo} actualizado exitosamente`);
-
+  
         if (seccion === 'perfil') {
           setPerfil((prev) =>
-            prev.map(([key, valor]) => (key === campo ? [key, nuevoValor] : [key, valor]))
+            prev.map(([key, valor]) => (key === campo ? [key, sanitizedValue] : [key, valor]))
           );
         } else {
           setConfiguracion((prev) =>
-            prev.map(([key, valor]) => (key === campo ? [key, nuevoValor] : [key, valor]))
+            prev.map(([key, valor]) => (key === campo ? [key, sanitizedValue] : [key, valor]))
           );
         }
-
+  
         cerrarModal();
       } else {
         alert('Error al actualizar el campo');
@@ -157,7 +178,7 @@ const EmpresaAdmin = () => {
       alert('Error de red al actualizar el campo');
     }
   };
-
+  
   const handleUpload = async (url) => {
     try {
       const response = await fetch('https://beatbox-blond.vercel.app/logos', {
@@ -206,7 +227,6 @@ const EmpresaAdmin = () => {
         alert('Logo configurado como vigente.');
         fetchAllLogos();
       }
-    
     } catch (error) {
       console.error('Error al establecer el logo vigente:', error);
     }
@@ -309,19 +329,18 @@ const EmpresaAdmin = () => {
               <button className="modal-close" onClick={cerrarModal}>
                 &times;
               </button>
-              <h2 className="h2-modal">
-                Modificar {nombresCampos[campoSeleccionado?.campo] || campoSeleccionado?.campo}
-              </h2>
+              <h2>{tituloModal}</h2>
               <textarea
                 value={nuevoValor}
                 onChange={(e) => setNuevoValor(e.target.value)}
-                className="textarea-perfil"
+                placeholder="Escribe aquí..."
               />
-              <div className="button-group">
-                <button className="btn-guardar" onClick={actualizarCampo}>
+              {error && <p className="error-message">{error}</p>}
+              <div className="modal-buttons">
+                <button className="modal-btn green" onClick={actualizarCampo}>
                   Guardar
                 </button>
-                <button className="btn-cancelar" onClick={cerrarModal}>
+                <button className="modal-btn red" onClick={cerrarModal}>
                   Cancelar
                 </button>
               </div>
