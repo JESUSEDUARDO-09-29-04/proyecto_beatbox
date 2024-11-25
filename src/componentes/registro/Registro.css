@@ -166,3 +166,27 @@
   font-size: 14px; /* Reducir el tamaño de fuente de los botones */
 }
 }
+.retroalimentacion {
+  font-size: 0.9rem;
+  margin-top: 5px;
+}
+
+.retroalimentacion .error {
+  color: red;
+  font-weight: bold;
+}
+
+.retroalimentacion ul {
+  list-style: none;
+  padding: 0;
+  margin-top: 5px;
+}
+
+.retroalimentacion li {
+  color: red; /* Cambiado a rojo */
+  margin-bottom: 5px;
+}
+
+p {
+  margin: 0;
+}

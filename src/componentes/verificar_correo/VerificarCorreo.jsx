@@ -2,20 +2,23 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import './VerificarCorreo.css';
 import '../home/Home.css';
-import logo from '../../assets/logo.png'; // Ruta del logo
+import logo from '../../assets/logo.png';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import '../inicio_sesion/InicioSesion.css';
 import jim from '../../assets/jim.png';
 import FooterH from '../FooterH';
 
-
 const VerificarCorreo = () => {
   const [codigo, setCodigo] = useState('');  // Estado para el OTP (código)
-  const [correo, setCorreo] = useState('');  // Estado para el correo electrónico
   const [error, setError] = useState('');    // Estado para mostrar errores
   const [success, setSuccess] = useState(''); // Estado para mostrar éxito
   const [menuAbierto, setMenuAbierto] = useState(false);  // Estado del menú
   const navigate = useNavigate();
+
+  // Función para sanitizar la entrada del usuario
+  const sanitizeInput = (input) => {
+    return input.replace(/<|>|&|\/|\\/g, ''); // Elimina caracteres peligrosos
+  };
 
   const toggleMenu = () => {
     setMenuAbierto(!menuAbierto);  // Alternar el menú hamburguesa
@@ -26,16 +29,21 @@ const VerificarCorreo = () => {
     setError('');   // Limpiar mensajes de error anteriores
     setSuccess(''); // Limpiar mensajes de éxito anteriores
 
-    // Verificar que ambos campos (correo y código) estén llenos
-    if (!correo || !codigo) {
-      setError('Por favor, ingresa el correo electrónico y el código de verificación.');
+    // Verificar que el campo del código esté lleno
+    if (!codigo) {
+      setError('Por favor, ingresa el código de verificación.');
+      return;
+    }
+
+    // Verificar si el código contiene caracteres dañinos
+    if (/[<>]/.test(codigo)) {
+      setError('El código no debe contener caracteres peligrosos.');
       return;
     }
 
     // Crear los datos a enviar
     const datosVerificacion = {
-      correo_Electronico: correo,
-      otp: codigo
+      otp: sanitizeInput(codigo),
     };
 
     try {
@@ -58,7 +66,7 @@ const VerificarCorreo = () => {
           navigate('/iniciar-sesion');
         }, 2000);  // Redirigir después de 2 segundos
       } else {
-        // Si el código o el correo son incorrectos
+        // Si el código es incorrecto
         setError(data.message || 'Error al verificar el código. Inténtalo de nuevo.');
       }
     } catch (err) {
@@ -98,23 +106,13 @@ const VerificarCorreo = () => {
           {error && <p style={{ color: 'red' }}>{error}</p>}
           {success && <p style={{ color: 'green' }}>{success}</p>}
 
-          <label htmlFor="correo">Correo Electrónico</label>
-          <input
-            type="email"
-            id="correo"
-            placeholder="Ingresa tu correo electrónico"
-            value={correo}
-            onChange={(e) => setCorreo(e.target.value)}  // Actualizar el estado del correo
-            required
-          />
-
           <label htmlFor="codigo">Código de verificación</label>
           <input
             type="text"
             id="codigo"
             placeholder="Ingresa el código de verificación"
             value={codigo}
-            onChange={(e) => setCodigo(e.target.value)}  // Actualizar el estado del OTP
+            onChange={(e) => setCodigo(sanitizeInput(e.target.value))}  // Sanitizar la entrada
             required
           />
 
@@ -122,7 +120,7 @@ const VerificarCorreo = () => {
         </form>
 
         <div className="imagen-lateral">
-        <img src={jim} alt="Imagen decorativa" />
+          <img src={jim} alt="Imagen decorativa" />
         </div>
       </div>
 
