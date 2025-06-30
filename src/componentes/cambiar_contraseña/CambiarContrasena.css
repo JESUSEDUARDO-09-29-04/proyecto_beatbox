@@ -1,60 +1,423 @@
-
-/* Ajustar espacio entre formulario, header y footer */
-.formulario {
-  margin: 40px auto;  /* Espacio superior e inferior para separarlo del header y footer */
-  width: 40%;
+/* Estilos base para el contenedor */
+.contenedor {
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  padding: 30px; /* Ajustar padding interno */
+  background-color: #f8f8f8;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Modo oscuro para el contenedor */
+.dark .contenedor {
+  background-color: #121212;
+  color: #f0f0f0;
+}
+
+/* Estilos mejorados para el formulario */
+.formulario {
+  margin: 40px auto 60px;
+  width: 100%;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  padding: 35px;
   gap: 20px;
   background-color: white;
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Modo oscuro para el formulario */
+.dark .formulario {
+  background-color: #1e1e1e;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+  color: #f0f0f0;
+}
+
+.formulario::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  background: linear-gradient(90deg, #ff8800, #ff6600);
 }
 
 .formulario h2 {
   text-align: center;
   margin-bottom: 10px;
-  font-size: 24px;
+  font-size: 28px;
+  color: #333;
+  position: relative;
+  padding-bottom: 15px;
+  transition: color 0.3s ease;
+}
+
+/* Modo oscuro para el título */
+.dark .formulario h2 {
+  color: #f0f0f0;
+}
+
+.formulario h2::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
+  background-color: #ff8800;
+}
+
+.formulario label {
+  font-weight: 600;
+  font-size: 15px;
+  color: #444;
+  margin-bottom: -10px;
+  display: block;
+  transition: color 0.3s ease;
+}
+
+/* Modo oscuro para las etiquetas */
+.dark .formulario label {
+  color: #e0e0e0;
+}
+
+/* Estilos para los campos de contraseña */
+.password-field {
+  position: relative;
+  width: 100%;
+}
+
+.password-field input {
+  width: 100%;
+  padding: 14px 45px 14px 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  background-color: #f9f9f9;
   color: #333;
 }
 
-.formulario input {
-  padding: 12px;
-  border-radius: 5px;
-  border: 1px solid #ddd;
-  font-size: 16px;
+/* Modo oscuro para los inputs */
+.dark .password-field input {
+  background-color: #2a2a2a;
+  border-color: #444;
+  color: #f0f0f0;
 }
 
-.password-field {
-  position: relative;
-  display: flex;
-  align-items: center;
+.password-field input:focus {
+  border-color: #ff8800;
+  box-shadow: 0 0 0 3px rgba(255, 136, 0, 0.2);
+  outline: none;
+  background-color: #fff;
+}
+
+/* Modo oscuro para los inputs con foco */
+.dark .password-field input:focus {
+  border-color: #ff9933;
+  box-shadow: 0 0 0 3px rgba(255, 153, 51, 0.2);
+  background-color: #333;
+}
+
+.password-field input::placeholder {
+  color: #999;
+  font-family: "Roboto", sans-serif;
+  font-style: normal;
+}
+
+/* Modo oscuro para los placeholders */
+.dark .password-field input::placeholder {
+  color: #777;
 }
 
 .show-password-btn {
   position: absolute;
-  right: 10px;
-  top: 10px;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
   background: none;
   border: none;
+  color: #666;
   cursor: pointer;
-  font-size: 20px;
-  color: #555;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: color 0.3s ease;
 }
 
+/* Modo oscuro para el botón de mostrar contraseña */
+.dark .show-password-btn {
+  color: #aaa;
+}
+
+.show-password-btn:hover {
+  color: #ff8800;
+}
+
+/* Modo oscuro para el hover del botón de mostrar contraseña */
+.dark .show-password-btn:hover {
+  color: #ff9933;
+}
+
+/* Estilos para la fortaleza de la contraseña */
+.formulario p {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 5px 0;
+}
+
+.formulario ul {
+  list_style: none;
+  padding: 0;
+  margin: 10px 0;
+  background-color: #fff8f0;
+  border-radius: 8px;
+  padding: 15px;
+  border-left: 3px solid #ff8800;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Modo oscuro para la lista de recomendaciones */
+.dark .formulario ul {
+  background-color: #2a2520;
+  border-left: 3px solid #ff9933;
+}
+
+.formulario ul li {
+  margin-bottom: 8px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  line-height: 1.4;
+  color: #555;
+  transition: color 0.3s ease;
+}
+
+/* Modo oscuro para los elementos de la lista */
+.dark .formulario ul li {
+  color: #bbb;
+}
+
+.formulario ul li::before {
+  content: "⚠️";
+  margin-right: 8px;
+  font-size: 14px;
+}
+
+/* Estilos para el botón */
 .btn-cambiar {
-  background-color: #ff8800;
+  background: linear-gradient(90deg, #ff8800, #ff6600);
   color: white;
   border: none;
-  padding: 12px;
-  border-radius: 5px;
+  padding: 15px;
+  border-radius: 8px;
   cursor: pointer;
   font-size: 16px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  margin-top: 10px;
+  box-shadow: 0 4px 10px rgba(255, 136, 0, 0.2);
+}
+
+/* Modo oscuro para el botón */
+.dark .btn-cambiar {
+  background: linear-gradient(90deg, #ff9933, #ff8800);
+  box-shadow: 0 4px 10px rgba(255, 153, 51, 0.3);
+}
+
+.btn-cambiar:hover:not(:disabled) {
+  background: linear-gradient(90deg, #ff7700, #ff5500);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(255, 136, 0, 0.3);
+}
+
+/* Modo oscuro para el hover del botón */
+.dark .btn-cambiar:hover:not(:disabled) {
+  background: linear-gradient(90deg, #ff8822, #ff7700);
+  box-shadow: 0 6px 15px rgba(255, 153, 51, 0.4);
+}
+
+.btn-cambiar:disabled {
+  background: #cccccc;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Modo oscuro para el botón deshabilitado */
+.dark .btn-cambiar:disabled {
+  background: #444444;
+}
+
+/* Estilos para mensajes de error */
+.error {
+  color: #e74c3c;
+  background-color: rgba(231, 76, 60, 0.1);
+  padding: 12px 15px;
+  border-radius: 8px;
+  font-size: 14px;
+  border-left: 3px solid #e74c3c;
+  margin: 0;
   transition: background-color 0.3s ease;
 }
 
-.btn-cambiar:hover {
-  background-color: #e06f00;
+/* Modo oscuro para mensajes de error */
+.dark .error {
+  background-color: rgba(231, 76, 60, 0.2);
+  color: #ff6b6b;
 }
+
+/* Indicador de fortaleza de contraseña */
+.strength-indicator {
+  height: 6px;
+  border-radius: 3px;
+  margin: 10px 0;
+  background-color: #eee;
+  overflow: hidden;
+  position: relative;
+  transition: background-color 0.3s ease;
+}
+
+/* Modo oscuro para el indicador de fortaleza */
+.dark .strength-indicator {
+  background-color: #333;
+}
+
+.strength-indicator::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+.strength-indicator.very-weak::after {
+  width: 20%;
+  background-color: #e74c3c;
+}
+
+.strength-indicator.weak::after {
+  width: 40%;
+  background-color: #e67e22;
+}
+
+.strength-indicator.medium::after {
+  width: 60%;
+  background-color: #f39c12;
+}
+
+.strength-indicator.strong::after {
+  width: 80%;
+  background-color: #27ae60;
+}
+
+.strength-indicator.very-strong::after {
+  width: 100%;
+  background-color: #2ecc71;
+}
+
+/* Animación de carga */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.btn-cambiar:disabled::after {
+  content: "";
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 1s ease-in-out infinite;
+  margin-left: 10px;
+  vertical-align: middle;
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+  .formulario {
+    width: 90%;
+    padding: 25px;
+    margin: 30px auto 50px;
+  }
+
+  .formulario h2 {
+    font-size: 24px;
+  }
+
+  .password-field input {
+    padding: 12px 40px 12px 12px;
+    font-size: 15px;
+  }
+
+  .btn-cambiar {
+    padding: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .formulario {
+    width: 95%;
+    padding: 20px;
+    margin: 20px auto 40px;
+  }
+
+  .formulario h2 {
+    font-size: 22px;
+  }
+
+  .password-field input {
+    font-size: 14px;
+  }
+
+  .formulario ul {
+    padding: 12px;
+  }
+
+  .formulario ul li {
+    font-size: 13px;
+  }
+}
+
+/* Variables de color para facilitar el mantenimiento */
+:root {
+  --color-primary: #ff8800;
+  --color-primary-dark: #e06f00;
+  --color-primary-light: #ff9933;
+  --color-success: #4caf50;
+  --color-success-light: #81c784;
+  --color-error: #f44336;
+  --color-error-light: #e57373;
+  --color-warning: #ff9800;
+  --color-warning-light: #ffb74d;
+}
+
+/* Variables para modo oscuro */
+.dark {
+  --color-primary: #ff9933;
+  --color-primary-dark: #ff8800;
+  --color-primary-light: #ffaa44;
+  --color-success: #81c784;
+  --color-success-light: #a5d6a7;
+  --color-error: #e57373;
+  --color-error-light: #ef9a9a;
+  --color-warning: #ffb74d;
+  --color-warning-light: #ffcc80;
+}
+

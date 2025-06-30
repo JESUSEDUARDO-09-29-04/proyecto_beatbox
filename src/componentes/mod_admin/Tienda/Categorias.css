@@ -1,0 +1,431 @@
+/* Estilos generales */
+.contenedor-categorias-admin {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    padding: 24px;
+    margin-bottom: 30px;
+  }
+  
+  .titulo-seccion {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 24px;
+    border-bottom: 2px solid #ff6600;
+    padding-bottom: 12px;
+  }
+  
+  .subtitulo-seccion {
+    font-size: 20px;
+    color: #444;
+    margin-bottom: 16px;
+  }
+  
+  /* Navegación entre categorías y subcategorías */
+  .navegacion-categorias {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 16px;
+  }
+  
+  .boton-volver {
+    background-color: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 8px 16px;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: all 0.2s ease;
+  }
+  
+  .boton-volver:hover {
+    background-color: #e9e9e9;
+  }
+  
+  .info-categoria-seleccionada {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+    background-color: #f9f9f9;
+    padding: 8px 16px;
+    border-radius: 4px;
+    border-left: 3px solid #ff6600;
+  }
+  
+  .icono-categoria {
+    color: #ff6600;
+    font-size: 18px;
+  }
+  
+  /* Cabecera de sección */
+  .cabecera-seccion {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  
+  .controles-cabecera {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  
+  .campo-busqueda {
+    position: relative;
+    width: 300px;
+  }
+  
+  .icono-busqueda {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #999;
+    font-size: 14px;
+  }
+  
+  .input-busqueda {
+    width: 100%;
+    padding: 10px 10px 10px 36px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: border-color 0.2s ease;
+  }
+  
+  .input-busqueda:focus {
+    outline: none;
+    border-color: #ff6600;
+    box-shadow: 0 0 0 2px rgba(255, 102, 0, 0.1);
+  }
+  
+  .boton-nueva-categoria,
+  .boton-nueva-subcategoria {
+    background-color: #ff6600;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.2s ease;
+  }
+  
+  .boton-nueva-categoria:hover,
+  .boton-nueva-subcategoria:hover {
+    background-color: #e55c00;
+  }
+  
+  /* Formularios */
+  .contenedor-formulario {
+    background-color: #f9f9f9;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 24px;
+  }
+  
+  .titulo-formulario {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .formulario-categoria,
+  .formulario-subcategoria {
+    display: grid;
+    gap: 16px;
+  }
+  
+  .grupo-formulario {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .grupo-formulario-inline {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  
+  .etiqueta-campo {
+    font-size: 14px;
+    font-weight: 500;
+    color: #555;
+  }
+  
+  .campo-texto {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: border-color 0.2s ease;
+  }
+  
+  .campo-texto:focus {
+    outline: none;
+    border-color: #ff6600;
+    box-shadow: 0 0 0 2px rgba(255, 102, 0, 0.1);
+  }
+  
+  .area-texto {
+    min-height: 80px;
+    resize: vertical;
+  }
+  
+  .campo-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .checkbox {
+    width: 16px;
+    height: 16px;
+    accent-color: #ff6600;
+  }
+  
+  .etiqueta-checkbox {
+    font-size: 14px;
+    color: #555;
+  }
+  
+  .campo-numero {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .campo-numero .campo-texto {
+    width: 80px;
+  }
+  
+  .botones-formulario {
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
+  }
+  
+  .boton-guardar,
+  .boton-cancelar {
+    padding: 10px 16px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+  }
+  
+  .boton-guardar {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+  }
+  
+  .boton-guardar:hover {
+    background-color: #43a047;
+  }
+  
+  .boton-cancelar {
+    background-color: #f5f5f5;
+    color: #666;
+    border: 1px solid #ddd;
+  }
+  
+  .boton-cancelar:hover {
+    background-color: #e9e9e9;
+  }
+  
+  /* Tablas */
+  .contenedor-tabla {
+    overflow-x: auto;
+    border: 1px solid #eee;
+    border-radius: 8px;
+  }
+  
+  .tabla-categorias,
+  .tabla-subcategorias {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .tabla-categorias th,
+  .tabla-subcategorias th {
+    background-color: #f5f5f5;
+    padding: 12px 16px;
+    text-align: left;
+    font-weight: 600;
+    color: #444;
+    border-bottom: 2px solid #ddd;
+  }
+  
+  .tabla-categorias td,
+  .tabla-subcategorias td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #eee;
+    color: #333;
+  }
+  
+  .tabla-categorias tr:hover,
+  .tabla-subcategorias tr:hover {
+    background-color: #f9f9f9;
+  }
+  
+  .celda-categoria,
+  .celda-subcategoria {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .icono-categoria,
+  .icono-subcategoria {
+    color: #ff6600;
+    font-size: 16px;
+  }
+  
+  .celda-descripcion {
+    max-width: 300px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .estado {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+  }
+  
+  .estado.activo {
+    background-color: rgba(76, 175, 80, 0.1);
+    color: #4caf50;
+    border: 1px solid rgba(76, 175, 80, 0.2);
+  }
+  
+  .estado.inactivo {
+    background-color: rgba(244, 67, 54, 0.1);
+    color: #f44336;
+    border: 1px solid rgba(244, 67, 54, 0.2);
+  }
+  
+  .acciones-categoria,
+  .acciones-subcategoria {
+    display: flex;
+    gap: 8px;
+  }
+  
+  .boton-accion {
+    background: none;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .boton-accion.editar {
+    color: #2196f3;
+    background-color: rgba(33, 150, 243, 0.1);
+  }
+  
+  .boton-accion.editar:hover {
+    background-color: rgba(33, 150, 243, 0.2);
+  }
+  
+  .boton-accion.eliminar {
+    color: #f44336;
+    background-color: rgba(244, 67, 54, 0.1);
+  }
+  
+  .boton-accion.eliminar:hover {
+    background-color: rgba(244, 67, 54, 0.2);
+  }
+  
+  .boton-subcategorias {
+    background-color: #ff6600;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 6px 12px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .boton-subcategorias:hover {
+    background-color: #e55c00;
+  }
+  
+  /* Mensajes */
+  .mensaje-sin-datos {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    text-align: center;
+    color: #666;
+  }
+  
+  .icono-advertencia {
+    font-size: 32px;
+    color: #ff9800;
+    margin-bottom: 16px;
+  }
+  
+  /* Responsividad */
+  @media (max-width: 768px) {
+    .cabecera-seccion {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .controles-cabecera {
+      width: 100%;
+      justify-content: space-between;
+    }
+  
+    .campo-busqueda {
+      width: 100%;
+      max-width: none;
+    }
+  
+    .grupo-formulario-inline {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .botones-formulario {
+      flex-direction: column;
+    }
+  }
+  
+  

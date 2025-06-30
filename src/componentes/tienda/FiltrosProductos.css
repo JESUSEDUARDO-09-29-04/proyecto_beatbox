@@ -1,0 +1,285 @@
+/* Variables globales (reutilizando las de tienda.css) */
+:root {
+  --color-primary: #ff8800;
+  --color-primary-dark: #ff6600;
+  --color-secondary: #333333;
+  --color-accent: #ff4500;
+  --color-background: #ffffff;
+  --color-text: #333333;
+  --color-text-light: #666666;
+  --color-border: #e0e0e0;
+  --color-success: #4caf50;
+  --color-error: #f44336;
+  --color-warning: #ff9800;
+  --color-info: #2196f3;
+  --border-radius-sm: 4px;
+  --border-radius-md: 8px;
+  --border-radius-lg: 16px;
+  --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --box-shadow-hover: 0 8px 15px rgba(0, 0, 0, 0.15);
+  --transition-fast: 0.2s ease;
+  --transition-normal: 0.3s ease;
+  --transition-slow: 0.5s ease;
+}
+
+/* 🔥 Contenedor Principal: Aseguramos que los filtros y productos estén bien alineados */
+.contenedor-filtros-productos {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  padding: 20px;
+  background-color: white;
+}
+
+/* 🔥 Sidebar de Filtros: Se mantiene fijo al lado izquierdo */
+.sidebar-filtros {
+  width: 300px;
+  background: white;
+  padding: 20px;
+  flex-shrink: 0;
+}
+
+/* 🔥 Título de filtros y botón limpiar */
+.titulo-filtros {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.titulo-filtros h3 {
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--color-text);
+}
+
+/* 🔥 Botón de Limpiar Filtros */
+.btn-limpiar-filtros {
+  background: none;
+  border: none;
+  color: var(--color-primary);
+  font-size: 14px;
+  cursor: pointer;
+  font-weight: bold;
+  text-align: right;
+}
+
+.btn-limpiar-filtros:hover {
+  color: var(--color-primary-dark);
+}
+
+/* 🔥 Sección de filtro individual */
+.filtro {
+  margin-bottom: 15px;
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: 12px;
+}
+
+.filtro h4 {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: var(--color-text);
+}
+
+/* 🔥 Opciones de filtro */
+.opcion {
+  display: flex;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.opcion input[type="checkbox"],
+.opcion input[type="radio"] {
+  margin-right: 8px;
+  cursor: pointer;
+}
+
+.opcion label {
+  font-size: 14px;
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+/* 🔥 Botón "Ver Más" */
+.ver-mas {
+  background: none;
+  border: none;
+  color: var(--color-primary);
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  text-align: left;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.ver-mas:hover {
+  color: var(--color-primary-dark);
+  text-decoration: underline;
+}
+
+/* 🔥 Contenedor de colores */
+.colores {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+/* 🔥 Círculo de color */
+.color {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+}
+
+/* 🔥 Borde cuando está seleccionado */
+.color.seleccionado {
+  border: 2px solid black;
+}
+
+/* 🔥 Slider de precio */
+.filtro input[type="range"] {
+  width: 100%;
+  margin: 10px 0;
+  accent-color: var(--color-primary);
+}
+
+.filtro p {
+  font-size: 14px;
+  color: var(--color-text);
+}
+
+/* 🔥 Contenedor de Productos: Cambiado de 5 a 4 productos por fila */
+.contenedor-productos-filtros {
+  flex-grow: 1;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+/* 🔥 Tarjeta de Producto */
+.tarjeta-producto {
+  background: white;
+  padding: 15px;
+  text-align: center;
+  position: relative;
+  transition: transform 0.3s;
+}
+
+.tarjeta-producto:hover {
+  transform: translateY(-5px);
+}
+
+/* 🔹 Etiqueta de descuento */
+.etiqueta-descuento {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: red;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 4px 8px;
+  border-radius: 4px;
+  z-index: 1;
+}
+
+/* 🔹 Imagen del producto */
+.imagen-producto {
+  width: 100%;
+  height: 180px;
+  object-fit: contain;
+  margin-bottom: 10px;
+  transition: transform var(--transition-fast);
+}
+
+.tarjeta-producto:hover .imagen-producto {
+  transform: scale(1.05);
+}
+
+/* 🔹 Información del producto */
+.nombre-producto {
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 5px;
+  height: 40px;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.precio-producto {
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--color-primary);
+  margin-bottom: 10px;
+}
+
+/* 🔹 Botón agregar al carrito */
+.btn-agregar {
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  width: 100%;
+  transition: background 0.3s;
+}
+
+.btn-agregar:hover {
+  background-color: var(--color-primary-dark);
+}
+
+/* 🔥 Mensaje de no productos */
+.no-productos {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 40px;
+  font-size: 16px;
+  color: var(--color-text-light);
+}
+
+/* 🔥 Ajustar el responsive para mantener 4 columnas en pantallas grandes y medianas */
+@media (max-width: 1200px) {
+  .contenedor-productos-filtros {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 992px) {
+  .contenedor-productos-filtros {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .contenedor-filtros-productos {
+    flex-direction: column;
+  }
+
+  .sidebar-filtros {
+    width: 100%;
+    border-right: none;
+  }
+
+  .contenedor-productos-filtros {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .contenedor-productos-filtros {
+    grid-template-columns: 1fr;
+  }
+}
+

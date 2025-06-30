@@ -1,0 +1,402 @@
+/* Variables para el tema */
+:root {
+  --table-bg-light: #ffffff;
+  --table-header-bg-light: #ff6600;
+  --table-header-text-light: white;
+  --table-row-even-bg-light: #f9f9f9;
+  --table-row-hover-bg-light: #f1f1f1;
+  --table-border-color-light: #ddd;
+  --table-text-color-light: #333;
+  --rol-admin-color: #29b529;
+  --rol-user-color-light: black;
+  --btn-active-bg: #4caf50;
+  --btn-active-hover: #4caf4fc3;
+  --btn-blocked-bg: #ff850a;
+  --btn-blocked-hover: #ff840aa3;
+  --btn-delete-bg: #f44336;
+  --btn-delete-hover: #d32f2f;
+  --modal-bg-light: #ffffff;
+  --modal-text-light: #333;
+  --modal-border-light: #eee;
+  --modal-shadow-light: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Dark mode variables */
+.usuarios-admin-contenedor.dark {
+  --table-bg-dark: #2a2a2a;
+  --table-header-bg-dark: #cc5200;
+  --table-header-text-dark: #e0e0e0;
+  --table-row-even-bg-dark: #333333;
+  --table-row-hover-bg-dark: #3a3a3a;
+  --table-border-color-dark: #444;
+  --table-text-color-dark: #e0e0e0;
+  --rol-user-color-dark: #e0e0e0;
+  --modal-bg-dark: #333333;
+  --modal-text-dark: #ffffff;
+  --modal-border-dark: #555555;
+  --modal-shadow-dark: 0 8px 16px rgba(0, 0, 0, 0.4);
+}
+
+.usuarios-admin-contenedor {
+  padding: 20px;
+  background-color: var(--table-bg-light);
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Modo oscuro para el contenedor principal */
+.usuarios-admin-contenedor.dark {
+  background-color: var(--table-bg-dark);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.usuarios-admin-header {
+  margin-bottom: 25px;
+  border-bottom: 1px solid var(--table-border-color-light);
+  padding-bottom: 15px;
+}
+
+/* Modo oscuro para el encabezado */
+.usuarios-admin-contenedor.dark .usuarios-admin-header {
+  border-color: var(--table-border-color-dark);
+}
+
+.usuarios-admin-header h1 {
+  font-size: 28px;
+  color: var(--table-text-color-light);
+  margin: 0;
+}
+
+/* Modo oscuro para el título */
+.usuarios-admin-contenedor.dark .usuarios-admin-header h1 {
+  color: var(--table-text-color-dark);
+}
+
+/* Tabla base */
+.table-responsive {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.usuarios-tabla {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  color: var(--table-text-color-light);
+  min-width: 600px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* Modo oscuro para la tabla */
+.usuarios-admin-contenedor.dark .usuarios-tabla {
+  color: var(--table-text-color-dark);
+}
+
+.usuarios-tabla th,
+.usuarios-tabla td {
+  text-align: center;
+  padding: 12px 15px;
+  border: 1px solid var(--table-border-color-light);
+}
+
+/* Modo oscuro para bordes de tabla */
+.usuarios-admin-contenedor.dark .usuarios-tabla th,
+.usuarios-admin-contenedor.dark .usuarios-tabla td {
+  border-color: var(--table-border-color-dark);
+}
+
+.usuarios-tabla thead th {
+  background-color: var(--table-header-bg-light);
+  color: var(--table-header-text-light);
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-radius: 8px 8px 0 0;
+}
+
+/* Modo oscuro para encabezado de tabla */
+.usuarios-admin-contenedor.dark .usuarios-tabla thead th {
+  background-color: var(--table-header-bg-dark);
+  color: var(--table-header-text-dark);
+}
+
+.usuarios-tabla tbody tr:nth-child(even) {
+  background-color: var(--table-row-even-bg-light);
+}
+
+/* Modo oscuro para filas pares */
+.usuarios-admin-contenedor.dark .usuarios-tabla tbody tr:nth-child(even) {
+  background-color: var(--table-row-even-bg-dark);
+}
+
+.usuarios-tabla tbody tr:hover {
+  background-color: var(--table-row-hover-bg-light);
+}
+
+/* Modo oscuro para filas al pasar el ratón */
+.usuarios-admin-contenedor.dark .usuarios-tabla tbody tr:hover {
+  background-color: var(--table-row-hover-bg-dark);
+}
+
+/* Colores del rol */
+.usuarios-tabla td.rol {
+  font-weight: bold;
+}
+
+.usuarios-tabla td.rol.admin {
+  color: var(--rol-admin-color);
+}
+
+.usuarios-tabla td.rol.usuario {
+  color: var(--rol-user-color-light);
+}
+
+/* Modo oscuro para rol de usuario */
+.usuarios-admin-contenedor.dark .usuarios-tabla td.rol.usuario {
+  color: var(--rol-user-color-dark);
+}
+
+/* Button Group */
+.button-group {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.btn-estado,
+.btn-eliminar {
+  padding: 8px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+  white-space: nowrap;
+}
+
+.btn-estado:active,
+.btn-eliminar:active {
+  transform: translateY(1px);
+}
+
+.btn-estado.activo {
+  background-color: var(--btn-active-bg);
+  color: #fff;
+  border: none;
+}
+
+.btn-estado.activo:hover {
+  background-color: var(--btn-active-hover);
+}
+
+.btn-estado.bloqueado {
+  background-color: var(--btn-blocked-bg);
+  color: #fff;
+  border: none;
+}
+
+.btn-estado.bloqueado:hover {
+  background-color: var(--btn-blocked-hover);
+}
+
+.btn-eliminar {
+  background-color: var(--btn-delete-bg);
+  color: #fff;
+  border: none;
+}
+
+.btn-eliminar:hover {
+  background-color: var(--btn-delete-hover);
+}
+
+/* Custom Modal Styles */
+.custom-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.custom-modal {
+  background-color: var(--modal-bg-light);
+  padding: 25px;
+  border-radius: 15px;
+  width: 90%;
+  max-width: 450px;
+  text-align: center;
+  box-shadow: var(--modal-shadow-light);
+  position: relative;
+  animation: modalSlideIn 0.3s ease-in-out;
+  color: var(--modal-text-light);
+  border: 1px solid var(--modal-border-light);
+}
+
+/* Modo oscuro para el modal */
+.usuarios-admin-contenedor.dark .custom-modal {
+  background-color: var(--modal-bg-dark);
+  color: var(--modal-text-dark);
+  box-shadow: var(--modal-shadow-dark);
+  border-color: var(--modal-border-dark);
+}
+
+.custom-modal-close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--table-text-color-light);
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+/* Modo oscuro para el botón de cerrar modal */
+.usuarios-admin-contenedor.dark .custom-modal-close {
+  color: var(--table-text-color-dark);
+}
+
+.custom-modal-close:hover {
+  color: #f44336;
+}
+
+.custom-modal h2 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  font-size: 22px;
+}
+
+.custom-modal p {
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+@keyframes modalSlideIn {
+  from {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+  .usuarios-admin-contenedor {
+    padding: 15px;
+  }
+
+  .usuarios-admin-header h1 {
+    font-size: 24px;
+  }
+
+  .usuarios-tabla {
+    display: block;
+    width: 100%;
+    border: none;
+    min-width: unset;
+  }
+
+  .usuarios-tabla thead {
+    display: none;
+  }
+
+  .usuarios-tabla tbody {
+    display: block;
+    width: 100%;
+  }
+
+  .usuarios-tabla tbody tr {
+    display: block;
+    margin-bottom: 15px;
+    border: 1px solid var(--table-border-color-light);
+    border-radius: 8px;
+    padding: 15px 20px;
+    background-color: var(--table-bg-light);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  }
+
+  /* Modo oscuro para filas en modo tarjeta */
+  .usuarios-admin-contenedor.dark .usuarios-tabla tbody tr {
+    background-color: var(--table-row-even-bg-dark);
+    border-color: var(--table-border-color-dark);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  .usuarios-tabla tbody tr td {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 8px 0;
+    border-bottom: 1px dashed var(--table-border-color-light);
+    font-size: 15px;
+  }
+
+  /* Modo oscuro para bordes de celdas en modo tarjeta */
+  .usuarios-admin-contenedor.dark .usuarios-tabla tbody tr td {
+    border-color: var(--table-border-color-dark);
+  }
+
+  .usuarios-tabla tbody tr td:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .usuarios-tabla tbody tr td::before {
+    content: attr(data-label);
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+    color: #777;
+    width: 100%;
+    text-align: left;
+  }
+
+  /* Modo oscuro para etiquetas en modo tarjeta */
+  .usuarios-admin-contenedor.dark .usuarios-tabla tbody tr td::before {
+    color: #bbbbbb;
+  }
+
+  .button-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    margin-top: 10px;
+    justify-content: center;
+  }
+
+  .btn-estado,
+  .btn-eliminar {
+    flex-grow: 1;
+    max-width: 100%;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .usuarios-admin-contenedor {
+    padding: 10px;
+  }
+
+  .usuarios-admin-header h1 {
+    font-size: 22px;
+  }
+
+  .usuarios-tabla tbody tr td {
+    padding: 6px 0;
+  }
+}

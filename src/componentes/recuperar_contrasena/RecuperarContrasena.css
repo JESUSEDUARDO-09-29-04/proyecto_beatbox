@@ -1,99 +1,562 @@
-  
-  /* Formulario e Imagen */
-  .formulario-imagen {
-    display: flex;
-    flex: 1;
-    height: calc(100vh - 100px); /* Resta espacio del header y footer */
+/* Base Styles */
+.recuperar-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-family: "Arial", sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Theme Styles */
+.recuperar-container.light {
+  background-color: #f5f5f5;
+  color: #333333;
+}
+
+.recuperar-container.dark {
+  background-color: #121212;
+  color: #f0f0f0;
+}
+
+/* Breadcrumb */
+.breadcrumb-container {
+  padding: 10px 20px;
+  background-color: transparent;
+}
+
+/* Main Content */
+.recuperar-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  padding: 20px;
+}
+
+.recuperar-main {
+  display: flex;
+  width: 100%;
+  max-width: 1200px;
+  background-color: #ffffff;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+}
+
+.recuperar-container.dark .recuperar-main {
+  background-color: #1e1e1e;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* Form Container */
+.recuperar-form-container {
+  width: 40%;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.recuperar-form {
+  max-width: 450px;
+  margin: 0 auto;
+}
+
+/* Form Header */
+.form-header {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.header-icon {
+  font-size: 28px;
+  color: #ff8800;
+  margin-bottom: 10px;
+}
+
+.recuperar-container.dark .header-icon {
+  color: #ff9933;
+}
+
+.form-header h1 {
+  font-size: 26px;
+  font-weight: bold;
+  margin: 0 0 10px 0;
+  color: #333333;
+}
+
+.recuperar-container.dark .form-header h1 {
+  color: #f0f0f0;
+}
+
+.form-subtitle {
+  color: #666666;
+  font-size: 15px;
+  margin: 0;
+}
+
+.recuperar-container.dark .form-subtitle {
+  color: #aaaaaa;
+}
+
+/* Form Description */
+.form-description {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.form-description p {
+  color: #666666;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.recuperar-container.dark .form-description p {
+  color: #aaaaaa;
+}
+
+/* Messages */
+.mensaje-error,
+.mensaje-exito {
+  padding: 12px 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.mensaje-error {
+  background-color: rgba(244, 67, 54, 0.1);
+  border-left: 3px solid #f44336;
+  color: #f44336;
+}
+
+.recuperar-container.dark .mensaje-error {
+  background-color: rgba(244, 67, 54, 0.2);
+}
+
+.mensaje-exito {
+  background-color: rgba(76, 175, 80, 0.1);
+  border-left: 3px solid #4caf50;
+  color: #4caf50;
+}
+
+.recuperar-container.dark .mensaje-exito {
+  background-color: rgba(76, 175, 80, 0.2);
+}
+
+.error-icon,
+.exito-icon {
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.mensaje-error p,
+.mensaje-exito p {
+  margin: 0;
+  font-size: 14px;
+}
+
+/* Form Group */
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #333333;
+  font-size: 15px;
+}
+
+.recuperar-container.dark .form-group label {
+  color: #f0f0f0;
+}
+
+.label-icon {
+  margin-right: 8px;
+  color: #ff8800;
+  font-size: 16px;
+}
+
+.recuperar-container.dark .label-icon {
+  color: #ff9933;
+}
+
+.input-wrapper {
+  position: relative;
+}
+
+.input-wrapper input {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #dddddd;
+  border-radius: 8px;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  background-color: #ffffff;
+  color: #333333;
+  font-family: "Roboto", sans-serif;
+}
+
+.recuperar-container.dark .input-wrapper input {
+  background-color: #2a2a2a;
+  border-color: #444444;
+  color: #f0f0f0;
+}
+
+.input-wrapper input::placeholder {
+  color: #999999;
+  font-family: "Roboto", sans-serif;
+  font-style: normal;
+}
+
+.recuperar-container.dark .input-wrapper input::placeholder {
+  color: #777777;
+}
+
+.input-wrapper input:focus {
+  border-color: #ff8800;
+  box-shadow: 0 0 0 3px rgba(255, 136, 0, 0.2);
+  outline: none;
+}
+
+.recuperar-container.dark .input-wrapper input:focus {
+  box-shadow: 0 0 0 3px rgba(255, 136, 0, 0.1);
+}
+
+/* Sugerencias */
+.sugerencias {
+  margin-top: 10px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 10px 15px;
+  border-left: 3px solid #ff8800;
+}
+
+.recuperar-container.dark .sugerencias {
+  background-color: #2a2a2a;
+}
+
+.sugerencias p {
+  margin: 0 0 5px 0;
+  font-size: 14px;
+  color: #666666;
+}
+
+.recuperar-container.dark .sugerencias p {
+  color: #aaaaaa;
+}
+
+.sugerencias ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sugerencias li {
+  padding: 5px 0;
+  color: #ff8800;
+  cursor: pointer;
+  font-size: 14px;
+  transition: color 0.3s ease;
+}
+
+.recuperar-container.dark .sugerencias li {
+  color: #ff9933;
+}
+
+.sugerencias li:hover {
+  text-decoration: underline;
+  color: #e06f00;
+}
+
+.recuperar-container.dark .sugerencias li:hover {
+  color: #e67300;
+}
+
+/* Buttons */
+.btn-principal {
+  width: 100%;
+  background-color: #ff8800;
+  color: white;
+  border: none;
+  padding: 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.recuperar-container.dark .btn-principal {
+  background-color: #ff9933;
+}
+
+.btn-principal:hover:not(:disabled) {
+  background-color: #e06f00;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 136, 0, 0.3);
+}
+
+.recuperar-container.dark .btn-principal:hover:not(:disabled) {
+  background-color: #e67300;
+  box-shadow: 0 4px 12px rgba(255, 153, 51, 0.3);
+}
+
+.btn-principal:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.recuperar-container.dark .btn-principal:disabled {
+  background-color: #444444;
+}
+
+.btn-secundario {
+  width: 100%;
+  background-color: transparent;
+  color: #666666;
+  border: 1px solid #dddddd;
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.recuperar-container.dark .btn-secundario {
+  color: #aaaaaa;
+  border-color: #444444;
+}
+
+.btn-secundario:hover {
+  background-color: #f5f5f5;
+  color: #333333;
+  border-color: #bbbbbb;
+}
+
+.recuperar-container.dark .btn-secundario:hover {
+  background-color: #2a2a2a;
+  color: #f0f0f0;
+  border-color: #666666;
+}
+
+.btn-icon {
+  font-size: 14px;
+  transition: transform 0.3s ease;
+}
+
+.btn-principal:hover:not(:disabled) .btn-icon {
+  transform: translateX(3px);
+}
+
+.btn-secundario:hover .btn-icon {
+  transform: translateX(-3px);
+}
+
+/* Spinner Animation */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
   }
-  
-  .formulario {
-    width: 40%; 
-    display: flex;
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.spinner-icon {
+  animation: spin 1s linear infinite;
+  font-size: 16px;
+}
+
+.spinner-large {
+  animation: spin 1.5s linear infinite;
+  font-size: 40px;
+  color: #ff8800;
+}
+
+.recuperar-container.dark .spinner-large {
+  color: #ff9933;
+}
+
+/* Loading Overlay */
+.overlay-loading {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.recuperar-container.dark .overlay-loading {
+  background-color: rgba(30, 30, 30, 0.9);
+}
+
+.loading-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+}
+
+.recuperar-container.dark .loading-content {
+  background-color: #1e1e1e;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+}
+
+.loading-content p {
+  font-size: 16px;
+  color: #333333;
+  margin: 0;
+}
+
+.recuperar-container.dark .loading-content p {
+  color: #f0f0f0;
+}
+
+/* Image Section */
+.recuperar-imagen {
+  width: 60%;
+  position: relative;
+  overflow: hidden;
+}
+
+.recuperar-imagen img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.recuperar-imagen:hover img {
+  transform: scale(1.05);
+}
+
+/* Image Overlay */
+.imagen-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+  padding: 30px;
+  color: white;
+  text-align: center;
+}
+
+.imagen-overlay h3 {
+  font-size: 28px;
+  margin-bottom: 10px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.imagen-overlay p {
+  font-size: 18px;
+  opacity: 0.9;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  margin: 0;
+}
+
+/* Responsive Styles */
+@media (max-width: 992px) {
+  .recuperar-main {
     flex-direction: column;
-    justify-content: center;
-    padding: 100px;
-    gap: 20px;
+    max-width: 600px;
   }
-  
-  .formulario h2 {
-    margin-bottom: 10px;
-    font-size: 24px;
-    text-align: center;
+
+  .recuperar-form-container,
+  .recuperar-imagen {
+    width: 100%;
   }
-  
-  .formulario input {
-    padding: 12px;
-    border-radius: 5px;
-    border: 1px solid #ddd;
-    font-size: 16px;
+
+  .recuperar-imagen {
+    height: 300px;
+    order: -1;
   }
-  
-  .btn-recuperar {
-    background-color: #ff8800;
-    color: white;
-    border: none;
-    padding: 12px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s;
-  }
-  
-  .btn-recuperar:hover {
-    background-color: #e06f00;
-  }
-  
-  .imagen-lateral {
-    width: 60%; 
-    background-color: #e0e0e0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-    font-size: 18px;
-    color: #666;
-  }
-  
-/* Media Query para Pantallas Pequeñas */
+}
+
 @media (max-width: 768px) {
-  .formulario-imagen {
-    flex-direction: column; /* Cambia de fila a columna */
-    align-items: center; /* Asegura que el formulario esté centrado */
-    gap: 20px; /* Añade espacio entre el formulario y la imagen */
+  .recuperar-content {
+    padding: 15px;
   }
 
-  /* Ajustar el formulario para que ocupe el 90% del ancho en pantallas pequeñas */
-  .formulario {
-    width: 90%;
-    padding: 20px; /* Reduce el padding */
+  .recuperar-form-container {
+    padding: 30px 20px;
   }
 
-  /* Ajustar el tamaño de la imagen lateral */
-  .imagen-lateral {
-    width: 90%; /* Asegura que la imagen también sea responsiva */
-    height: 200px; /* Establecer una altura adecuada para la imagen */
+  .form-header h1 {
+    font-size: 22px;
   }
 
-  /* Asegurar que los botones en el header se mantengan en la misma línea */
-  .navbar .nav-enlaces {
-    flex-direction: row; /* Asegura que el botón de iniciar sesión y el icono del menú se alineen horizontalmente */
-    gap: 10px; /* Ajusta el espacio entre los botones */
+  .icon-circle {
+    width: 60px;
+    height: 60px;
+  }
+
+  .header-icon {
+    font-size: 24px;
+  }
+
+  .imagen-overlay h3 {
+    font-size: 22px;
+  }
+
+  .imagen-overlay p {
+    font-size: 16px;
   }
 }
-/* Otros ajustes para pantallas más pequeñas (hasta 576px de ancho) */
+
 @media (max-width: 576px) {
-.formulario {
-  width: 100%; /* Ocupa todo el ancho en pantallas más pequeñas */
-  padding: 15px; /* Reduce aún más el padding */
+  .recuperar-form-container {
+    padding: 20px 15px;
+  }
+
+  .recuperar-imagen {
+    height: 200px;
+  }
+
+  .btn-principal,
+  .btn-secundario {
+    padding: 12px;
+    font-size: 14px;
+  }
+
+  .form-header h1 {
+    font-size: 20px;
+  }
+
+  .icon-circle {
+    width: 50px;
+    height: 50px;
+  }
+
+  .header-icon {
+    font-size: 20px;
+  }
 }
 
-.imagen-lateral {
-  width: 100%; /* Asegura que la imagen ocupe todo el ancho disponible */
-  height: 150px; /* Ajusta la altura de la imagen */
-}
-
-.btn-iniciar, .btn-registrar {
-  padding: 10px; /* Ajustar el padding de los botones para pantallas pequeñas */
-  font-size: 14px; /* Reducir el tamaño de fuente de los botones */
-}
-}

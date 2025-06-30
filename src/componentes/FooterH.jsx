@@ -1,89 +1,114 @@
-// src/componentes/admin/AdminMenu.jsx
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import logo from '../assets/logo.png';
-import './FooterH.css';
+"use client"
+
+import { useState, useEffect, useContext } from "react"
+import { Link } from "react-router-dom"
+import { FaHeart, FaFacebook } from "react-icons/fa"
+import { ThemeContext } from "../context/ThemeContext"
+import logo from "../assets/logo.png"
+import "./FooterH.css"
 
 const FooterH = () => {
+  const { theme } = useContext(ThemeContext)
   const [socialLinks, setSocialLinks] = useState({
     facebook: null,
     instagram: null,
     x: null,
-  });
+  })
+  const [currentYear] = useState(new Date().getFullYear())
 
   useEffect(() => {
     const fetchSocialLinks = async () => {
       try {
         // Redes sociales esperadas
-        const socialTypes = ['facebook'];
+        const socialTypes = ["facebook"]
         const fetchPromises = socialTypes.map(async (type) => {
           try {
-            const response = await fetch(`https://beatbox-blond.vercel.app/social/ver/${type}`);
+            const response = await fetch(`http://localhost:3000/social/ver/${type}`)
             if (response.ok) {
-              const data = await response.json();
-              return { [type]: data.link || null }; // Guardar link o null si no hay
+              const data = await response.json()
+              return { [type]: data.link || null } // Guardar link o null si no hay
             } else {
-              console.warn(`No se pudo cargar el link para ${type}`);
-              return { [type]: null };
+              console.warn(`No se pudo cargar el link para ${type}`)
+              return { [type]: null }
             }
           } catch (error) {
-            console.warn(`Error al cargar el link para ${type}:`, error);
-            return { [type]: null };
+            console.warn(`Error al cargar el link para ${type}:`, error)
+            return { [type]: null }
           }
-        });
+        })
 
         // Resolvemos todas las promesas y consolidamos los resultados
-        const results = await Promise.all(fetchPromises);
-        const consolidatedLinks = results.reduce((acc, curr) => ({ ...acc, ...curr }), {});
-        setSocialLinks(consolidatedLinks);
+        const results = await Promise.all(fetchPromises)
+        const consolidatedLinks = results.reduce((acc, curr) => ({ ...acc, ...curr }), {})
+        setSocialLinks(consolidatedLinks)
       } catch (error) {
-        console.error('Error al cargar los links de redes sociales:', error);
+        console.error("Error al cargar los links de redes sociales:", error)
       }
-    };
+    }
 
-    fetchSocialLinks();
-  }, []);
+    fetchSocialLinks()
+  }, [])
 
   return (
-    <div>
-      <footer className="footer">
-        <img src={logo} alt="Logo Beatbox" className="logo-footer" />
-        <div className="linea-separacion"></div>
-
-        <h2>Síguenos</h2>
-        <div className="redes-sociales">
-          {socialLinks.facebook && (
-            <a href={socialLinks.facebook} target="_blank" rel="noopener noreferrer">
-              <i className="fab fa-facebook"></i>
-            </a>
-          )}
-          {socialLinks.instagram && (
-            <a href={socialLinks.instagram} target="_blank" rel="noopener noreferrer">
-              <i className="fab fa-instagram"></i>
-            </a>
-          )}
-          {socialLinks.x && (
-            <a href={socialLinks.x} target="_blank" rel="noopener noreferrer">
-              <i className="fab fa-twitter"></i> {/* Asegúrate del nombre del ícono */}
-            </a>
-          )}
+    <footer className={`footer ${theme === "dark" ? "dark-mode" : ""}`}>
+      <div className="footer-main">
+        <div className="footer-logo-container">
+          <img src={logo || "/placeholder.svg"} alt="Logo Beatbox" className="logo-footer" />
         </div>
 
-        <div className="linea-separacion"></div>
-
-        <div className="footer-secciones">
-          <div>
+        <div className="footer-columns">
+          <div className="footer-column">
             <h3>Beatbox</h3>
             <ul>
-              <li><a href="#">Quiénes somos</a></li>
-              <li><a href="#">Contáctanos</a></li>
-              <li><a href="#">Aviso de Privacidad</a></li>
+              <li>
+                <Link to="/quienes_somos">Quienes Somos</Link>
+              </li>
+              <li>
+                <Link to="/contactanos">Contáctanos</Link>
+              </li>
+              <li>
+                <Link to="/aviso_privacidad">Aviso de Privacidad</Link>
+              </li>
+              <li>
+                <Link to="/Preguntas_Frecuentes">Preguntas Frecuentes</Link>
+              </li>
             </ul>
           </div>
-        </div>
-      </footer>
-      </div>
-  );
-};
 
-export default FooterH;
+          <div className="footer-column">
+            <h3>Servicios</h3>
+            <ul>
+              <li>
+                <Link to="/Tienda">Tienda</Link>
+              </li>
+              <li>
+                <Link to="/">Membresías</Link>
+              </li>
+            </ul>
+          </div>
+
+          <div className="footer-column">
+            <h3>Síguenos</h3>
+            <div className="footer-social">
+              {socialLinks.facebook && (
+                <a href={socialLinks.facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+                  <FaFacebook />
+                </a>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="footer-bottom">
+        <p className="copyright">&copy; {currentYear} Beatbox. Todos los derechos reservados.</p>
+        <p className="made-with">
+          Hecho con <FaHeart className="heart-icon" /> en México
+        </p>
+      </div>
+    </footer>
+  )
+}
+
+export default FooterH
+

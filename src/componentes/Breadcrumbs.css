@@ -1,0 +1,54 @@
+/* Estilos independientes para el componente Breadcrumbs */
+.breadcrumbs {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: #ff8800;
+  position: relative;
+  margin: 0;
+  height: 20px; /* Altura fija para mantener consistencia */
+}
+
+.breadcrumb-item {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  color: #ff8800;
+  transition: color 0.3s;
+  position: relative; /* Posición relativa para mantener consistencia */
+}
+
+.breadcrumb-item:hover {
+  color: #ff6600;
+}
+
+.breadcrumb-item svg {
+  margin-right: 7px;
+  font-size: 16px;
+  color: #ff8800;
+}
+
+.breadcrumb-separator {
+  margin: 0 15px; /* Separación fija entre elementos */
+  color: #ff8800;
+}
+
+/* Asegurar que todos los enlaces dentro de breadcrumbs tengan el mismo estilo */
+.breadcrumb-item a {
+  color: #ff8800;
+  text-decoration: none;
+}
+
+.breadcrumb-item a:hover {
+  color: #ff6600;
+}
+
+/* Contenedor para el breadcrumb - estilo consistente en todas las páginas */
+.breadcrumb-container {
+  padding: 10px 20px;
+  background-color: white;
+  border-bottom: 1px solid #ffffff;
+  width: 100%;
+  box-sizing: border-box;
+}
+

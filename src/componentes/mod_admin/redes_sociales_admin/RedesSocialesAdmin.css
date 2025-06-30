@@ -1,0 +1,627 @@
+/* Contenedor principal */
+.redes-sociales-container {
+  width: 100%;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* Encabezado con título y botón */
+.redes-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.redes-header h1 {
+  font-size: 1.8rem;
+  color: #333;
+  margin: 0;
+}
+
+/* Botón de agregar red social */
+.btn-agregar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #ff6600;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 5px rgba(255, 102, 0, 0.2);
+}
+
+.btn-agregar:hover {
+  background-color: #e55c00;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(255, 102, 0, 0.3);
+}
+
+.icon-btn {
+  font-size: 14px;
+}
+
+/* Contenido principal */
+.redes-content {
+  width: 100%;
+}
+
+/* Mensaje cuando no hay redes */
+.no-redes {
+  text-align: center;
+  padding: 40px 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  border: 1px dashed #ddd;
+}
+
+.no-redes p {
+  color: #666;
+  font-size: 16px;
+}
+
+/* Tarjetas de redes sociales */
+.redes-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.red-card {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.red-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.red-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 5px;
+  height: 100%;
+  background-color: #ddd;
+}
+
+.red-card.facebook::before {
+  background-color: #1877f2;
+}
+
+.red-card.instagram::before {
+  background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+}
+
+.red-card.x::before,
+.red-card.twitter::before {
+  background-color: #1da1f2;
+}
+
+/* Iconos de redes sociales */
+.red-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #f5f5f5;
+  margin-right: 15px;
+  flex-shrink: 0;
+}
+
+.social-icon {
+  font-size: 24px;
+}
+
+.social-icon.facebook {
+  color: #1877f2;
+}
+
+.social-icon.instagram {
+  color: #e1306c;
+}
+
+.social-icon.twitter {
+  color: #1da1f2;
+}
+
+/* Información de la red social */
+.red-info {
+  flex-grow: 1;
+  overflow: hidden;
+}
+
+.red-info h3 {
+  margin: 0 0 5px 0;
+  font-size: 16px;
+  text-transform: capitalize;
+}
+
+.red-link {
+  display: block;
+  color: #666;
+  font-size: 14px;
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color 0.2s ease;
+}
+
+.red-link:hover {
+  color: #ff6600;
+  text-decoration: underline;
+}
+
+/* Botones de acción */
+.red-actions {
+  display: flex;
+  gap: 8px;
+  margin-left: 10px;
+}
+
+.btn-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background-color: #f5f5f5;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-action.edit:hover {
+  background-color: #e6f7ff;
+  color: #1890ff;
+}
+
+.btn-action.delete:hover {
+  background-color: #fff1f0;
+  color: #ff4d4f;
+}
+
+/* Modal - Nuevo diseño simple */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(3px);
+}
+
+.modal-simple {
+  background-color: #fff;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 450px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  animation: modalFadeIn 0.3s ease;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Cabecera del modal blanca */
+.modal-header-white {
+  background-color: #fff;
+  padding: 20px;
+  border-bottom: 1px solid #eee;
+  text-align: center;
+}
+
+.modal-header-white h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+}
+
+/* Cuerpo del modal simple */
+.modal-body-simple {
+  padding: 25px 20px;
+}
+
+.modal-field-simple {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.modal-field-simple label {
+  width: 80px;
+  text-align: right;
+  margin-right: 15px;
+  font-size: 14px;
+  color: #333;
+}
+
+.input-container,
+.select-container {
+  flex: 1;
+  position: relative;
+}
+
+.select-container {
+  position: relative;
+}
+
+.select-arrow {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #999;
+  font-size: 10px;
+  pointer-events: none;
+}
+
+.select-simple {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ff6600;
+  border-radius: 5px;
+  font-size: 14px;
+  appearance: none;
+  background-color: white;
+  cursor: pointer;
+}
+
+.input-simple,
+.input-disabled-simple {
+  width: 100%;
+  padding: 10px 12px 10px 35px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 14px;
+  /* Manejo de texto largo */
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+/* Campo de entrada con desplazamiento horizontal */
+.input-container-scroll {
+  flex: 1;
+  position: relative;
+  overflow-x: auto;
+  white-space: nowrap;
+  padding-bottom: 5px; /* Espacio para la barra de desplazamiento */
+}
+
+.input-simple-scroll {
+  width: 100%;
+  padding: 10px 12px 10px 35px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 14px;
+  white-space: pre;
+  overflow-x: visible;
+}
+
+/* Estilizar la barra de desplazamiento */
+.input-container-scroll::-webkit-scrollbar {
+  height: 4px;
+}
+
+.input-container-scroll::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.input-container-scroll::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 10px;
+}
+
+.input-container-scroll::-webkit-scrollbar-thumb:hover {
+  background: #aaa;
+}
+
+/* Asegurar que el icono permanezca visible */
+.input-container-scroll .input-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #999;
+  z-index: 2;
+  background-color: white;
+  padding-right: 5px;
+}
+
+/* Tooltip para mostrar el enlace completo al pasar el cursor */
+.input-container {
+  position: relative;
+}
+
+.input-container:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: -30px;
+  left: 0;
+  background-color: #333;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  z-index: 10;
+  max-width: 100%;
+  white-space: normal;
+  word-break: break-all;
+}
+
+/* Actualizar el contenedor para mostrar el tooltip */
+.input-container[data-tooltip] {
+  cursor: help;
+}
+
+.input-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #999;
+}
+
+.input-disabled-simple {
+  background-color: #f5f5f5;
+  color: #666;
+  cursor: not-allowed;
+}
+
+.error-container-simple {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #fff2f0;
+  border: 1px solid #ffccc7;
+  border-radius: 5px;
+}
+
+.error-message-simple {
+  color: #ff4d4f;
+  font-size: 14px;
+  margin: 0;
+}
+
+/* Pie del modal simple */
+.modal-footer-simple {
+  display: flex;
+  justify-content: flex-end;
+  padding: 15px 20px;
+  background-color: #f5f5f5;
+  border-top: 1px solid #eee;
+}
+
+.btn-cancel-simple,
+.btn-confirm-simple {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.btn-cancel-simple {
+  background-color: #f0f0f0;
+  color: #666;
+}
+
+.btn-confirm-simple {
+  background-color: #ff6600;
+  color: white;
+}
+
+.btn-cancel-simple:hover {
+  background-color: #e0e0e0;
+}
+
+.btn-confirm-simple:hover {
+  background-color: #e55c00;
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+  .redes-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .btn-agregar {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .redes-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .modal-simple {
+    width: 95%;
+  }
+
+  .modal-field-simple {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .modal-field-simple label {
+    width: 100%;
+    text-align: left;
+    margin-bottom: 5px;
+  }
+
+  .modal-footer-simple {
+    flex-direction: column-reverse;
+    gap: 10px;
+  }
+
+  .btn-cancel-simple,
+  .btn-confirm-simple {
+    width: 100%;
+    margin-left: 0;
+  }
+}
+
+/* Modo oscuro */
+.dark .redes-sociales-container {
+  background-color: #1f1f1f;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.dark .redes-header h1 {
+  color: #e0e0e0;
+}
+
+.dark .no-redes {
+  background-color: #2a2a2a;
+  border-color: #444;
+}
+
+.dark .no-redes p {
+  color: #bbb;
+}
+
+.dark .red-card {
+  background-color: #2a2a2a;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.dark .red-icon {
+  background-color: #333;
+}
+
+.dark .red-info h3 {
+  color: #e0e0e0;
+}
+
+.dark .red-link {
+  color: #bbb;
+}
+
+.dark .btn-action {
+  background-color: #333;
+  color: #bbb;
+}
+
+.dark .modal-simple {
+  background-color: #2a2a2a;
+}
+
+.dark .modal-header-white {
+  background-color: #2a2a2a;
+  border-bottom-color: #444;
+}
+
+.dark .modal-header-white h2 {
+  color: #e0e0e0;
+}
+
+.dark .modal-body-simple {
+  background-color: #2a2a2a;
+}
+
+.dark .modal-field-simple label {
+  color: #e0e0e0;
+}
+
+.dark .select-simple {
+  background-color: #333;
+  border-color: #ff6600;
+  color: #e0e0e0;
+}
+
+.dark .input-simple {
+  background-color: #333;
+  border-color: #444;
+  color: #e0e0e0;
+}
+
+.dark .input-disabled-simple {
+  background-color: #222;
+  border-color: #444;
+  color: #999;
+}
+
+/* Modo oscuro para el nuevo contenedor */
+.dark .input-container-scroll .input-icon {
+  background-color: #333;
+}
+
+.dark .input-simple-scroll {
+  background-color: #333;
+  border-color: #444;
+  color: #e0e0e0;
+}
+
+.dark .input-container-scroll::-webkit-scrollbar-track {
+  background: #2a2a2a;
+}
+
+.dark .input-container-scroll::-webkit-scrollbar-thumb {
+  background: #555;
+}
+
+.dark .input-container-scroll::-webkit-scrollbar-thumb:hover {
+  background: #777;
+}
+
+.dark .error-container-simple {
+  background-color: rgba(255, 77, 79, 0.1);
+  border-color: rgba(255, 77, 79, 0.3);
+}
+
+.dark .modal-footer-simple {
+  background-color: #222;
+  border-top-color: #444;
+}
+
+.dark .btn-cancel-simple {
+  background-color: #333;
+  color: #bbb;
+}
+
+.dark .input-container:hover::after {
+  background-color: #555;
+  color: #fff;
+}
+

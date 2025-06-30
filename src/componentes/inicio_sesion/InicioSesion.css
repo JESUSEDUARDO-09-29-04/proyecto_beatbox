@@ -1,3 +1,7 @@
+/* ============================= */
+/* 🎨 Estilos para el formulario de inicio de sesión */
+/* ============================= */
+
 /* Contenedor del Formulario e Imagen */
 .formulario-imagen {
   display: flex;
@@ -6,6 +10,7 @@
   justify-content: center; /* Centra horizontalmente el contenido */
   min-height: calc(25vh - 50px); /* Asegura espacio igual entre header y footer */
   gap: 20px;
+  padding: 20px;
 }
 
 /* Formulario - 40% del ancho */
@@ -14,65 +19,349 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 50px;
+  padding: 40px;
   gap: 20px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Agrega sombra para resaltar */
-  border-radius: 10px; /* Bordes redondeados */
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12); /* Sombra más pronunciada */
+  border-radius: 16px; /* Bordes más redondeados */
+  background-color: #ffffff;
+  transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  overflow: hidden;
 }
 
-.formulario h2 {
-  margin-bottom: 10px;
-  font-size: 24px;
+/* Encabezado del formulario */
+.form-header {
   text-align: center;
+  margin-bottom: 10px;
+  position: relative;
 }
 
-.formulario input {
-  padding: 8px;
-  border-radius: 5px;
-  border: 1px solid #ddd;
+.form-icon {
+  font-size: 32px;
+  color: #ff8800;
+  margin-bottom: 10px;
+}
+
+.form-subtitle {
+  color: #666;
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+/* Modo oscuro para el formulario */
+.dark .formulario {
+  background-color: #1e1e1e;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  color: #e0e0e0;
+}
+
+/* Título del formulario */
+.formulario h2 {
+  margin-bottom: 5px;
+  font-size: 28px;
+  text-align: center;
+  color: #333333;
+}
+
+.dark .formulario h2 {
+  color: #ffffff;
+}
+
+/* Descripción del formulario */
+.formulario-descripcion {
+  text-align: center;
+  color: #666666;
+  margin-bottom: 10px;
+  font-size: 15px;
+}
+
+.dark .formulario-descripcion {
+  color: #aaaaaa;
+}
+
+/* Campo de formulario */
+.campo-formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.campo-formulario label {
+  font-weight: 600;
+  font-size: 14px;
+  color: #333333;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.input-icon {
+  color: #ff8800;
+}
+
+.dark .campo-formulario label {
+  color: #e0e0e0;
+}
+
+/* Contenedor para input */
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* Estilos para los inputs */
+.input-wrapper input,
+.password-field input {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid #dddddd;
+  border-radius: 8px;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  background-color: #f5f5f5; /* Color de fondo más claro */
+  color: #333333;
+}
+
+.dark .input-wrapper input,
+.dark .password-field input {
+  background-color: #2a2a2a;
+  border-color: #444444;
+  color: #e0e0e0;
+}
+
+.input-wrapper input:focus,
+.password-field input:focus {
+  border-color: #ff8800;
+  box-shadow: 0 0 0 3px rgba(255, 136, 0, 0.2);
+  outline: none;
+}
+
+.dark .input-wrapper input:focus,
+.dark .password-field input:focus {
+  box-shadow: 0 0 0 3px rgba(255, 136, 0, 0.3);
+}
+
+/* Estilos para inputs con error */
+.input-error {
+  border-color: #f44336 !important;
+}
+
+.input-error:focus {
+  box-shadow: 0 0 0 3px rgba(244, 67, 54, 0.2) !important;
+}
+
+/* Campo de contraseña con botón para mostrar/ocultar */
+.password-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* Botón para mostrar/ocultar contraseña */
+.btn-mostrar-contrasena {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  color: #666666;
+  cursor: pointer;
   font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: color 0.3s ease;
 }
 
+.dark .btn-mostrar-contrasena {
+  color: #aaaaaa;
+}
+
+.btn-mostrar-contrasena:hover {
+  color: #ff8800;
+}
+
+/* Mensajes de error */
+.mensaje-error {
+  color: #f44336;
+  font-size: 14px;
+  padding: 12px;
+  background-color: rgba(244, 67, 54, 0.1);
+  border-left: 3px solid #f44336;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dark .mensaje-error {
+  background-color: rgba(244, 67, 54, 0.2);
+}
+
+.mensaje-error-campo {
+  color: #f44336;
+  font-size: 13px;
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.error-icon {
+  flex-shrink: 0;
+}
+
+/* Mensaje de bloqueo */
+.mensaje-bloqueo {
+  background-color: rgba(255, 152, 0, 0.1);
+  border-left: 3px solid #ff9800;
+  padding: 12px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #ff9800;
+}
+
+.icono-bloqueo {
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+/* Botón de inicio de sesión */
 .btn-iniciar {
   background-color: #ff8800;
   color: white;
   border: none;
-  padding: 12px;
-  border-radius: 5px;
+  padding: 14px;
+  border-radius: 8px;
   cursor: pointer;
   font-size: 16px;
-  transition: background-color 0.3s;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+  position: relative;
+  overflow: hidden;
 }
 
 .btn-iniciar:hover {
   background-color: #e06f00;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 136, 0, 0.3);
 }
 
-.olvidaste-contrasena {
-  text-align: center;
-  color: #008cba;
+.btn-iniciar:active {
+  transform: translateY(0);
+}
+
+.btn-iniciar:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.dark .btn-iniciar:disabled {
+  background-color: #444444;
+}
+
+/* Animación del spinner */
+.spinner-icon {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Links de la parte inferior */
+.links {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+.links a {
+  color: #ff8800;
   text-decoration: none;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
-/* Imagen Lateral - Tamaño fijo */
+.links a:hover {
+  color: #e06f00;
+  transform: translateY(-2px);
+}
+
+.dark .links a {
+  color: #ff9933;
+}
+
+.dark .links a:hover {
+  color: #ffaa55;
+}
+
+/* Imagen Lateral - 60% del ancho */
 .imagen-lateral {
-  width: 640px;
-  height: 426px;
-  background-color: #e0e0e0;
+  width: 60%;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 18px;
-  color: #666;
-  overflow: hidden; /* Oculta cualquier contenido que exceda las dimensiones */
+  overflow: hidden;
+  position: relative;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
 }
 
-.imagen-lateral p {
+.imagen-lateral img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.imagen-lateral:hover img {
+  transform: scale(1.05);
+}
+
+/* Overlay para la imagen */
+.imagen-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+  padding: 30px;
+  color: white;
   text-align: center;
 }
 
+.imagen-overlay h3 {
+  font-size: 24px;
+  margin-bottom: 10px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.imagen-overlay p {
+  font-size: 16px;
+  opacity: 0.9;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
 /* Media Query para Pantallas Pequeñas */
-/* Ajustes de formulario en pantallas pequeñas */
 @media (max-width: 768px) {
   .formulario-imagen {
     flex-direction: column;
@@ -85,13 +374,20 @@
   .formulario {
     width: 100%;
     max-width: 400px; /* Ancho máximo para centrar */
-    padding: 20px;
+    padding: 30px;
     box-sizing: border-box; /* Incluye el padding dentro del ancho */
   }
 
   /* Ajusta las imágenes y oculta si es necesario */
   .imagen-lateral {
-    display: none;
+    width: 100%;
+    max-width: 400px;
+    height: 200px;
+  }
+
+  .imagen-lateral img {
+    height: 100%;
+    object-fit: cover;
   }
 }
 
@@ -99,45 +395,20 @@
 @media (max-width: 576px) {
   .formulario {
     width: 100%; /* Ocupar todo el ancho disponible */
-    padding: 15px;
+    padding: 20px;
   }
 
-  .btn-iniciar, .btn-registrar {
-    padding: 10px;
+  .btn-iniciar {
+    padding: 12px;
     font-size: 14px;
   }
+
+  .form-icon {
+    font-size: 24px;
+  }
+
+  .formulario h2 {
+    font-size: 22px;
+  }
 }
 
-/* Links de la parte inferior */
-.links {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 10px;
-}
-
-.links a {
-  color: #008cba;
-  text-decoration: none;
-  font-size: 14px;
-}
-
-.links a:hover {
-  text-decoration: underline;
-}
-
-.btn-registrarse {
-  background-color: #ff8800;
-  color: white;
-  border: none;
-  border-radius: 20px;
-  padding: 6px 8px;
-  cursor: pointer;
-  font-size: 14px;
-  transition: background-color 0.3s ease;
-}
-
-.nav-enlaces {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}

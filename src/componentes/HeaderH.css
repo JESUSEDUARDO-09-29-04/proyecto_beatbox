@@ -1,0 +1,277 @@
+/* Estilos para el header */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  background-color: white;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  position: relative;
+  z-index: 1000;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Estilos para el modo oscuro */
+.navbar.dark-mode {
+  background-color: #121212;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.logo {
+  height: 50px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.logo:hover {
+  transform: scale(1.05);
+}
+
+.nav-enlaces {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+/* Botones */
+.btn {
+  padding: 10px 15px;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+}
+
+/* Modo claro: botones naranja */
+.btn-inicio,
+.btn-registrarse {
+  background-color: #ff8800;
+  color: white;
+  border: none;
+}
+
+.btn-inicio:hover,
+.btn-registrarse:hover {
+  background-color: #ff6600;
+}
+
+/* Modo oscuro: botones gris claro */
+.dark-mode .btn-inicio,
+.dark-mode .btn-registrarse,
+.dark-mode .btn-cerrar-sesion {
+  background-color: #aaaaaa;
+  color: #121212;
+}
+
+.dark-mode .btn-inicio:hover,
+.dark-mode .btn-registrarse:hover,
+.dark-mode .btn-cerrar-sesion:hover {
+  background-color: #888888;
+}
+
+.btn-cerrar-sesion {
+  background-color: #ff8800;
+  color: white;
+  border: none;
+}
+
+.btn-cerrar-sesion:hover {
+  background-color: #ff6600;
+}
+
+/* Icono del menú hamburguesa */
+.menu-icono {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #333;
+  display: block;
+}
+
+.dark-mode .menu-icono {
+  color: #e0e0e0;
+}
+
+.menu-icono:hover {
+  color: #ff8800;
+}
+
+/* Menú desplegable */
+.menu-desplegable {
+  position: fixed;
+  top: 0;
+  right: -100%;
+  width: 300px;
+  height: 100vh;
+  background-color: white;
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+  transition: right 0.3s ease;
+  z-index: 1001;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.menu-desplegable.dark-mode {
+  background-color: #1a1a1a;
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.menu-desplegable.activo {
+  right: 0;
+}
+
+/* Cabecera del menú */
+.menu-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 15px;
+  border-bottom: 1px solid #eee;
+  gap: 15px;
+}
+
+.dark-mode .menu-header {
+  border-color: #333;
+}
+
+.menu-logo {
+  height: 40px;
+}
+
+.btn-cerrar {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #333;
+}
+
+.dark-mode .btn-cerrar {
+  color: #e0e0e0;
+}
+
+.btn-suscribirse {
+  background-color: transparent;
+  color: #333;
+  border: 1px solid #333;
+  padding: 8px 15px;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  width: 80%;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+}
+
+.dark-mode .btn-suscribirse {
+  color: #fff;
+  border-color: #fff;
+}
+
+.btn-suscribirse:hover {
+  background-color: rgba(255, 136, 0, 0.1);
+}
+
+/* Secciones del menú */
+.menu-secciones {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menu-secciones li {
+  padding: 15px 20px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  cursor: pointer;
+  font-weight: 500;
+  border-bottom: 1px solid #f5f5f5;
+}
+
+.dark-mode .menu-secciones li {
+  color: #e0e0e0;
+  border-color: #333;
+}
+
+.menu-secciones li:hover {
+  background-color: #f9f9f9;
+}
+
+.dark-mode .menu-secciones li:hover {
+  background-color: #222;
+}
+
+.menu-secciones li svg {
+  color: #ff8800;
+  font-size: 20px;
+}
+
+.dark-mode .menu-secciones li svg {
+  color: #ff8800;
+}
+
+/* Separador del menú */
+.menu-separador {
+  display: none;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .btn-inicio,
+  .btn-registrarse,
+  .btn-cerrar-sesion {
+    display: none;
+  }
+
+  .nav-enlaces {
+    gap: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar {
+    padding: 10px 15px;
+  }
+
+  .logo {
+    height: 40px;
+  }
+
+  .menu-desplegable {
+    width: 85%;
+  }
+}
+
+/* Añade este estilo para el nombre de usuario */
+.usuario-nombre {
+  display: flex;
+  align-items: center;
+  margin-right: 15px;
+  font-weight: 500;
+  color: var(--color-texto);
+  font-size: 0.9rem;
+}
+
+.dark-mode .usuario-nombre {
+  color: #f0f0f0;
+}
+
+@media (max-width: 768px) {
+  .usuario-nombre {
+    display: none;
+  }
+}
+

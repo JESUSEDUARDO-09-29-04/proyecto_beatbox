@@ -1,31 +1,45 @@
-// src/context/ThemeContext.jsx
-import { createContext, useState, useEffect } from 'react';
+"use client"
 
-export const ThemeContext = createContext();
+import { createContext, useState, useEffect } from "react"
 
-const ThemeProvider = ({ children }) => {
-  const [theme, setTheme] = useState('light');
+export const ThemeContext = createContext()
 
-  useEffect(() => {
-    const savedTheme = localStorage.getItem('app-theme');
-    if (savedTheme) {
-      setTheme(savedTheme);
+export const ThemeProvider = ({ children }) => {
+  // Intentar obtener el tema guardado en localStorage, o usar 'light' por defecto
+  const [theme, setTheme] = useState(() => {
+    if (typeof window !== "undefined") {
+      const savedTheme = localStorage.getItem("app-theme")
+      return savedTheme || "light"
     }
-  }, []);
+    return "light"
+  })
 
+  // Efecto para aplicar la clase 'dark' al elemento html cuando el tema cambia
   useEffect(() => {
-    localStorage.setItem('app-theme', theme);
-  }, [theme]);
+    const root = window.document.documentElement
 
+    if (theme === "dark") {
+      root.classList.add("dark")
+    } else {
+      root.classList.remove("dark")
+    }
+
+    // Guardar el tema en localStorage
+    localStorage.setItem("app-theme", theme)
+  }, [theme])
+
+  // Función para alternar entre temas
   const toggleTheme = () => {
-    setTheme((prevTheme) => (prevTheme === 'light' ? 'dark' : 'light'));
-  };
+    setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"))
+  }
 
-  return (
-    <ThemeContext.Provider value={{ theme, toggleTheme }}>
-      {children}
-    </ThemeContext.Provider>
-  );
-};
+  // Función para establecer un tema específico
+  const setThemeMode = (mode) => {
+    setTheme(mode)
+  }
 
-export default ThemeProvider;
+  return <ThemeContext.Provider value={{ theme, toggleTheme, setThemeMode }}>{children}</ThemeContext.Provider>
+}
+
+export default ThemeProvider
+

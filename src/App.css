@@ -1,583 +1,205 @@
-/* src/App.css */
-
-/* Estilos para el tema claro */
-.app.light {
-  background-color: #f4f4f4; /* Fondo claro */
-  color: black;
-}
-
-/* Header en tema claro */
-.app.light .navbar {
-  background-color: white;
-  color: black;
-  border-bottom: 1px solid #ddd;
-}
-
-/* Estilos para el tema oscuro */
-.app.dark {
-  background-color: #242323; /* Fondo oscuro */
-  color: white;
-}
-
-/* Header en tema oscuro */
-.app.dark .navbar {
-  background-color: black; /* Fondo negro para el header */
-  color: white;
-  border-bottom: 1px solid #444;
-}
-
-/* Estilos del botón flotante para cambiar de tema */
-#theme-toggle-button {
-  position: fixed;
-  bottom: 50px;
-  right: 20px;
-  background-color: #444;
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  font-size: 24px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background-color 0.3s ease;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-#theme-toggle-button:hover {
-  background-color: #ff8800; /* Hover para el botón de cambio de tema */
-}
-
-/* Estilo para el tema claro */
-.app.light .contenedor-cambiar-contrasena {
-  background-color: #f4f4f4; /* Blanco para tema claro */
-  color: black; /* Texto negro */
-}
-
-/* Estilo para el tema oscuro */
-.app.dark .contenedor-cambiar-contrasena {
-  background-color: #242323; /* Fondo negro para tema oscuro */
-  color: white; /* Texto blanco */
-}
-
-/* Estilos adicionales comunes */
-.contenedor-cambiar-contrasena {
-  display: flex;
-  flex-direction: column;
+/* Estilos generales de la aplicación */
+.app {
   min-height: 100vh;
-  font-family: 'Arial', sans-serif;
-}
-
-.app.light .contenedor-inicio-sesion {
-  background-color: #f4f4f4; /* Blanco para tema claro */
-  color: black; /* Texto negro */
-}
-
-/* Estilo para el tema oscuro */
-.app.dark .contenedor-inicio-sesion {
-  background-color: #242323; /* Fondo negro para tema oscuro */
-  color: white; /* Texto blanco */
-}
-
-/* Estilos adicionales comunes */
-.contenedor-inicio-sesion {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
-  font-family: 'Arial', sans-serif;
-}
-.app.light .registro-contenedor {
-  background-color: #f4f4f4; /* Blanco para tema claro */
-  color: black; /* Texto negro */
+  transition: background-color 0.3s ease, color 0.3s ease;
+  overflow-x: hidden;
 }
 
-/* Estilo para el tema oscuro */
-.app.dark .registro-contenedor {
-  background-color: #242323; /* Fondo negro para tema oscuro */
-  color: white; /* Texto blanco */
+/* Estilos específicos para el modo oscuro */
+.dark .app {
+  background-color: #121212;
+  color: #e0e0e0;
 }
 
-/* Estilos adicionales comunes */
-.registro-contenedor {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  font-family: 'Arial', sans-serif;
-}
-.app.light .contenedor-verificar-correo {
-  background-color: #f4f4f4; /* Blanco para tema claro */
-  color: black; /* Texto negro */
+/* Estilos para el contenedor principal */
+.contenedor_Tienda,
+.contenedor-detalle-producto,
+.contenedor-carrito {
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Estilo para el tema oscuro */
-.app.dark .contenedor-verificar-correo {
-  background-color: #242323; /* Fondo negro para tema oscuro */
-  color: white; /* Texto blanco */
+.dark .contenedor_Tienda,
+.dark .contenedor-detalle-producto,
+.dark .contenedor-carrito {
+  background-color: #121212;
+  color: #e0e0e0;
 }
 
-/* Estilos adicionales comunes */
-.contenedor-verificar-correo {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  font-family: 'Arial', sans-serif;
-}
-/* Estilo para el tema claro */
-.app.light .certificado-card {
-  background-color: white; /* Fondo blanco para tema claro */
-  color: black; /* Texto negro */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-/* Estilo para el tema oscuro */
-.app.dark .certificado-card {
-  background-color: black; /* Fondo oscuro para tema oscuro */
-  color: white; /* Texto blanco */
-  box-shadow: 0 2px 5px rgba(255, 255, 255, 0.1); /* Sombra más clara en tema oscuro */
-}
-
-/* Estilos comunes */
-.certificado-card {
-  flex: 1 1 20%;
-  min-width: 280px; /* Ancho mínimo para pantallas pequeñas */
-  border-radius: 10px;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-}
-/* Estilos para textos (h1, h2, h3 p, label) en ambos temas */
-.app.light h1, .app.light h2, .app.light h3, .app.light p, .app.light label {
-  color: black; /* Texto negro en tema claro */
-}
-
-.app.dark h1, .app.dark h2, .app.light h3, .app.dark p, .app.dark label {
-  color: white; /* Texto blanco en tema oscuro */
-}
-/* Estilos para el tema claro */
-.app.light .certificado-img-placeholder {
-  background-color: #f0f0f0; /* Fondo claro para la imagen del certificado */
-  color: #888; /* Texto gris */
-}
-
-.app.light .certificado-logo-placeholder {
-  background-color: #ddd; /* Fondo claro para el logo del certificado */
-}
-
-.app.light .certificado-descripcion {
-  color: #555; /* Texto gris para la descripción del certificado */
-}
-
-.app.light .certificado-descripcion h3 {
-  color: black; /* Títulos en negro para el tema claro */
-}
-
-/* Estilos para el tema oscuro */
-.app.dark .certificado-img-placeholder {
-  background-color: #333; /* Fondo oscuro para la imagen del certificado */
-  color: #ccc; /* Texto gris claro en tema oscuro */
-}
-
-.app.dark .certificado-logo-placeholder {
-  background-color: #555; /* Fondo oscuro para el logo del certificado */
-}
-
-.app.dark .certificado-descripcion {
-  color: #bbb; /* Texto gris claro para la descripción del certificado en tema oscuro */
-}
-
-.app.dark .certificado-descripcion h3 {
-  color: white; /* Títulos en blanco para el tema oscuro */
-}
-
-/* Estilos comunes */
-.certificado-img-placeholder {
-  width: 100%;
-  height: 150px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 8px;
-  margin-bottom: 20px;
-}
-
-.certificado-logo-placeholder {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 10px;
-}
-
-.certificado-descripcion {
-  font-size: 16px;
-}
-
-.certificado-descripcion h3 {
-  margin-bottom: 10px;
-  font-size: 18px;
-}
-/* Icono del menú hamburguesa */
-.menu-icono {
-  background: none;
-  border: none;
-  font-size: 30px;
-  cursor: pointer;
-  color: inherit; /* El color se ajustará según el tema activo */
-}
-
-/* Menú Desplegable - Tema Claro */
-.app.light .menu-desplegable {
-  background-color: white; /* Fondo blanco para tema claro */
-  color: black; /* Texto negro */
-  box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1); /* Sombra clara */
-}
-
-/* Menú Desplegable - Tema Oscuro */
-.app.dark .menu-desplegable {
-  background-color: #333; /* Fondo oscuro para tema oscuro */
-  color: white; /* Texto blanco */
-  box-shadow: -5px 0 15px rgba(255, 255, 255, 0.1); /* Sombra más clara para el tema oscuro */
-}
-
-/* Menú Desplegable Común */
-.menu-desplegable {
-  position: fixed;
-  top: 0;
-  right: -100%;
-  width: 80%; /* Reducir el ancho del menú */
-  max-width: 300px; /* Tamaño máximo del menú */
-  height: 100vh;
-  transition: right 0.3s ease-in-out;
-  padding: 20px;
-}
-
-/* Menú activo (común para ambos temas) */
-.menu-desplegable.activo {
-  right: 0;
-}
-
-/* Opciones dentro del menú */
-.menu-desplegable ul {
-  list-style: none;
-  padding: 0;
-}
-
-.menu-desplegable ul li {
-  margin-bottom: 20px;
-}
-
-.menu-desplegable ul li a {
-  text-decoration: none;
-  color: inherit; /* El color cambiará según el tema (hereda de .menu-desplegable) */
-  font-size: 18px;
-}
-
-.menu-desplegable ul li a:hover {
-  text-decoration: underline;
-}
-/* Formulario - Tema Claro */
-.app.light .formulario {
-  background-color: white; /* Fondo blanco para tema claro */
-  color: black; /* Texto negro */
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Sombra ligera para tema claro */
-}
-
-/* Formulario - Tema Oscuro */
-.app.dark .formulario {
-  background-color: black; /* Fondo oscuro para tema oscuro */
-  color: white; /* Texto blanco */
-  box-shadow: 0 2px 10px rgba(255, 255, 255, 0.1); /* Sombra ligera con borde claro para tema oscuro */
-}
-
-/* Estilos comunes para el formulario */
-.formulario {
-  margin: 40px auto;  /* Espacio superior e inferior para separarlo del header y footer */
-  width: 40%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 30px; /* Ajustar padding interno */
-  gap: 20px;
-  border-radius: 10px;
-}
-/* Tema claro */
-.app.light .imagen-lateral {
-  background-color: #e0e0e0; /* Fondo claro */
-  color: #666; /* Texto gris oscuro */
-}
-
-/* Tema oscuro */
-.app.dark .imagen-lateral {
-  background-color: #000000; /* Fondo oscuro */
-  color: #ccc; /* Texto gris claro */
-}
-
-/* Estilos comunes */
-.imagen-lateral {
-  width: 60%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-  font-size: 18px;
-}
-.footer h2 {
-  color: white !important; /* Mantener blanco en ambos temas */
-}
-/* Media Query para Pantallas Pequeñas */
-@media (max-width: 768px) {
-  .formulario-imagen {
-    flex-direction: column; /* Cambia de fila a columna */
-    align-items: center; /* Asegura que el formulario esté centrado */
-    gap: 20px; /* Añade espacio entre el formulario y la imagen */
-  }
-
-  /* Ajustar el formulario para que ocupe el 90% del ancho en pantallas pequeñas */
-  .formulario {
-    width: 90%;
-    padding: 20px; /* Reduce el padding */
-  }
-
-  /* Ajustar el tamaño de la imagen lateral */
-  .imagen-lateral {
-    width: 90%; /* Asegura que la imagen también sea responsiva */
-    height: 200px; /* Establecer una altura adecuada para la imagen */
-  }
-
-  /* Asegurar que los botones en el header se mantengan en la misma línea */
-  .navbar .nav-enlaces {
-    flex-direction: row; /* Asegura que el botón de iniciar sesión y el icono del menú se alineen horizontalmente */
-    gap: 10px; /* Ajusta el espacio entre los botones */
-  }
-}
-/* Otros ajustes para pantallas más pequeñas (hasta 576px de ancho) */
-@media (max-width: 576px) {
-.formulario {
-  width: 100%; /* Ocupa todo el ancho en pantallas más pequeñas */
-  padding: 15px; /* Reduce aún más el padding */
-}
-
-.imagen-lateral {
-  width: 100%; /* Asegura que la imagen ocupe todo el ancho disponible */
-  height: 150px; /* Ajusta la altura de la imagen */
-}
-
-.btn-iniciar, .btn-registrar {
-  padding: 10px; /* Ajustar el padding de los botones para pantallas pequeñas */
-  font-size: 14px; /* Reducir el tamaño de fuente de los botones */
-}
-}
-/* Estilos responsivos */
-@media (max-width: 768px) {
-  /* Centrar las tarjetas de certificados en pantallas pequeñas */
-  .certificados-container {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .certificado-card {
-    width: 100%; /* Ocupar todo el ancho disponible en pantallas pequeñas */
-  }
-
-  /* Ajuste de navbar en pantallas pequeñas */
-  .nav-enlaces {
-    gap: 15px; /* Aumentar el espacio entre los botones */
-  }
-
-  /* Ajustes de tamaño de botón */
-  .btn {
-    padding: 10px 15px; /* Más padding en pantallas pequeñas */
-    font-size: 16px; /* Aumentar el tamaño de la fuente en botones */
-  }
-
-  .menu-desplegable ul li a {
-    font-size: 20px; /* Texto más grande en el menú desplegable */
-  }
-}
-/* Media Query para Pantallas Pequeñas */
-@media (max-width: 768px) {
-  .formulario-imagen {
-    flex-direction: column; /* Cambia de fila a columna */
-    align-items: center; /* Asegura que el formulario esté centrado */
-    gap: 20px; /* Añade espacio entre el formulario y la imagen */
-  }
-
-  /* Ajustar el formulario para que ocupe el 90% del ancho en pantallas pequeñas */
-  .formulario {
-    width: 90%;
-    padding: 20px; /* Reduce el padding */
-  }
-
-  /* Ajustar el tamaño de la imagen lateral */
-  .imagen-lateral {
-    width: 90%; /* Asegura que la imagen también sea responsiva */
-    height: 200px; /* Establecer una altura adecuada para la imagen */
-  }
-
-  /* Asegurar que los botones en el header se mantengan en la misma línea */
-  .navbar .nav-enlaces {
-    flex-direction: row; /* Asegura que el botón de iniciar sesión y el icono del menú se alineen horizontalmente */
-    gap: 10px; /* Ajusta el espacio entre los botones */
-  }
-}
-/* Otros ajustes para pantallas más pequeñas (hasta 576px de ancho) */
-@media (max-width: 576px) {
-.formulario {
-  width: 100%; /* Ocupa todo el ancho en pantallas más pequeñas */
-  padding: 15px; /* Reduce aún más el padding */
-}
-
-.imagen-lateral {
-  width: 100%; /* Asegura que la imagen ocupe todo el ancho disponible */
-  height: 150px; /* Ajusta la altura de la imagen */
-}
-
-.btn-iniciar, .btn-registrar {
-  padding: 10px; /* Ajustar el padding de los botones para pantallas pequeñas */
-  font-size: 14px; /* Reducir el tamaño de fuente de los botones */
-}
-}
-/* Media Query para Pantallas Pequeñas */
-@media (max-width: 768px) {
-  .formulario-imagen {
-    flex-direction: column; /* Cambia de fila a columna */
-    align-items: center; /* Asegura que el formulario esté centrado */
-    gap: 20px; /* Añade espacio entre el formulario y la imagen */
-  }
-
-  /* Ajustar el formulario para que ocupe el 90% del ancho en pantallas pequeñas */
-  .formulario {
-    width: 90%;
-    padding: 20px; /* Reduce el padding */
-  }
-
-  /* Ajustar el tamaño de la imagen lateral */
-  .imagen-lateral {
-    width: 90%; /* Asegura que la imagen también sea responsiva */
-    height: 200px; /* Establecer una altura adecuada para la imagen */
-  }
-
-  /* Asegurar que los botones en el header se mantengan en la misma línea */
-  .navbar .nav-enlaces {
-    flex-direction: row; /* Asegura que el botón de iniciar sesión y el icono del menú se alineen horizontalmente */
-    gap: 10px; /* Ajusta el espacio entre los botones */
-  }
-}
-/* Otros ajustes para pantallas más pequeñas (hasta 576px de ancho) */
-@media (max-width: 576px) {
-.formulario {
-  width: 100%; /* Ocupa todo el ancho en pantallas más pequeñas */
-  padding: 15px; /* Reduce aún más el padding */
-}
-
-.imagen-lateral {
-  width: 100%; /* Asegura que la imagen ocupe todo el ancho disponible */
-  height: 150px; /* Ajusta la altura de la imagen */
-}
-
-.btn-iniciar, .btn-registrar {
-  padding: 10px; /* Ajustar el padding de los botones para pantallas pequeñas */
-  font-size: 14px; /* Reducir el tamaño de fuente de los botones */
-}
-}
-/* Media Query para Pantallas Pequeñas */
-@media (max-width: 768px) {
-  .formulario-imagen {
-    flex-direction: column; /* Cambia de fila a columna */
-    align-items: center; /* Asegura que el formulario esté centrado */
-    gap: 20px; /* Añade espacio entre el formulario y la imagen */
-  }
-
-  /* Ajustar el formulario para que ocupe el 90% del ancho en pantallas pequeñas */
-  .formulario {
-    width: 90%;
-    padding: 20px; /* Reduce el padding */
-  }
-
-  /* Ajustar el tamaño de la imagen lateral */
-  .imagen-lateral {
-    width: 90%; /* Asegura que la imagen también sea responsiva */
-    height: 200px; /* Establecer una altura adecuada para la imagen */
-  }
-
-  /* Asegurar que los botones en el header se mantengan en la misma línea */
-  .navbar .nav-enlaces {
-    flex-direction: row; /* Asegura que el botón de iniciar sesión y el icono del menú se alineen horizontalmente */
-    gap: 10px; /* Ajusta el espacio entre los botones */
-  }
-}
-/* Otros ajustes para pantallas más pequeñas (hasta 576px de ancho) */
-@media (max-width: 576px) {
-.formulario {
-  width: 100%; /* Ocupa todo el ancho en pantallas más pequeñas */
-  padding: 15px; /* Reduce aún más el padding */
-}
-
-.imagen-lateral {
-  width: 100%; /* Asegura que la imagen ocupe todo el ancho disponible */
-  height: 150px; /* Ajusta la altura de la imagen */
-}
-
-.btn-iniciar, .btn-registrar {
-  padding: 10px; /* Ajustar el padding de los botones para pantallas pequeñas */
-  font-size: 14px; /* Reducir el tamaño de fuente de los botones */
-}
-}
-/* Tema claro */
-.app.light .redes-sociales-tabla {
-  background-color: #ffffff;
-  color: #000000;
-}
-
-/* Tema oscuro */
-.app.dark .redes-sociales-tabla {
-  background-color: #242323;
+/* Estilos para tarjetas y contenedores */
+.dark .tarjeta-producto,
+.dark .tarjeta-relacionado,
+.dark .card-compra,
+.dark .imagen-info-contenedor,
+.dark .destacado-card,
+.dark .carrusel,
+.dark .menu-tienda,
+.dark .breadcrumb-container,
+.dark .categorias-dropdown,
+.dark .barra-busqueda,
+.dark .contenido-detalle,
+.dark .seccion-productos {
+  background-color: #1e1e1e;
+  border-color: #333;
   color: #ffffff;
 }
 
-/* Hover en modo oscuro */
-.app.dark .redes-sociales-tabla tbody tr:hover {
-  background-color: #333333;
+/* Estilos para textos */
+.dark h1,
+.dark h2,
+.dark h3,
+.dark h4,
+.dark h5,
+.dark h6,
+.dark .nombre-producto,
+.dark .precio-producto,
+.dark .titulo-producto,
+.dark .precio-actual,
+.dark .titulo-relacionados,
+.dark .titulo-destacados {
+  color: #e0e0e0;
 }
 
-
-.app.light .usuarios-tabla thead th {
-  background-color: #ff6600; /* Encabezados en naranja */
-  color: #ffffff; /* Texto blanco */
+.dark p,
+.dark span:not(.precio-producto):not(.precio-relacionado) {
+  color: #b0b0b0;
 }
 
-.app.light .usuarios-tabla tbody tr:nth-child(even) {
-  background-color: #f9f9f9; /* Fondo alternado claro */
+/* Estilos para inputs */
+.dark input,
+.dark select,
+.dark textarea {
+  background-color: #333;
+  border-color: #444;
+  color: #e0e0e0;
 }
 
-.app.light .usuarios-tabla tbody tr:hover {
-  background-color: #f1f1f1; /* Fondo gris claro al hover */
+/* Estilos para botones */
+.dark .btn-agregar,
+.dark .btn-agregar-carrito,
+.dark .btn-agregar-relacionado,
+.dark .btn-comprar-ahora {
+  background-color: var(--color-primary);
 }
 
-/* Tabla en tema oscuro */
-.app.dark .usuarios-tabla {
-  background-color: #242323; /* Fondo oscuro */
-  color: #ffffff; /* Texto blanco */
-  border-color: #444444; /* Bordes más oscuros */
+.dark .btn-agregar:hover,
+.dark .btn-agregar-carrito:hover,
+.dark .btn-agregar-relacionado:hover,
+.dark .btn-comprar-ahora:hover {
+  background-color: var(--color-primary-dark);
 }
 
-.app.dark .usuarios-tabla thead th {
-  background-color: #333333; /* Fondo oscuro para encabezados */
-  color: #ffffff; /* Texto blanco */
+/* Estilos para el header y footer */
+.dark .navbar,
+.dark footer {
+  background-color: #1a1a1a;
+  border-color: #333;
 }
 
-.app.dark .usuarios-tabla tbody tr:nth-child(even) {
-  background-color: #3a3a3a; /* Fondo alternado oscuro */
+/* Estilos para iconos */
+.dark .icono {
+  color: var(--color-primary);
 }
 
-.app.dark .usuarios-tabla tbody tr:hover {
-  background-color: #444444; /* Fondo más claro al hover */
+/* Estilos para la barra de búsqueda */
+.dark .barra-busqueda {
+  background-color: #333;
+  border-color: #444;
 }
 
+.dark .barra-busqueda input {
+  background-color: transparent;
+  color: #e0e0e0;
+}
+
+.dark .icono-busqueda {
+  color: #888;
+}
+
+/* Estilos para el menú de categorías */
+.dark .categoria-opcion:hover {
+  background-color: #333;
+  color: var(--color-primary);
+}
+
+/* Estilos para pestañas */
+.dark .pestana {
+  color: #888;
+}
+
+.dark .pestana.activa {
+  color: var(--color-primary);
+}
+
+.dark .pestana.activa::after {
+  background-color: var(--color-primary);
+}
+
+/* Estilos para el control de cantidad */
+.dark .control-cantidad {
+  border-color: #444;
+}
+
+.dark .btn-cantidad:hover:not(:disabled) {
+  background-color: #333;
+}
+
+.dark .input-cantidad {
+  border-color: #444;
+  color: #e0e0e0;
+}
+
+/* Estilos para medios de pago */
+.dark .icono-tarjeta,
+.dark .icono-otro {
+  background-color: #333;
+}
+
+/* Estilos para el spinner de carga */
+.dark .spinner {
+  border-color: rgba(255, 136, 0, 0.2);
+  border-top-color: var(--color-primary);
+}
+
+/* Estilos para formularios */
+.dark .formulario {
+  background-color: #1e1e1e;
+  color: #e0e0e0;
+}
+
+.dark .formulario input,
+.dark .formulario select,
+.dark .formulario textarea {
+  background-color: #333;
+  border-color: #444;
+  color: #e0e0e0;
+}
+
+.dark .formulario label {
+  color: #e0e0e0;
+}
+
+/* Estilos para tablas */
+.dark table {
+  border-color: #444;
+}
+
+.dark th {
+  background-color: #333;
+  color: #e0e0e0;
+}
+
+.dark td {
+  border-color: #444;
+  color: #e0e0e0;
+}
+
+.dark tr:nth-child(even) {
+  background-color: #2a2a2a;
+}
+
+.dark tr:hover {
+  background-color: #333;
+}
 

@@ -1,0 +1,503 @@
+/* Variables globales */
+:root {
+  --primary-color: #ff6600;
+  --primary-hover: #e55c00;
+  --secondary-color: #2196f3;
+  --secondary-hover: #1976d2;
+  --success-color: #4caf50;
+  --warning-color: #ff9800;
+  --danger-color: #f44336;
+  --light-bg: #f9f9f9;
+  --dark-bg: #1f1f1f;
+  --card-bg: #ffffff;
+  --dark-card-bg: #2a2a2a;
+  --text-color: #333333;
+  --dark-text-color: #e0e0e0;
+  --border-color: #e0e0e0;
+  --dark-border-color: #444444;
+  --shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  --dark-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  --border-radius: 10px;
+}
+
+/* Estilos para suscripciones */
+.suscripciones-container {
+  width: 100%;
+}
+
+.datos-header {
+  margin-bottom: 30px;
+}
+
+.datos-header h1 {
+  font-size: 28px;
+  margin-bottom: 10px;
+  color: var(--text-color);
+}
+
+.dark-mode .datos-header h1 {
+  color: var(--dark-text-color);
+}
+
+.datos-header p {
+  font-size: 16px;
+  color: #666;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.dark-mode .datos-header p {
+  color: #aaa;
+}
+
+.cargando-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+}
+
+.cargando-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(255, 102, 0, 0.2);
+  border-left-color: var(--primary-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 15px;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.suscripcion-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+}
+
+.suscripcion-card {
+  background-color: var(--card-bg);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.dark-mode .suscripcion-card {
+  background-color: var(--dark-card-bg);
+  box-shadow: var(--dark-shadow);
+}
+
+.suscripcion-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background-color: #f5f5f5;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.dark-mode .suscripcion-header {
+  background-color: #333;
+  border-color: var(--dark-border-color);
+}
+
+.suscripcion-header h2 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.suscripcion-estado {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.suscripcion-estado.activo {
+  background-color: rgba(76, 175, 80, 0.1);
+  color: var(--success-color);
+}
+
+.suscripcion-estado.pendiente {
+  background-color: rgba(255, 152, 0, 0.1);
+  color: var(--warning-color);
+}
+
+.suscripcion-estado.cancelado {
+  background-color: rgba(244, 67, 54, 0.1);
+  color: var(--danger-color);
+}
+
+.suscripcion-details {
+  padding: 20px;
+}
+
+.suscripcion-details h3 {
+  margin: 0 0 15px 0;
+  font-size: 24px;
+}
+
+.suscripcion-precio {
+  font-size: 32px;
+  font-weight: bold;
+  color: var(--primary-color);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: baseline;
+}
+
+.periodo-precio {
+  font-size: 16px;
+  font-weight: normal;
+  color: #666;
+  margin-left: 5px;
+}
+
+.dark-mode .periodo-precio {
+  color: #aaa;
+}
+
+.suscripcion-fechas {
+  margin-bottom: 20px;
+}
+
+.fecha-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  gap: 10px;
+  font-size: 14px;
+}
+
+.fecha-item svg {
+  color: var(--primary-color);
+}
+
+.fecha-item span {
+  color: #666;
+  margin-right: 5px;
+}
+
+.dark-mode .fecha-item span {
+  color: #aaa;
+}
+
+.suscripcion-renovacion {
+  background-color: #f5f5f5;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.dark-mode .suscripcion-renovacion {
+  background-color: #333;
+}
+
+.renovacion-progress {
+  margin-bottom: 5px;
+}
+
+.progress-bar {
+  height: 8px;
+  background-color: #e0e0e0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.dark-mode .progress-bar {
+  background-color: #444;
+}
+
+.progress-fill {
+  height: 100%;
+  background-color: var(--primary-color);
+  border-radius: 4px;
+}
+
+.dias-restantes {
+  font-size: 14px;
+  text-align: right;
+  margin-top: 5px;
+}
+
+.suscripcion-pago {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+.suscripcion-pago svg {
+  color: var(--primary-color);
+}
+
+.suscripcion-beneficios {
+  margin-bottom: 20px;
+}
+
+.suscripcion-beneficios h4 {
+  margin: 0 0 10px 0;
+  font-size: 16px;
+}
+
+.suscripcion-beneficios ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.suscripcion-beneficios li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.beneficio-icon {
+  color: var(--success-color);
+  font-size: 16px;
+}
+
+.suscripcion-actions {
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.btn-cambiar-pago {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 15px;
+  background-color: transparent;
+  border: 1px solid var(--primary-color);
+  color: var(--primary-color);
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 14px;
+}
+
+.btn-cambiar-pago:hover {
+  background-color: rgba(255, 102, 0, 0.1);
+}
+
+.btn-cancelar {
+  padding: 10px 15px;
+  background-color: transparent;
+  border: 1px solid var(--danger-color);
+  color: var(--danger-color);
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 14px;
+}
+
+.btn-cancelar:hover {
+  background-color: rgba(244, 67, 54, 0.1);
+}
+
+.suscripcion-secondary {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.historial-pagos,
+.mejora-planes {
+  background-color: var(--card-bg);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  padding: 20px;
+}
+
+.dark-mode .historial-pagos,
+.dark-mode .mejora-planes {
+  background-color: var(--dark-card-bg);
+  box-shadow: var(--dark-shadow);
+}
+
+.historial-pagos h2,
+.mejora-planes h2 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 18px;
+  color: var(--text-color);
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 10px;
+}
+
+.dark-mode .historial-pagos h2,
+.dark-mode .mejora-planes h2 {
+  color: var(--dark-text-color);
+  border-color: var(--dark-border-color);
+}
+
+.pagos-tabla {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.pagos-tabla table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.pagos-tabla th,
+.pagos-tabla td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 14px;
+}
+
+.dark-mode .pagos-tabla th,
+.dark-mode .pagos-tabla td {
+  border-color: var(--dark-border-color);
+}
+
+.estado-pago {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 14px;
+}
+
+.estado-pago.pagado {
+  color: var(--success-color);
+}
+
+.estado-pago.pendiente {
+  color: var(--warning-color);
+}
+
+.btn-factura {
+  background-color: transparent;
+  border: none;
+  color: var(--secondary-color);
+  cursor: pointer;
+  font-size: 16px;
+  padding: 5px;
+}
+
+.btn-factura:hover {
+  color: var(--secondary-hover);
+}
+
+.planes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 20px;
+}
+
+.plan-mejora-card {
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.dark-mode .plan-mejora-card {
+  background-color: #333;
+}
+
+.plan-mejora-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.dark-mode .plan-mejora-card:hover {
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.plan-mejora-card h3 {
+  margin: 0 0 10px 0;
+  font-size: 18px;
+}
+
+.plan-precio {
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--primary-color);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+}
+
+.plan-ahorro {
+  display: inline-block;
+  background-color: var(--success-color);
+  color: white;
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 20px;
+  margin-bottom: 15px;
+}
+
+.plan-beneficios {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 20px 0;
+  text-align: left;
+}
+
+.plan-beneficios li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 10px;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.btn-mejorar {
+  padding: 10px 20px;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-size: 14px;
+}
+
+.btn-mejorar:hover {
+  background-color: var(--primary-hover);
+}
+
+/* Responsividad */
+@media (max-width: 1024px) {
+  .suscripcion-content {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .suscripcion-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .planes-grid {
+    grid-template-columns: 1fr;
+  }
+}
+

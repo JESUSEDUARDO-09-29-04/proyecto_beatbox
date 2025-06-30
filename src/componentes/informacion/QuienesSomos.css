@@ -1,0 +1,251 @@
+/* Base Styles */
+.quienes-somos-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  font-family: "Arial", sans-serif;
+}
+
+/* Theme Styles */
+.quienes-somos-container.light {
+  background-color: #ffffff;
+  color: #333333;
+}
+
+.quienes-somos-container.dark {
+  background-color: #121212;
+  color: #f0f0f0;
+}
+
+/* Breadcrumb */
+.breadcrumb-container {
+  padding: 10px 20px;
+  background-color: transparent;
+}
+
+/* Main Layout */
+.quienes-somos-content {
+  display: flex;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px 40px;
+  gap: 40px;
+}
+
+.main-content {
+  flex: 3;
+}
+
+.sidebar {
+  flex: 1;
+}
+
+/* Page Title */
+.page-title {
+  font-size: 2.5rem;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.quienes-somos-container.dark .page-title {
+  color: #f0f0f0;
+}
+
+/* Slogan */
+.slogan {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #ff8800;
+  margin-bottom: 30px;
+  display: flex;
+  align-items: center;
+}
+
+.emoji {
+  margin: 0 8px;
+}
+
+/* Section Styles */
+.section {
+  margin-bottom: 40px;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.icon-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #ff8800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 15px;
+}
+
+.section-icon {
+  color: white;
+  font-size: 1.2rem;
+}
+
+.section-title {
+  font-size: 1.8rem;
+  color: #ff8800;
+  margin: 0;
+}
+
+.section-content {
+  padding-left: 55px;
+}
+
+.section-content p {
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Valores Grid */
+.valores-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 25px;
+}
+
+.valor-item {
+  margin-bottom: 5px;
+}
+
+.valor-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.valor-icon {
+  margin-right: 10px;
+  font-size: 1.2rem;
+}
+
+.valor-header h3 {
+  font-size: 1.1rem;
+  color: #ff8800;
+  margin: 0;
+}
+
+.valor-item p {
+  margin: 0;
+  padding-left: 30px;
+}
+
+/* CTA Box */
+.cta-box {
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  padding: 25px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  position: sticky;
+  top: 20px;
+}
+
+.quienes-somos-container.dark .cta-box {
+  background-color: #1e1e1e;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.cta-box h2 {
+  font-size: 1.4rem;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.quienes-somos-container.dark .cta-box h2 {
+  color: #f0f0f0;
+}
+
+.cta-button {
+  background-color: #ff8800;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 12px 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  width: 100%;
+  transition: background-color 0.3s;
+}
+
+.cta-button:hover {
+  background-color: #e67300;
+}
+
+/* Responsive Styles */
+@media (max-width: 992px) {
+  .quienes-somos-content {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    margin-top: 20px;
+  }
+
+  .cta-box {
+    position: static;
+  }
+}
+
+@media (max-width: 768px) {
+  .valores-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .page-title {
+    font-size: 2rem;
+  }
+
+  .slogan {
+    font-size: 1.2rem;
+  }
+
+  .section-title {
+    font-size: 1.5rem;
+  }
+
+  .icon-circle {
+    width: 35px;
+    height: 35px;
+  }
+}
+
+@media (max-width: 576px) {
+  .quienes-somos-content {
+    padding: 0 15px 30px;
+  }
+
+  .section-content {
+    padding-left: 0;
+    margin-top: 15px;
+  }
+
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .icon-circle {
+    margin-bottom: 10px;
+  }
+
+  .page-title {
+    font-size: 1.8rem;
+  }
+}
+
+/* Dark Mode Toggle Compatibility */
+.quienes-somos-container.dark .valor-header h3 {
+  color: #ff9933;
+}
+

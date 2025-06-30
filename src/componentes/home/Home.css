@@ -1,256 +1,772 @@
-/* Contenedor general */
-body, html {
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
-}
-.contenedor {
-  font-family: 'Roboto', sans-serif;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-/* Menú Desplegable */
-.menu-desplegable {
-  position: fixed;
-  top: 0;
-  right: -100%;
-  width: 80%; /* Reducir el ancho del menú */
-  max-width: 300px; /* Tamaño máximo del menú */
-  height: 100vh;
-  background-color: white;
-  transition: right 0.3s ease-in-out;
-  padding: 20px;
-  box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
-}
-
-.menu-desplegable.activo {
-  right: 0;
-}
-
-/* Botón para cerrar el menú */
-.btn-cerrar {
-  background: none;
-  border: none;
-  font-size: 24px; /* Tamaño del icono de cerrar */
-  cursor: pointer;
-  margin-left: auto;
-}
-
-/* Lista del menú */
-.menu-desplegable ul {
-  list-style: none;
-  padding: 0;
-  margin-top: 20px;
-}
-
-.menu-desplegable ul li {
-  margin-bottom: 15px; /* Espacio entre los elementos del menú */
-}
-
-.menu-desplegable ul li a {
-  text-decoration: none;
-  color: black;
-  font-size: 18px; /* Tamaño del texto dentro del menú */
-}
-/* Navbar */
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+/* ===================== */
+/* 🎨 Botones Globales */
+/* ===================== */
+.btn {
   padding: 10px 20px;
-  background-color: white;
-  border-bottom: 1px solid #ddd;
-}
-
-/* Enlaces en la Navbar */
-.nav-enlaces {
-  display: flex;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
   align-items: center;
-  gap: 5px; /* Ajustar el espacio entre los botones */
+  justify-content: center;
+  gap: 8px;
+  border: none;
+  text-decoration: none;
 }
 
-/* Estilo común para los botones */
-
-.btn-inicio {
+/* Modo claro: botones naranja */
+.btn-conocenos,
+.btn-membresia,
+.btn-contacto,
+.btn-visita {
   background-color: #ff8800;
   color: white;
-  border: none;
-  border-radius: 20px;
-  padding: 5px 7px; /* Tamaño reducido para los botones */
-  cursor: pointer;
-  font-size: 14px; /* Texto más pequeño */
-  transition: background-color 0.3s ease;
 }
-.btn-registrarse {
+
+.btn-conocenos:hover,
+.btn-membresia:hover,
+.btn-contacto:hover,
+.btn-visita:hover {
+  background-color: #ff6600;
+  transform: translateY(-2px);
+}
+
+/* Modo oscuro: botones gris claro */
+.dark .btn-conocenos,
+.dark .btn-membresia,
+.dark .btn-contacto,
+.dark .btn-visita {
+  background-color: #aaaaaa;
+  color: #121212;
+}
+
+.dark .btn-conocenos:hover,
+.dark .btn-membresia:hover,
+.dark .btn-contacto:hover,
+.dark .btn-visita:hover {
+  background-color: #888888;
+}
+/* ===================== */
+/* 🎨 Encabezados de sección */
+/* ===================== */
+.section-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.section-header h2 {
+  font-size: 32px;
+  margin-bottom: 15px;
+  position: relative;
+  display: inline-block;
+}
+
+.section-divider {
+  height: 4px;
+  width: 80px;
   background-color: #ff8800;
+  margin: 0 auto;
+  border-radius: 2px;
+}
+
+.dark .section-divider {
+  background-color: #aaaaaa;
+}
+/* Carrusel mejorado */
+.carousel-section {
+  position: relative;
+  height: 70vh;
+  overflow: hidden;
+}
+
+.carousel-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.carousel-slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.carousel-slide.active {
+  opacity: 1;
+}
+
+.carousel-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.carousel-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: white;
+  max-width: 800px;
+  padding: 0 20px;
+}
+
+.carousel-title {
+  font-size: 4rem;
+  font-weight: bold;
+  margin-bottom: 24px;
+  animation: fadeInUp 1s ease-out;
+}
+
+.carousel-subtitle {
+  font-size: 1.5rem;
+  margin-bottom: 32px;
+  opacity: 0.9;
+  animation: fadeInUp 1s ease-out 0.2s both;
+}
+
+.carousel-control {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(255, 255, 255, 0.2);
   color: white;
   border: none;
-  border-radius: 20px;
-  padding: 5px 7px; /* Tamaño reducido para los botones */
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
   cursor: pointer;
-  font-size: 14px; /* Texto más pequeño */
-  transition: background-color 0.3s ease;
-}
-.btn:hover {
-  background-color: #e67300; /* Color de hover */
+  font-size: 18px;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
 }
 
-/* Icono del menú hamburguesa */
-.menu-icono {
-  background: none;
+.carousel-control:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.carousel-control.prev {
+  left: 20px;
+}
+
+.carousel-control.next {
+  right: 20px;
+}
+
+.carousel-indicators {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 12px;
+}
+
+.indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
   border: none;
-  font-size: 30px;
+  background-color: rgba(255, 255, 255, 0.5);
   cursor: pointer;
+  transition: all 0.3s ease;
 }
 
+.indicator.active {
+  background-color: #f97316;
+}
 
+/* Sección de Certificados mejorada */
+.certificates-section {
+  padding: 80px 0;
+  background-color: #f9fafb;
+}
 
-/* Sección de Certificados */
-.certificados-container {
+.certificates-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 32px;
+}
+
+.certificate-card {
+  background-color: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.certificate-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.certificate-image {
+  position: relative;
+  height: 200px;
+  overflow: hidden;
+}
+
+.certificate-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.certificate-card:hover .certificate-image img {
+  transform: scale(1.05);
+}
+
+.certificate-badge {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background-color: #f97316;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.certificate-content {
+  padding: 24px;
+}
+
+.certificate-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #111827;
+  margin-bottom: 8px;
+}
+
+.certificate-org {
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 16px;
+}
+
+.certificate-footer {
   display: flex;
   justify-content: space-between;
-  flex-wrap: wrap; /* Permitir que los elementos se ajusten a la pantalla */
-  padding: 40px 20px;
-  gap: 40px;
+  align-items: center;
 }
 
-.certificado-card {
-  flex: 1 1 20%;
-  min-width: 280px; /* Ancho mínimo para pantallas pequeñas */
+.certificate-type {
+  background-color: #fef3f2;
+  color: #dc2626;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  border: 1px solid #fecaca;
+}
+
+.certificate-verified {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #f97316;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Sección de Membresías mejorada */
+.memberships-section {
+  padding: 80px 0;
+  background-color: white;
+}
+
+.memberships-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 32px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.membership-card {
+  background-color: white;
+  border: 2px solid #e5e7eb;
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.membership-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.membership-card.featured {
+  border-color: #f97316;
+  transform: scale(1.05);
+  box-shadow: 0 20px 40px rgba(249, 115, 22, 0.2);
+}
+
+.membership-badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: #f97316;
+  color: white;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: bold;
+  border-bottom-left-radius: 8px;
+}
+
+.membership-header {
+  text-align: center;
+  padding: 32px 24px 16px;
+}
+
+.membership-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #111827;
+  margin-bottom: 16px;
+}
+
+.membership-price {
+  margin-bottom: 16px;
+}
+
+.price {
+  font-size: 3rem;
+  font-weight: bold;
+  color: #f97316;
+}
+
+.period {
+  font-size: 1.25rem;
+  color: #6b7280;
+}
+
+.membership-content {
+  padding: 0 24px 32px;
+}
+
+.membership-features {
+  list-style: none;
+  margin-bottom: 32px;
+  padding: 0;
+}
+
+.membership-features li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+  color: #374151;
+}
+
+.membership-features i {
+  width: 20px;
+  height: 20px;
+  background-color: #fef3f2;
+  color: #f97316;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+.btn-membership {
+  width: 100%;
+  padding: 16px;
+  font-size: 18px;
+  font-weight: 600;
+  background-color: #f3f4f6;
+  color: #111827;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.btn-membership:hover {
+  background-color: #f97316;
+  color: white;
+}
+
+.btn-membership.featured {
+  background-color: #f97316;
+  color: white;
+}
+
+.btn-membership.featured:hover {
+  background-color: #ea580c;
+}
+
+/* Botón CTA para el carrusel */
+.btn-cta {
+  background-color: #f97316;
+  color: white;
+  padding: 16px 32px;
+  font-size: 18px;
+  border-radius: 50px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-cta:hover {
+  background-color: #ea580c;
+  transform: translateY(-2px);
+}
+/* ===================== */
+/* 🎨 Sección de Testimonios */
+/* ===================== */
+.testimonios-section {
+  padding: 80px 20px;
+  background-color: #ffffff;
+  transition: background-color 0.3s ease;
+}
+
+.dark .testimonios-section {
+  background-color: #121212;
+}
+
+.testimonios-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.testimonio-card {
   background-color: white;
   border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  width: 300px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Logo */
-.logo {
-  height: 28px; /* Tamaño reducido del logo */
-  width: auto;
+.dark .testimonio-card {
+  background-color: #2a2a2a;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
 
-/* Estilo para la imagen del certificado */
-.certificado-img-placeholder {
-  width: 100%;
-  height: 150px;
-  background-color: #f0f0f0;
-  color: #888;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 8px;
+.testimonio-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.dark .testimonio-card:hover {
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+}
+
+.testimonio-content {
   margin-bottom: 20px;
 }
 
-/* Estilo para el logo del certificado */
-.certificado-logo-placeholder {
-  width: 80px;
-  height: 80px;
-  background-color: #ddd;
+.testimonio-content p {
+  font-style: italic;
+  color: #666;
+  line-height: 1.6;
+  margin: 0;
+  position: relative;
+  padding: 0 10px;
+}
+
+.dark .testimonio-content p {
+  color: #aaa;
+}
+
+.testimonio-content p::before,
+.testimonio-content p::after {
+  content: '"';
+  font-size: 30px;
+  color: #ff8800;
+  position: absolute;
+}
+
+.dark .testimonio-content p::before,
+.dark .testimonio-content p::after {
+  color: #aaaaaa;
+}
+
+.testimonio-content p::before {
+  left: -10px;
+  top: -10px;
+}
+
+.testimonio-content p::after {
+  right: -10px;
+  bottom: -20px;
+}
+
+.testimonio-autor {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.testimonio-avatar {
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
+  background-color: #ff8800;
+  color: white;
   display: flex;
-  justify-content: center;
   align-items: center;
-  margin-bottom: 10px;
+  justify-content: center;
+  font-weight: bold;
 }
 
-/* Estilo para la descripción del certificado */
-.certificado-descripcion {
+.dark .testimonio-avatar {
+  background-color: #aaaaaa;
+  color: #121212;
+}
+
+.testimonio-info h4 {
+  margin: 0 0 5px 0;
   font-size: 16px;
-  color: #555;
+  color: #333;
 }
 
-.certificado-descripcion h3 {
-  margin-bottom: 10px;
-  font-size: 18px;
+.dark .testimonio-info h4 {
+  color: #e0e0e0;
 }
 
-/* Estilo del título centrado */
-h1 {
-  text-align: center;
-  font-size: 28px;
-  margin: 50px auto 30px auto; /* Margen superior e inferior */
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.testimonio-info p {
+  margin: 0;
+  font-size: 14px;
+  color: #666;
 }
 
-/* Footer */
-.footer {
-  background-color: black;
+.dark .testimonio-info p {
+  color: #aaa;
+}
+/* ===================== */
+/* 🎨 Sección de Contacto Rápido */
+/* ===================== */
+.contacto-rapido-section {
+  padding: 60px 20px;
+  background-color: #ff8800;
   color: white;
   text-align: center;
-  padding: 30px 0;
-  margin-top: auto;
+  transition: background-color 0.3s ease;
 }
 
-.logo-footer {
-  height: 30px; /* Tamaño reducido del logo en el footer */
-  margin-bottom: 10px;
+.dark .contacto-rapido-section {
+  background-color: #333333;
 }
 
-.footer h2 {
-  margin: 10px 0;
+.contacto-content {
+  max-width: 800px;
+  margin: 0 auto;
 }
 
-.redes-sociales {
+.contacto-content h2 {
+  font-size: 36px;
+  margin: 0 0 20px 0;
+}
+
+.contacto-content p {
+  font-size: 18px;
+  margin: 0 0 30px 0;
+  opacity: 0.9;
+}
+
+.contacto-buttons {
   display: flex;
   justify-content: center;
   gap: 20px;
-  margin-top: 10px;
+  flex-wrap: wrap;
 }
 
-.redes-sociales a {
-  color: white;
-  font-size: 24px;
-}
-
-.redes-sociales a:hover {
+.btn-contacto {
+  background-color: white;
   color: #ff8800;
+  padding: 12px 25px;
+  font-size: 16px;
+  min-width: 150px;
 }
 
-/* Estilos responsivos */
+.btn-contacto:hover {
+  background-color: #f0f0f0;
+  transform: translateY(-3px);
+}
+
+.dark .btn-contacto {
+  background-color: #aaaaaa;
+  color: #333333;
+}
+
+.dark .btn-contacto:hover {
+  background-color: #888888;
+}
+
+.btn-visita {
+  background-color: transparent;
+  border: 2px solid white;
+  color: white;
+}
+
+.btn-visita:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark .btn-visita {
+  border-color: #aaaaaa;
+  color: #aaaaaa;
+}
+
+.dark .btn-visita:hover {
+  background-color: rgba(170, 170, 170, 0.1);
+}
+
+
+/* Animaciones */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
 @media (max-width: 768px) {
-  /* Centrar las tarjetas de certificados en pantallas pequeñas */
-   .certificados-container {
-    flex-direction: column; /* Cambiar a columna */
-    align-items: center;
-    gap: 20px; /* Separación uniforme entre tarjetas */
-    padding: 20px;
+  .carousel-title {
+    font-size: 2.5rem;
   }
 
-  .certificado-card {
-    flex: 1 1 20%;
-    min-width: 280px; /* Ancho mínimo */
-    max-width: 300px;
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
+  .carousel-subtitle {
+    font-size: 1.25rem;
   }
 
-  /* Ajuste de navbar en pantallas pequeñas */
-  .nav-enlaces {
-    gap: 15px; /* Aumentar el espacio entre los botones */
+  .certificates-grid,
+  .memberships-grid {
+    grid-template-columns: 1fr;
   }
 
-  /* Ajustes de tamaño de botón */
-  .btn {
-    padding: 10px 15px; /* Más padding en pantallas pequeñas */
-    font-size: 16px; /* Aumentar el tamaño de la fuente en botones */
+  .membership-card.featured {
+    transform: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .carousel-title {
+    font-size: 2rem;
   }
 
-  .menu-desplegable ul li a {
-    font-size: 20px; /* Texto más grande en el menú desplegable */
+  .carousel-subtitle {
+    font-size: 1rem;
+  }
+
+  .certificates-grid,
+  .memberships-grid {
+    gap: 24px;
+  }
+}
+/* Contenedor para centrar el contenido */
+.section-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Ajustes para la sección de certificados */
+.certificates-section {
+  padding: 50px 0;
+  background-color: #f9fafb;
+}
+
+.certificates-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  margin-top: 40px;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+/* Ajustes para la sección de membresías */
+.memberships-section {
+  padding: 60px 0;
+  background-color: white;
+}
+
+.memberships-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 24px;
+  margin-top: 40px;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Ajustes para los títulos y descripciones */
+.section-header {
+  text-align: center;
+  margin-bottom: 40px;
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.section-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #111827;
+  margin-bottom: 16px;
+}
+
+.section-description {
+  font-size: 1.1rem;
+  color: #6b7280;
+  margin-top: 16px;
+}
+
+.section-divider {
+  width: 80px;
+  height: 3px;
+  background-color: #f97316;
+  margin: 16px auto;
+}
+
+/* Ajustes responsivos */
+@media (max-width: 768px) {
+  .section-title {
+    font-size: 1.8rem;
+  }
+  
+  .section-description {
+    font-size: 1rem;
+  }
+  
+  .certificates-grid,
+  .memberships-grid {
+    grid-template-columns: 1fr;
+    padding: 0 15px;
+  }
+  
+  .memberships-grid {
+    max-width: 100%;
   }
 }
