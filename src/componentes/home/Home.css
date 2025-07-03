@@ -51,12 +51,12 @@
 /* ===================== */
 /* 🎨 Encabezados de sección */
 /* ===================== */
-.section-header {
+.section-header-h {
   text-align: center;
   margin-bottom: 40px;
 }
 
-.section-header h2 {
+.section-header-h h2 {
   font-size: 32px;
   margin-bottom: 15px;
   position: relative;
@@ -722,7 +722,7 @@
 }
 
 /* Ajustes para los títulos y descripciones */
-.section-header {
+.section-header-h {
   text-align: center;
   margin-bottom: 40px;
   max-width: 1000px;
@@ -730,7 +730,7 @@
   margin-right: auto;
 }
 
-.section-title {
+.section-title-h {
   font-size: 2rem;
   font-weight: bold;
   color: #111827;
@@ -752,7 +752,7 @@
 
 /* Ajustes responsivos */
 @media (max-width: 768px) {
-  .section-title {
+  .section-title-h {
     font-size: 1.8rem;
   }
   

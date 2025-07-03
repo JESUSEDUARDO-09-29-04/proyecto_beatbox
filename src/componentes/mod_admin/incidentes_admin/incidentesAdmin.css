@@ -1,10 +1,48 @@
+/* Variables para el tema */
+:root {
+  --incidentes-bg-light: #ffffff;
+  --incidentes-header-bg-light: #ff6600;
+  --incidentes-header-text-light: white;
+  --incidentes-row-even-bg-light: #f9f9f9;
+  --incidentes-row-hover-bg-light: #f1f1f1;
+  --incidentes-border-color-light: #ddd;
+  --incidentes-text-color-light: #333;
+  --incidentes-search-bg-light: #ffffff;
+  --incidentes-modal-bg-light: #ffffff;
+  --incidentes-modal-text-light: #333;
+  --incidentes-modal-border-light: #eee;
+  --incidentes-modal-shadow-light: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Dark mode variables */
+.incidentes-container.dark {
+  --incidentes-bg-dark: #2a2a2a;
+  --incidentes-header-bg-dark: #cc5200;
+  --incidentes-header-text-dark: #e0e0e0;
+  --incidentes-row-even-bg-dark: #333333;
+  --incidentes-row-hover-bg-dark: #3a3a3a;
+  --incidentes-border-color-dark: #444;
+  --incidentes-text-color-dark: #e0e0e0;
+  --incidentes-search-bg-dark: #333333;
+  --incidentes-modal-bg-dark: #333333;
+  --incidentes-modal-text-dark: #ffffff;
+  --incidentes-modal-border-dark: #555555;
+  --incidentes-modal-shadow-dark: 0 8px 16px rgba(0, 0, 0, 0.4);
+}
+
 /* Contenedor principal */
 .incidentes-container {
-  width: 100%;
   padding: 20px;
-  background-color: #f9f9f9;
+  background-color: var(--incidentes-bg-light);
   border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Modo oscuro para el contenedor principal */
+.incidentes-container.dark {
+  background-color: var(--incidentes-bg-dark);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 /* Encabezado con título y búsqueda */
@@ -13,14 +51,26 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 25px;
+  border-bottom: 1px solid var(--incidentes-border-color-light);
+  padding-bottom: 15px;
   flex-wrap: wrap;
   gap: 15px;
 }
 
+/* Modo oscuro para el encabezado */
+.incidentes-container.dark .incidentes-header {
+  border-color: var(--incidentes-border-color-dark);
+}
+
 .incidentes-header h1 {
-  font-size: 1.8rem;
-  color: #333;
+  font-size: 28px;
+  color: var(--incidentes-text-color-light);
   margin: 0;
+}
+
+/* Modo oscuro para el título */
+.incidentes-container.dark .incidentes-header h1 {
+  color: var(--incidentes-text-color-dark);
 }
 
 /* Búsqueda */
@@ -31,77 +81,150 @@
 
 .incidentes-search-input {
   width: 100%;
-  padding: 10px 15px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
+  padding: 12px 15px;
+  border: 1px solid var(--incidentes-border-color-light);
+  border-radius: 8px;
   font-size: 14px;
-  transition: all 0.2s ease;
+  background-color: var(--incidentes-search-bg-light);
+  color: var(--incidentes-text-color-light);
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+/* Modo oscuro para el input de búsqueda */
+.incidentes-container.dark .incidentes-search-input {
+  background-color: var(--incidentes-search-bg-dark);
+  border-color: var(--incidentes-border-color-dark);
+  color: var(--incidentes-text-color-dark);
 }
 
 .incidentes-search-input:focus {
   border-color: #ff6600;
-  box-shadow: 0 0 0 2px rgba(255, 102, 0, 0.2);
+  box-shadow: 0 0 0 3px rgba(255, 102, 0, 0.2);
   outline: none;
 }
 
-/* Contenedor de tabla */
-.incidentes-table-container {
-  width: 100%;
+/* Modo oscuro para el focus del input */
+.incidentes-container.dark .incidentes-search-input:focus {
+  box-shadow: 0 0 0 3px rgba(255, 102, 0, 0.3);
+}
+
+/* Tabla responsive */
+.table-responsive {
   overflow-x: auto;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  -webkit-overflow-scrolling: touch;
 }
 
 /* Tabla de incidentes */
 .incidentes-table {
   width: 100%;
   border-collapse: collapse;
-  background-color: #fff;
+  font-family: Arial, sans-serif;
   font-size: 14px;
+  color: var(--incidentes-text-color-light);
+  min-width: 600px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* Modo oscuro para la tabla */
+.incidentes-container.dark .incidentes-table {
+  color: var(--incidentes-text-color-dark);
+}
+
+.incidentes-table th,
+.incidentes-table td {
+  text-align: center;
+  padding: 12px 15px;
+  border: 1px solid var(--incidentes-border-color-light);
+}
+
+/* Modo oscuro para bordes de tabla */
+.incidentes-container.dark .incidentes-table th,
+.incidentes-container.dark .incidentes-table td {
+  border-color: var(--incidentes-border-color-dark);
 }
 
 .incidentes-table thead {
-  background-color: #ff6600;
-  color: white;
+  background-color: var(--incidentes-header-bg-light);
+  color: var(--incidentes-header-text-light);
 }
 
 .incidentes-table th {
-  padding: 12px 15px;
-  text-align: left;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-radius: 8px 8px 0 0;
+}
+
+/* Modo oscuro para encabezado de tabla */
+.incidentes-container.dark .incidentes-table thead {
+  background-color: var(--incidentes-header-bg-dark);
+  color: var(--incidentes-header-text-dark);
+}
+
+.incidentes-table tbody tr {
+  transition: background-color 0.2s ease;
+}
+
+.incidentes-table tbody tr:nth-child(even) {
+  background-color: var(--incidentes-row-even-bg-light);
+}
+
+/* Modo oscuro para filas pares */
+.incidentes-container.dark .incidentes-table tbody tr:nth-child(even) {
+  background-color: var(--incidentes-row-even-bg-dark);
+}
+
+.incidentes-table tbody tr:hover {
+  background-color: var(--incidentes-row-hover-bg-light);
+}
+
+/* Modo oscuro para filas al pasar el ratón */
+.incidentes-container.dark .incidentes-table tbody tr:hover {
+  background-color: var(--incidentes-row-hover-bg-dark);
+}
+
+/* Rol badges - similar al diseño de documentos */
+.rol-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
-.incidentes-table tbody tr {
-  border-bottom: 1px solid #eee;
-  transition: background-color 0.2s ease;
+.rol-badge.admin {
+  background-color: #f6ffed;
+  color: #52c41a;
+  border: 1px solid #b7eb8f;
 }
 
-.incidentes-table tbody tr:last-child {
-  border-bottom: none;
+.rol-badge.user {
+  background-color: #e6f7ff;
+  color: #1890ff;
+  border: 1px solid #91d5ff;
 }
 
-.incidentes-table tbody tr:hover {
-  background-color: #f5f5f5;
+/* Modo oscuro para badges de rol */
+.incidentes-container.dark .rol-badge.admin {
+  background-color: rgba(82, 196, 26, 0.1);
+  border-color: rgba(82, 196, 26, 0.3);
+  color: #95de64;
 }
 
-.incidentes-table td {
-  padding: 12px 15px;
-  vertical-align: middle;
+.incidentes-container.dark .rol-badge.user {
+  background-color: rgba(24, 144, 255, 0.1);
+  border-color: rgba(24, 144, 255, 0.3);
+  color: #69c0ff;
 }
 
-/* Estilos para roles */
-.incidentes-table td.rol {
-  font-weight: 500;
-}
-
-.incidentes-table td.rol.admin {
-  color: #2e7d32;
-}
-
-.incidentes-table td.rol.user {
-  color: #0277bd;
+.rol-icon {
+  font-size: 10px;
 }
 
 /* Botón de ver incidencias */
@@ -113,18 +236,23 @@
   background-color: #2196f3;
   color: white;
   border: none;
-  padding: 8px 12px;
-  border-radius: 4px;
+  padding: 8px 15px;
+  border-radius: 8px;
   font-size: 13px;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
-  width: auto;
+  white-space: nowrap;
 }
 
 .btn-ver-incidencias:hover {
   background-color: #1976d2;
   transform: translateY(-2px);
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-ver-incidencias:active {
+  transform: translateY(1px);
 }
 
 .btn-icon {
@@ -139,6 +267,11 @@
   font-style: italic;
 }
 
+/* Modo oscuro para mensaje de no resultados */
+.incidentes-container.dark .no-results {
+  color: #bbb;
+}
+
 /* Indicador de carga */
 .incidentes-loading {
   display: flex;
@@ -146,7 +279,12 @@
   align-items: center;
   justify-content: center;
   padding: 40px;
-  color: #666;
+  color: var(--incidentes-text-color-light);
+}
+
+/* Modo oscuro para indicador de carga */
+.incidentes-container.dark .incidentes-loading {
+  color: var(--incidentes-text-color-dark);
 }
 
 .incidentes-spinner {
@@ -172,7 +310,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.6);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -181,15 +319,25 @@
 }
 
 .modal-incidentes {
-  background-color: #fff;
-  border-radius: 10px;
+  background-color: var(--incidentes-modal-bg-light);
+  border-radius: 15px;
   width: 90%;
   max-width: 500px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--incidentes-modal-shadow-light);
   overflow: hidden;
   animation: modalFadeIn 0.3s ease;
   display: flex;
   flex-direction: column;
+  color: var(--incidentes-modal-text-light);
+  border: 1px solid var(--incidentes-modal-border-light);
+}
+
+/* Modo oscuro para el modal */
+.incidentes-container.dark .modal-incidentes {
+  background-color: var(--incidentes-modal-bg-dark);
+  color: var(--incidentes-modal-text-dark);
+  box-shadow: var(--incidentes-modal-shadow-dark);
+  border-color: var(--incidentes-modal-border-dark);
 }
 
 @keyframes modalFadeIn {
@@ -205,14 +353,18 @@
 
 .modal-header {
   padding: 20px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--incidentes-modal-border-light);
+}
+
+/* Modo oscuro para encabezado del modal */
+.incidentes-container.dark .modal-header {
+  border-color: var(--incidentes-modal-border-dark);
 }
 
 .modal-header h2 {
   margin: 0;
   font-size: 18px;
   font-weight: 600;
-  color: #333;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -233,9 +385,15 @@
 .modal-footer {
   padding: 15px 20px;
   background-color: #f5f5f5;
-  border-top: 1px solid #eee;
+  border-top: 1px solid var(--incidentes-modal-border-light);
   display: flex;
   justify-content: flex-end;
+}
+
+/* Modo oscuro para pie del modal */
+.incidentes-container.dark .modal-footer {
+  background-color: #222;
+  border-color: var(--incidentes-modal-border-dark);
 }
 
 .modal-btn {
@@ -260,13 +418,19 @@
   background: none;
   border: none;
   font-size: 24px;
-  color: #999;
+  font-weight: bold;
+  color: var(--incidentes-text-color-light);
   cursor: pointer;
   transition: color 0.2s ease;
 }
 
+/* Modo oscuro para botón de cerrar */
+.incidentes-container.dark .modal-close {
+  color: var(--incidentes-text-color-dark);
+}
+
 .modal-close:hover {
-  color: #333;
+  color: #f44336;
 }
 
 /* Detalles de incidencia */
@@ -283,6 +447,12 @@
   background-color: #f9f9f9;
   border-radius: 8px;
   border-left: 4px solid #ddd;
+}
+
+/* Modo oscuro para ítems de incidencia */
+.incidentes-container.dark .incidencia-item {
+  background-color: #333;
+  border-left-color: #555;
 }
 
 .incidencia-icon {
@@ -313,12 +483,24 @@
   font-size: 12px;
   color: #666;
   margin-bottom: 3px;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+/* Modo oscuro para etiquetas */
+.incidentes-container.dark .incidencia-label {
+  color: #bbb;
 }
 
 .incidencia-value {
   font-size: 15px;
   font-weight: 500;
-  color: #333;
+  color: var(--incidentes-text-color-light);
+}
+
+/* Modo oscuro para valores */
+.incidentes-container.dark .incidencia-value {
+  color: var(--incidentes-text-color-dark);
 }
 
 .incidencia-value.blocked {
@@ -347,10 +529,24 @@
   border: 1px solid #ffcdd2;
 }
 
+/* Modo oscuro para error del modal */
+.incidentes-container.dark .modal-error {
+  background-color: rgba(211, 47, 47, 0.2);
+  color: #ef9a9a;
+  border-color: rgba(211, 47, 47, 0.3);
+}
+
 .no-incidencias {
   background-color: #f5f5f5;
   color: #666;
   border: 1px dashed #ddd;
+}
+
+/* Modo oscuro para mensaje sin incidencias */
+.incidentes-container.dark .no-incidencias {
+  background-color: #333;
+  color: #bbb;
+  border-color: #555;
 }
 
 .modal-loading {
@@ -363,9 +559,17 @@
 
 /* Responsividad */
 @media (max-width: 768px) {
+  .incidentes-container {
+    padding: 15px;
+  }
+
   .incidentes-header {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .incidentes-header h1 {
+    font-size: 24px;
   }
 
   .incidentes-search {
@@ -373,42 +577,76 @@
     width: 100%;
   }
 
+  .incidentes-table {
+    display: block;
+    width: 100%;
+    border: none;
+    min-width: unset;
+  }
+
   .incidentes-table thead {
     display: none;
+  }
+
+  .incidentes-table tbody {
+    display: block;
+    width: 100%;
   }
 
   .incidentes-table tbody tr {
     display: block;
     margin-bottom: 15px;
-    border: 1px solid #eee;
+    border: 1px solid var(--incidentes-border-color-light);
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    padding: 15px 20px;
+    background-color: var(--incidentes-bg-light);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   }
 
-  .incidentes-table td {
+  /* Modo oscuro para filas en modo tarjeta */
+  .incidentes-container.dark .incidentes-table tbody tr {
+    background-color: var(--incidentes-row-even-bg-dark);
+    border-color: var(--incidentes-border-color-dark);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  .incidentes-table tbody tr td {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 15px;
-    text-align: right;
-    border-bottom: 1px solid #f0f0f0;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 8px 0;
+    border-bottom: 1px dashed var(--incidentes-border-color-light);
+    font-size: 15px;
   }
 
-  .incidentes-table td:last-child {
+  /* Modo oscuro para bordes de celdas en modo tarjeta */
+  .incidentes-container.dark .incidentes-table tbody tr td {
+    border-color: var(--incidentes-border-color-dark);
+  }
+
+  .incidentes-table tbody tr td:last-child {
     border-bottom: none;
+    padding-bottom: 0;
   }
 
-  .incidentes-table td::before {
+  .incidentes-table tbody tr td::before {
     content: attr(data-label);
-    font-weight: 600;
-    color: #666;
+    font-weight: 700;
     text-transform: uppercase;
-    font-size: 12px;
+    margin-bottom: 5px;
+    color: #777;
+    width: 100%;
+    text-align: left;
+  }
+
+  /* Modo oscuro para etiquetas en modo tarjeta */
+  .incidentes-container.dark .incidentes-table tbody tr td::before {
+    color: #bbbbbb;
   }
 
   .btn-ver-incidencias {
-    width: auto;
-    margin-left: auto;
+    align-self: flex-start;
+    margin-top: 10px;
   }
 
   .modal-incidentes {
@@ -417,116 +655,16 @@
   }
 }
 
-/* Modo oscuro */
-.dark .incidentes-container {
-  background-color: #1f1f1f;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-}
+@media (max-width: 480px) {
+  .incidentes-container {
+    padding: 10px;
+  }
 
-.dark .incidentes-header h1 {
-  color: #e0e0e0;
-}
+  .incidentes-header h1 {
+    font-size: 22px;
+  }
 
-.dark .incidentes-search-input {
-  background-color: #333;
-  border-color: #444;
-  color: #e0e0e0;
+  .incidentes-table tbody tr td {
+    padding: 6px 0;
+  }
 }
-
-.dark .incidentes-search-input:focus {
-  border-color: #ff6600;
-  box-shadow: 0 0 0 2px rgba(255, 102, 0, 0.3);
-}
-
-.dark .incidentes-table-container {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-}
-
-.dark .incidentes-table {
-  background-color: #2a2a2a;
-  color: #e0e0e0;
-}
-
-.dark .incidentes-table tbody tr {
-  border-bottom-color: #444;
-}
-
-.dark .incidentes-table tbody tr:hover {
-  background-color: #333;
-}
-
-.dark .incidentes-table td.rol.admin {
-  color: #81c784;
-}
-
-.dark .incidentes-table td.rol.user {
-  color: #64b5f6;
-}
-
-.dark .no-results {
-  color: #bbb;
-}
-
-.dark .incidentes-loading {
-  color: #bbb;
-}
-
-.dark .modal-incidentes {
-  background-color: #2a2a2a;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-}
-
-.dark .modal-header {
-  border-bottom-color: #444;
-}
-
-.dark .modal-header h2 {
-  color: #e0e0e0;
-}
-
-.dark .modal-footer {
-  background-color: #222;
-  border-top-color: #444;
-}
-
-.dark .modal-close {
-  color: #bbb;
-}
-
-.dark .modal-close:hover {
-  color: #fff;
-}
-
-.dark .incidencia-item {
-  background-color: #333;
-  border-left-color: #555;
-}
-
-.dark .incidencia-label {
-  color: #bbb;
-}
-
-.dark .incidencia-value {
-  color: #e0e0e0;
-}
-
-.dark .modal-error {
-  background-color: rgba(211, 47, 47, 0.2);
-  color: #ef9a9a;
-  border-color: rgba(211, 47, 47, 0.3);
-}
-
-.dark .no-incidencias {
-  background-color: #333;
-  color: #bbb;
-  border-color: #555;
-}
-
-.dark .modal-btn {
-  background-color: #ff6600;
-}
-
-.dark .modal-btn:hover {
-  background-color: #e55c00;
-}
-

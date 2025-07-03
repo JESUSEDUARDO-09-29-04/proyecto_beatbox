@@ -141,22 +141,46 @@
   background-color: var(--table-row-hover-bg-dark);
 }
 
-/* Colores del rol */
-.usuarios-tabla td.rol {
-  font-weight: bold;
+/* Rol badges - similar al diseño de documentos */
+.rol-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-.usuarios-tabla td.rol.admin {
-  color: var(--rol-admin-color);
+.rol-badge.admin {
+  background-color: #f6ffed;
+  color: #52c41a;
+  border: 1px solid #b7eb8f;
 }
 
-.usuarios-tabla td.rol.usuario {
-  color: var(--rol-user-color-light);
+.rol-badge.usuario {
+  background-color: #e6f7ff;
+  color: #1890ff;
+  border: 1px solid #91d5ff;
 }
 
-/* Modo oscuro para rol de usuario */
-.usuarios-admin-contenedor.dark .usuarios-tabla td.rol.usuario {
-  color: var(--rol-user-color-dark);
+/* Modo oscuro para badges de rol */
+.usuarios-admin-contenedor.dark .rol-badge.admin {
+  background-color: rgba(82, 196, 26, 0.1);
+  border-color: rgba(82, 196, 26, 0.3);
+  color: #95de64;
+}
+
+.usuarios-admin-contenedor.dark .rol-badge.usuario {
+  background-color: rgba(24, 144, 255, 0.1);
+  border-color: rgba(24, 144, 255, 0.3);
+  color: #69c0ff;
+}
+
+.rol-icon {
+  font-size: 10px;
 }
 
 /* Button Group */

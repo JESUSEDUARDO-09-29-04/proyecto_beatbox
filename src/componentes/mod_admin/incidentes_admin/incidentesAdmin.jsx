@@ -1,12 +1,23 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useContext } from "react"
 import { useNavigate } from "react-router-dom"
+import { ThemeContext } from "../../../context/ThemeContext" // Import ThemeContext
 import "./IncidentesAdmin.css"
-import { FaEye, FaExclamationTriangle, FaLock, FaUnlock, FaCalendarAlt, FaHistory } from "react-icons/fa"
+import {
+  FaEye,
+  FaExclamationTriangle,
+  FaLock,
+  FaUnlock,
+  FaCalendarAlt,
+  FaHistory,
+  FaUserShield,
+  FaUser,
+} from "react-icons/fa"
 
 const IncidentesAdmin = () => {
   const navigate = useNavigate()
+  const { theme } = useContext(ThemeContext) // Get theme from context
   const [usuarios, setUsuarios] = useState([])
   const [incidencia, setIncidencia] = useState(null)
   const [usuarioSeleccionado, setUsuarioSeleccionado] = useState("")
@@ -127,7 +138,7 @@ const IncidentesAdmin = () => {
   }
 
   return (
-    <div className="incidentes-container">
+    <div className={`incidentes-container ${theme === "dark" ? "dark" : ""}`}>
       <div className="incidentes-header">
         <h1>Gestión de Incidencias</h1>
         <div className="incidentes-search">
@@ -147,7 +158,7 @@ const IncidentesAdmin = () => {
           <p>Cargando usuarios...</p>
         </div>
       ) : (
-        <div className="incidentes-table-container">
+        <div className="table-responsive">
           <table className="incidentes-table">
             <thead>
               <tr>
@@ -162,9 +173,21 @@ const IncidentesAdmin = () => {
                 usuariosFiltrados.map((usuario) => (
                   <tr key={usuario._id || usuario.id}>
                     <td data-label="Usuario">{usuario.usuario}</td>
-                    <td data-label="Email">{usuario.correo_Electronico}</td>
-                    <td data-label="Rol" className={`rol ${usuario.role}`}>
-                      {usuario.role}
+                    <td data-label="Email">{usuario.correo_electronico}</td>
+                    <td data-label="Rol">
+                      <span className={`rol-badge ${usuario.role}`}>
+                        {usuario.role === "admin" ? (
+                          <>
+                            <FaUserShield className="rol-icon" />
+                            Admin
+                          </>
+                        ) : (
+                          <>
+                            <FaUser className="rol-icon" />
+                            Usuario
+                          </>
+                        )}
+                      </span>
                     </td>
                     <td data-label="Acciones">
                       <button
@@ -277,4 +300,3 @@ const IncidentesAdmin = () => {
 }
 
 export default IncidentesAdmin
-

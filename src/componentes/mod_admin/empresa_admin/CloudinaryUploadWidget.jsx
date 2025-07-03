@@ -14,7 +14,7 @@ const CloudinaryUploadWidget = ({ onUpload }) => {
       script.async = true;
 
       script.onload = () => {
-        console.log('Cloudinary script cargado correctamente.');
+        console.log('Cloudinary script ha cargado correctamente.');
       };
 
       script.onerror = () => {
@@ -29,7 +29,7 @@ const CloudinaryUploadWidget = ({ onUpload }) => {
 
   const openCloudinaryWidget = () => {
     if (!window.cloudinary) {
-      console.error('Cloudinary no está disponible. Verifica que el script esté cargado.');
+      console.error('Cloudinary no está disponible. Verifique que el script esté cargado correctamente.');
       return;
     }
 
@@ -42,7 +42,7 @@ const CloudinaryUploadWidget = ({ onUpload }) => {
         cropping: true, // Habilitar recorte
         croppingAspectRatio: 1, // Relación de aspecto del recorte
         multiple: false, // No permitir múltiples imágenes
-        clientAllowedFormats: ['webp'], // Formatos permitidos
+        clientAllowedFormats: ['webp','png', 'jpg', 'jpeg'], // Formatos permitidos
         maxImageFileSize: 2000000, // Tamaño máximo del archivo (2 MB)
         resourceType: 'image', // Tipo de recurso
         transformation: [{ width: 300, height: 300, crop: 'limit' }], // Transformación de la imagen

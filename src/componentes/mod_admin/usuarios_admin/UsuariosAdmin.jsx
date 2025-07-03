@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom"
 import { ThemeContext } from "../../../context/ThemeContext" // Import ThemeContext
 import DOMPurify from "dompurify"
 import "./UsuariosAdmin.css"
+import { FaUserShield, FaUser } from "react-icons/fa"
 
 const UsuariosAdmin = () => {
   const navigate = useNavigate()
@@ -133,8 +134,20 @@ const UsuariosAdmin = () => {
               <tr key={usuario.id}>
                 <td data-label="Nombre">{sanitizarEntrada(usuario.usuario)}</td>
                 <td data-label="Correo electrónico">{sanitizarEntrada(usuario.correo_electronico)}</td>
-                <td data-label="Rol" className={`rol ${usuario.role === "admin" ? "admin" : "usuario"}`}>
-                  {sanitizarEntrada(usuario.role)}
+                <td data-label="Rol">
+                  <span className={`rol-badge ${usuario.role === "admin" ? "admin" : "usuario"}`}>
+                    {usuario.role === "admin" ? (
+                      <>
+                        <FaUserShield className="rol-icon" />
+                        Admin
+                      </>
+                    ) : (
+                      <>
+                        <FaUser className="rol-icon" />
+                        Usuario
+                      </>
+                    )}
+                  </span>
                 </td>
                 <td data-label="Acciones">
                   <div className="button-group">

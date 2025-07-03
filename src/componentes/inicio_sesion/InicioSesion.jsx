@@ -122,7 +122,7 @@ const InicioSesion = () => {
         },
         credentials: "include",
         body: JSON.stringify({
-          usuario: usuarioSanitizado,
+          usuarioOEmail: usuarioSanitizado,
           password: contrasenaSanitizada,
         }),
       })

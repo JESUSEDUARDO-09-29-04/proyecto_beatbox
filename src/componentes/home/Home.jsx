@@ -236,10 +236,10 @@ const handleSeleccionarMembresia = (id) => {
 
         {/* Sección de Certificados mejorada de Home2 */}
         <section className="certificates-section">
-          <div className="section-header">
+          <div className="section-header-h">
             <div className="section-title-wrapper">
               <i className="fas fa-award section-icon"></i>
-              <h2 className="section-title">Certificados del Establecimiento</h2>
+              <h2 className="section-title-h">Certificados del Establecimiento</h2>
             </div>
             <div className="section-divider"></div>
             <p className="section-description">
@@ -272,8 +272,8 @@ const handleSeleccionarMembresia = (id) => {
 
         {/* Sección de Membresías mejorada de Home2 */}
         <section className="memberships-section">
-          <div className="section-header">
-            <h2 className="section-title">Nuestras Membresías</h2>
+          <div className="section-header-h">
+            <h2 className="section-title-h">Nuestras Membresías</h2>
             <div className="section-divider"></div>
             <p className="section-description">Elige el plan que mejor se adapte a tu estilo de vida</p>
           </div>
@@ -315,7 +315,7 @@ const handleSeleccionarMembresia = (id) => {
 
         {/* Sección de Testimonios */}
         <section className="testimonios-section">
-          <div className="section-header">
+          <div className="section-header-h">
             <h2>Lo que dicen nuestros clientes</h2>
             <div className="section-divider"></div>
           </div>

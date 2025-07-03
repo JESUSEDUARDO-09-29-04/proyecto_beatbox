@@ -1,10 +1,42 @@
+/* Variables para el tema */
+:root {
+  --redes-bg-light: #ffffff;
+  --redes-text-color-light: #333;
+  --redes-border-color-light: #ddd;
+  --redes-card-bg-light: #ffffff;
+  --redes-card-shadow-light: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --redes-modal-bg-light: #ffffff;
+  --redes-modal-text-light: #333;
+  --redes-modal-border-light: #eee;
+  --redes-modal-shadow-light: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Dark mode variables */
+.redes-sociales-container.dark {
+  --redes-bg-dark: #2a2a2a;
+  --redes-text-color-dark: #e0e0e0;
+  --redes-border-color-dark: #444;
+  --redes-card-bg-dark: #2a2a2a;
+  --redes-card-shadow-dark: 0 2px 8px rgba(0, 0, 0, 0.2);
+  --redes-modal-bg-dark: #2a2a2a;
+  --redes-modal-text-dark: #ffffff;
+  --redes-modal-border-dark: #555555;
+  --redes-modal-shadow-dark: 0 10px 25px rgba(0, 0, 0, 0.4);
+}
+
 /* Contenedor principal */
 .redes-sociales-container {
-  width: 100%;
   padding: 20px;
-  background-color: #f9f9f9;
+  background-color: var(--redes-bg-light);
   border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Modo oscuro para el contenedor principal */
+.redes-sociales-container.dark {
+  background-color: var(--redes-bg-dark);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 /* Encabezado con título y botón */
@@ -13,14 +45,26 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 25px;
+  border-bottom: 1px solid var(--redes-border-color-light);
+  padding-bottom: 15px;
   flex-wrap: wrap;
   gap: 15px;
 }
 
+/* Modo oscuro para el encabezado */
+.redes-sociales-container.dark .redes-header {
+  border-color: var(--redes-border-color-dark);
+}
+
 .redes-header h1 {
-  font-size: 1.8rem;
-  color: #333;
+  font-size: 28px;
+  color: var(--redes-text-color-light);
   margin: 0;
+}
+
+/* Modo oscuro para el título */
+.redes-sociales-container.dark .redes-header h1 {
+  color: var(--redes-text-color-dark);
 }
 
 /* Botón de agregar red social */
@@ -31,19 +75,24 @@
   background-color: #ff6600;
   color: white;
   border: none;
-  padding: 10px 16px;
-  border-radius: 6px;
+  padding: 12px 20px;
+  border-radius: 8px;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
   box-shadow: 0 2px 5px rgba(255, 102, 0, 0.2);
+  white-space: nowrap;
 }
 
 .btn-agregar:hover {
   background-color: #e55c00;
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(255, 102, 0, 0.3);
+}
+
+.btn-agregar:active {
+  transform: translateY(1px);
 }
 
 .icon-btn {
@@ -59,14 +108,26 @@
 .no-redes {
   text-align: center;
   padding: 40px 20px;
-  background-color: #fff;
+  background-color: var(--redes-card-bg-light);
   border-radius: 8px;
-  border: 1px dashed #ddd;
+  border: 1px dashed var(--redes-border-color-light);
+}
+
+/* Modo oscuro para mensaje sin redes */
+.redes-sociales-container.dark .no-redes {
+  background-color: var(--redes-card-bg-dark);
+  border-color: var(--redes-border-color-dark);
 }
 
 .no-redes p {
   color: #666;
   font-size: 16px;
+  margin: 0;
+}
+
+/* Modo oscuro para texto sin redes */
+.redes-sociales-container.dark .no-redes p {
+  color: #bbb;
 }
 
 /* Tarjetas de redes sociales */
@@ -79,18 +140,31 @@
 .red-card {
   display: flex;
   align-items: center;
-  padding: 16px;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  padding: 20px;
+  background-color: var(--redes-card-bg-light);
+  border-radius: 10px;
+  box-shadow: var(--redes-card-shadow-light);
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
+  border: 1px solid var(--redes-border-color-light);
+}
+
+/* Modo oscuro para tarjetas */
+.redes-sociales-container.dark .red-card {
+  background-color: var(--redes-card-bg-dark);
+  box-shadow: var(--redes-card-shadow-dark);
+  border-color: var(--redes-border-color-dark);
 }
 
 .red-card:hover {
   transform: translateY(-3px);
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Modo oscuro para hover de tarjetas */
+.redes-sociales-container.dark .red-card:hover {
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
 
 .red-card::before {
@@ -100,7 +174,12 @@
   left: 0;
   width: 5px;
   height: 100%;
-  background-color: #ddd;
+  background-color: var(--redes-border-color-light);
+}
+
+/* Modo oscuro para borde izquierdo */
+.redes-sociales-container.dark .red-card::before {
+  background-color: var(--redes-border-color-dark);
 }
 
 .red-card.facebook::before {
@@ -121,16 +200,21 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 50px;
-  height: 50px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
   background-color: #f5f5f5;
-  margin-right: 15px;
+  margin-right: 20px;
   flex-shrink: 0;
 }
 
+/* Modo oscuro para iconos */
+.redes-sociales-container.dark .red-icon {
+  background-color: #333;
+}
+
 .social-icon {
-  font-size: 24px;
+  font-size: 28px;
 }
 
 .social-icon.facebook {
@@ -149,12 +233,20 @@
 .red-info {
   flex-grow: 1;
   overflow: hidden;
+  min-width: 0;
 }
 
 .red-info h3 {
-  margin: 0 0 5px 0;
-  font-size: 16px;
+  margin: 0 0 8px 0;
+  font-size: 18px;
+  font-weight: 600;
   text-transform: capitalize;
+  color: var(--redes-text-color-light);
+}
+
+/* Modo oscuro para títulos de red */
+.redes-sociales-container.dark .red-info h3 {
+  color: var(--redes-text-color-dark);
 }
 
 .red-link {
@@ -168,6 +260,11 @@
   transition: color 0.2s ease;
 }
 
+/* Modo oscuro para enlaces */
+.redes-sociales-container.dark .red-link {
+  color: #bbb;
+}
+
 .red-link:hover {
   color: #ff6600;
   text-decoration: underline;
@@ -176,22 +273,30 @@
 /* Botones de acción */
 .red-actions {
   display: flex;
-  gap: 8px;
-  margin-left: 10px;
+  gap: 10px;
+  margin-left: 15px;
+  flex-shrink: 0;
 }
 
 .btn-action {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   border: none;
   background-color: #f5f5f5;
   color: #666;
   cursor: pointer;
   transition: all 0.2s ease;
+  font-size: 14px;
+}
+
+/* Modo oscuro para botones de acción */
+.redes-sociales-container.dark .btn-action {
+  background-color: #333;
+  color: #bbb;
 }
 
 .btn-action.edit:hover {
@@ -204,6 +309,10 @@
   color: #ff4d4f;
 }
 
+.btn-action:active {
+  transform: scale(0.95);
+}
+
 /* Modal - Nuevo diseño simple */
 .modal-overlay {
   position: fixed;
@@ -211,7 +320,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.6);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -220,13 +329,21 @@
 }
 
 .modal-simple {
-  background-color: #fff;
-  border-radius: 10px;
+  background-color: var(--redes-modal-bg-light);
+  border-radius: 15px;
   width: 90%;
-  max-width: 450px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  max-width: 500px;
+  box-shadow: var(--redes-modal-shadow-light);
   overflow: hidden;
   animation: modalFadeIn 0.3s ease;
+  border: 1px solid var(--redes-modal-border-light);
+}
+
+/* Modo oscuro para el modal */
+.redes-sociales-container.dark .modal-simple {
+  background-color: var(--redes-modal-bg-dark);
+  box-shadow: var(--redes-modal-shadow-dark);
+  border-color: var(--redes-modal-border-dark);
 }
 
 @keyframes modalFadeIn {
@@ -242,36 +359,53 @@
 
 /* Cabecera del modal blanca */
 .modal-header-white {
-  background-color: #fff;
-  padding: 20px;
-  border-bottom: 1px solid #eee;
+  background-color: var(--redes-modal-bg-light);
+  padding: 25px;
+  border-bottom: 1px solid var(--redes-modal-border-light);
   text-align: center;
+}
+
+/* Modo oscuro para encabezado del modal */
+.redes-sociales-container.dark .modal-header-white {
+  background-color: var(--redes-modal-bg-dark);
+  border-color: var(--redes-modal-border-dark);
 }
 
 .modal-header-white h2 {
   margin: 0;
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 600;
-  color: #333;
+  color: var(--redes-modal-text-light);
+}
+
+/* Modo oscuro para título del modal */
+.redes-sociales-container.dark .modal-header-white h2 {
+  color: var(--redes-modal-text-dark);
 }
 
 /* Cuerpo del modal simple */
 .modal-body-simple {
-  padding: 25px 20px;
+  padding: 30px 25px;
 }
 
 .modal-field-simple {
   display: flex;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
 }
 
 .modal-field-simple label {
   width: 80px;
   text-align: right;
-  margin-right: 15px;
+  margin-right: 20px;
   font-size: 14px;
-  color: #333;
+  font-weight: 600;
+  color: var(--redes-modal-text-light);
+}
+
+/* Modo oscuro para etiquetas del modal */
+.redes-sociales-container.dark .modal-field-simple label {
+  color: var(--redes-modal-text-dark);
 }
 
 .input-container,
@@ -296,26 +430,51 @@
 
 .select-simple {
   width: 100%;
-  padding: 10px 12px;
+  padding: 12px 15px;
   border: 1px solid #ff6600;
-  border-radius: 5px;
+  border-radius: 8px;
   font-size: 14px;
   appearance: none;
-  background-color: white;
+  background-color: var(--redes-modal-bg-light);
+  color: var(--redes-modal-text-light);
   cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* Modo oscuro para select */
+.redes-sociales-container.dark .select-simple {
+  background-color: #333;
+  color: var(--redes-modal-text-dark);
 }
 
 .input-simple,
 .input-disabled-simple {
   width: 100%;
-  padding: 10px 12px 10px 35px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
+  padding: 12px 15px 12px 40px;
+  border: 1px solid var(--redes-border-color-light);
+  border-radius: 8px;
   font-size: 14px;
+  background-color: var(--redes-modal-bg-light);
+  color: var(--redes-modal-text-light);
+  transition: all 0.3s ease;
+  box-sizing: border-box;
   /* Manejo de texto largo */
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+}
+
+/* Modo oscuro para inputs */
+.redes-sociales-container.dark .input-simple {
+  background-color: #333;
+  border-color: var(--redes-border-color-dark);
+  color: var(--redes-modal-text-dark);
+}
+
+.input-simple:focus {
+  border-color: #ff6600;
+  box-shadow: 0 0 0 3px rgba(255, 102, 0, 0.2);
+  outline: none;
 }
 
 /* Campo de entrada con desplazamiento horizontal */
@@ -329,12 +488,23 @@
 
 .input-simple-scroll {
   width: 100%;
-  padding: 10px 12px 10px 35px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
+  padding: 12px 15px 12px 40px;
+  border: 1px solid var(--redes-border-color-light);
+  border-radius: 8px;
   font-size: 14px;
+  background-color: var(--redes-modal-bg-light);
+  color: var(--redes-modal-text-light);
   white-space: pre;
   overflow-x: visible;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+/* Modo oscuro para input scroll */
+.redes-sociales-container.dark .input-simple-scroll {
+  background-color: #333;
+  border-color: var(--redes-border-color-dark);
+  color: var(--redes-modal-text-dark);
 }
 
 /* Estilizar la barra de desplazamiento */
@@ -356,16 +526,34 @@
   background: #aaa;
 }
 
+/* Modo oscuro para scrollbar */
+.redes-sociales-container.dark .input-container-scroll::-webkit-scrollbar-track {
+  background: #2a2a2a;
+}
+
+.redes-sociales-container.dark .input-container-scroll::-webkit-scrollbar-thumb {
+  background: #555;
+}
+
+.redes-sociales-container.dark .input-container-scroll::-webkit-scrollbar-thumb:hover {
+  background: #777;
+}
+
 /* Asegurar que el icono permanezca visible */
 .input-container-scroll .input-icon {
   position: absolute;
-  left: 12px;
+  left: 15px;
   top: 50%;
   transform: translateY(-50%);
   color: #999;
   z-index: 2;
-  background-color: white;
+  background-color: var(--redes-modal-bg-light);
   padding-right: 5px;
+}
+
+/* Modo oscuro para icono de input */
+.redes-sociales-container.dark .input-container-scroll .input-icon {
+  background-color: #333;
 }
 
 /* Tooltip para mostrar el enlace completo al pasar el cursor */
@@ -376,17 +564,24 @@
 .input-container:hover::after {
   content: attr(data-tooltip);
   position: absolute;
-  bottom: -30px;
+  bottom: -35px;
   left: 0;
   background-color: #333;
   color: white;
-  padding: 5px 10px;
-  border-radius: 4px;
+  padding: 8px 12px;
+  border-radius: 6px;
   font-size: 12px;
   z-index: 10;
   max-width: 100%;
   white-space: normal;
   word-break: break-all;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Modo oscuro para tooltip */
+.redes-sociales-container.dark .input-container:hover::after {
+  background-color: #555;
+  color: #fff;
 }
 
 /* Actualizar el contenedor para mostrar el tooltip */
@@ -396,10 +591,11 @@
 
 .input-icon {
   position: absolute;
-  left: 12px;
+  left: 15px;
   top: 50%;
   transform: translateY(-50%);
   color: #999;
+  font-size: 16px;
 }
 
 .input-disabled-simple {
@@ -408,12 +604,25 @@
   cursor: not-allowed;
 }
 
+/* Modo oscuro para input deshabilitado */
+.redes-sociales-container.dark .input-disabled-simple {
+  background-color: #222;
+  border-color: var(--redes-border-color-dark);
+  color: #999;
+}
+
 .error-container-simple {
-  margin-top: 10px;
-  padding: 10px;
+  margin-top: 15px;
+  padding: 12px;
   background-color: #fff2f0;
   border: 1px solid #ffccc7;
-  border-radius: 5px;
+  border-radius: 8px;
+}
+
+/* Modo oscuro para contenedor de error */
+.redes-sociales-container.dark .error-container-simple {
+  background-color: rgba(255, 77, 79, 0.1);
+  border-color: rgba(255, 77, 79, 0.3);
 }
 
 .error-message-simple {
@@ -426,24 +635,38 @@
 .modal-footer-simple {
   display: flex;
   justify-content: flex-end;
-  padding: 15px 20px;
+  gap: 15px;
+  padding: 20px 25px;
   background-color: #f5f5f5;
-  border-top: 1px solid #eee;
+  border-top: 1px solid var(--redes-modal-border-light);
+}
+
+/* Modo oscuro para pie del modal */
+.redes-sociales-container.dark .modal-footer-simple {
+  background-color: #222;
+  border-color: var(--redes-modal-border-dark);
 }
 
 .btn-cancel-simple,
 .btn-confirm-simple {
-  padding: 10px 20px;
+  padding: 12px 24px;
   border: none;
-  border-radius: 5px;
+  border-radius: 8px;
   font-size: 14px;
+  font-weight: 600;
   cursor: pointer;
-  margin-left: 10px;
+  transition: all 0.2s ease;
 }
 
 .btn-cancel-simple {
   background-color: #f0f0f0;
   color: #666;
+}
+
+/* Modo oscuro para botón cancelar */
+.redes-sociales-container.dark .btn-cancel-simple {
+  background-color: #333;
+  color: #bbb;
 }
 
 .btn-confirm-simple {
@@ -459,35 +682,78 @@
   background-color: #e55c00;
 }
 
+.btn-confirm-simple:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
 /* Responsividad */
 @media (max-width: 768px) {
+  .redes-sociales-container {
+    padding: 15px;
+  }
+
   .redes-header {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
+    gap: 15px;
+  }
+
+  .redes-header h1 {
+    font-size: 24px;
+    text-align: center;
   }
 
   .btn-agregar {
     width: 100%;
     justify-content: center;
+    padding: 15px 20px;
   }
 
   .redes-cards {
     grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .red-card {
+    padding: 15px;
+    flex-direction: column;
+    text-align: center;
+    gap: 15px;
+  }
+
+  .red-icon {
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+
+  .red-info {
+    order: 2;
+  }
+
+  .red-actions {
+    order: 3;
+    margin-left: 0;
+    justify-content: center;
   }
 
   .modal-simple {
     width: 95%;
+    max-height: 90vh;
+    overflow-y: auto;
   }
 
   .modal-field-simple {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
+    gap: 8px;
   }
 
   .modal-field-simple label {
     width: 100%;
     text-align: left;
     margin-bottom: 5px;
+    margin-right: 0;
   }
 
   .modal-footer-simple {
@@ -498,130 +764,36 @@
   .btn-cancel-simple,
   .btn-confirm-simple {
     width: 100%;
-    margin-left: 0;
   }
 }
 
-/* Modo oscuro */
-.dark .redes-sociales-container {
-  background-color: #1f1f1f;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-}
+@media (max-width: 480px) {
+  .redes-sociales-container {
+    padding: 10px;
+  }
 
-.dark .redes-header h1 {
-  color: #e0e0e0;
-}
+  .redes-header h1 {
+    font-size: 22px;
+  }
 
-.dark .no-redes {
-  background-color: #2a2a2a;
-  border-color: #444;
-}
+  .red-card {
+    padding: 12px;
+  }
 
-.dark .no-redes p {
-  color: #bbb;
-}
+  .red-icon {
+    width: 50px;
+    height: 50px;
+  }
 
-.dark .red-card {
-  background-color: #2a2a2a;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-}
+  .social-icon {
+    font-size: 24px;
+  }
 
-.dark .red-icon {
-  background-color: #333;
-}
+  .modal-body-simple {
+    padding: 20px 15px;
+  }
 
-.dark .red-info h3 {
-  color: #e0e0e0;
+  .modal-footer-simple {
+    padding: 15px;
+  }
 }
-
-.dark .red-link {
-  color: #bbb;
-}
-
-.dark .btn-action {
-  background-color: #333;
-  color: #bbb;
-}
-
-.dark .modal-simple {
-  background-color: #2a2a2a;
-}
-
-.dark .modal-header-white {
-  background-color: #2a2a2a;
-  border-bottom-color: #444;
-}
-
-.dark .modal-header-white h2 {
-  color: #e0e0e0;
-}
-
-.dark .modal-body-simple {
-  background-color: #2a2a2a;
-}
-
-.dark .modal-field-simple label {
-  color: #e0e0e0;
-}
-
-.dark .select-simple {
-  background-color: #333;
-  border-color: #ff6600;
-  color: #e0e0e0;
-}
-
-.dark .input-simple {
-  background-color: #333;
-  border-color: #444;
-  color: #e0e0e0;
-}
-
-.dark .input-disabled-simple {
-  background-color: #222;
-  border-color: #444;
-  color: #999;
-}
-
-/* Modo oscuro para el nuevo contenedor */
-.dark .input-container-scroll .input-icon {
-  background-color: #333;
-}
-
-.dark .input-simple-scroll {
-  background-color: #333;
-  border-color: #444;
-  color: #e0e0e0;
-}
-
-.dark .input-container-scroll::-webkit-scrollbar-track {
-  background: #2a2a2a;
-}
-
-.dark .input-container-scroll::-webkit-scrollbar-thumb {
-  background: #555;
-}
-
-.dark .input-container-scroll::-webkit-scrollbar-thumb:hover {
-  background: #777;
-}
-
-.dark .error-container-simple {
-  background-color: rgba(255, 77, 79, 0.1);
-  border-color: rgba(255, 77, 79, 0.3);
-}
-
-.dark .modal-footer-simple {
-  background-color: #222;
-  border-top-color: #444;
-}
-
-.dark .btn-cancel-simple {
-  background-color: #333;
-  color: #bbb;
-}
-
-.dark .input-container:hover::after {
-  background-color: #555;
-  color: #fff;
-}
-

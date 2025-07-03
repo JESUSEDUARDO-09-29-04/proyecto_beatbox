@@ -1,7 +1,8 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, useContext } from "react"
 import { useNavigate } from "react-router-dom"
+import { ThemeContext } from "../../../context/ThemeContext" // Import ThemeContext
 import "./RedesSocialesAdmin.css"
 import { FaFacebook, FaInstagram, FaPlus, FaPen, FaTrash, FaLink } from "react-icons/fa"
 import { FaXTwitter } from "react-icons/fa6"
@@ -23,6 +24,7 @@ const sanitizeUrl = (url) => {
 
 const RedesSocialesAdmin = () => {
   const navigate = useNavigate()
+  const { theme } = useContext(ThemeContext) // Get theme from context
   const [redesSociales, setRedesSociales] = useState([])
   const [modalVisible, setModalVisible] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
@@ -295,7 +297,7 @@ const RedesSocialesAdmin = () => {
   }, [])
 
   return (
-    <div className="redes-sociales-container">
+    <div className={`redes-sociales-container ${theme === "dark" ? "dark" : ""}`}>
       <div className="redes-header">
         <h1>Gestión de Redes Sociales</h1>
         <button className="btn-agregar" onClick={() => abrirModal()}>
@@ -428,4 +430,3 @@ const RedesSocialesAdmin = () => {
 }
 
 export default RedesSocialesAdmin
-

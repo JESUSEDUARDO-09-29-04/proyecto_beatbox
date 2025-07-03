@@ -20,13 +20,15 @@ const FooterH = () => {
     const fetchSocialLinks = async () => {
       try {
         // Redes sociales esperadas
-        const socialTypes = ["facebook"]
+        const socialTypes = ["facebook", "instagram", "x"]
         const fetchPromises = socialTypes.map(async (type) => {
           try {
             const response = await fetch(`http://localhost:3000/social/ver/${type}`)
+
             if (response.ok) {
               const data = await response.json()
-              return { [type]: data.link || null } // Guardar link o null si no hay
+              return { [type]: data.linkRed || null }
+ // Guardar link o null si no hay
             } else {
               console.warn(`No se pudo cargar el link para ${type}`)
               return { [type]: null }
@@ -95,7 +97,18 @@ const FooterH = () => {
                   <FaFacebook />
                 </a>
               )}
+              {socialLinks.instagram && (
+                <a href={socialLinks.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                  <i className="fab fa-instagram"></i> {/* O usa react-icons si tienes FaInstagram */}
+                </a>
+              )}
+              {socialLinks.x && (
+                <a href={socialLinks.x} target="_blank" rel="noopener noreferrer" aria-label="Twitter/X">
+                  <i className="fab fa-x-twitter"></i> {/* O un icono personalizado */}
+                </a>
+              )}
             </div>
+
           </div>
         </div>
       </div>
