@@ -75,7 +75,7 @@
   font-size: 24px;
 }
 
-/* Contenido principal */
+/* Contenido principal - CAMBIO PRINCIPAL: Flex column en lugar de grid */
 .empresa-content {
   display: flex;
   flex-direction: column;
@@ -90,6 +90,7 @@
   box-shadow: var(--empresa-shadow-light);
   overflow: hidden;
   transition: all 0.3s ease;
+  width: 100%;
 }
 
 /* Modo oscuro para secciones */
@@ -138,15 +139,13 @@
 
 /* Contenido de sección */
 .section-content {
-  padding: 20px;
+  padding: 25px;
 }
 
 /* Sección de logo específica */
 .logo-section {
-  margin-bottom: 20px;
   max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 0 auto;
 }
 
 .logo-content {
@@ -251,13 +250,19 @@
   max-width: 400px;
 }
 
-/* Grid para perfil y configuración */
-.empresa-grid {
+/* Grids específicos para cada sección */
+.perfil-grid,
+.configuracion-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 20px;
-  max-width: 800px;
-  margin: 0 auto;
+  gap: 25px;
+}
+
+/* Secciones específicas con ancho completo */
+.perfil-section,
+.configuracion-section {
+  width: 100%;
+  max-width: none;
 }
 
 /* Grupos de campos */
@@ -302,12 +307,12 @@
 
 .field-container {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 12px;
   background-color: var(--empresa-field-bg-light);
   border: 1px solid var(--empresa-border-color-light);
   border-radius: 8px;
-  padding: 12px;
+  padding: 15px;
   transition: all 0.3s ease;
 }
 
@@ -326,9 +331,10 @@
   flex: 1;
   color: var(--empresa-text-color-light);
   font-size: 14px;
-  line-height: 1.5;
+  line-height: 1.6;
   min-height: 20px;
   word-wrap: break-word;
+  white-space: pre-wrap;
 }
 
 /* Modo oscuro para valores de campo */
@@ -339,8 +345,9 @@
 .config-value {
   font-weight: 600;
   font-family: monospace;
-  font-size: 16px;
+  font-size: 18px;
   color: #ff6600;
+  text-align: center;
 }
 
 /* Botones */
@@ -504,7 +511,7 @@
   background-color: var(--empresa-input-bg-light);
   color: var(--empresa-text-color-light);
   resize: vertical;
-  min-height: 100px;
+  min-height: 120px;
   transition: all 0.3s ease;
   box-sizing: border-box;
 }
@@ -730,7 +737,8 @@
 
 /* Responsividad */
 @media (max-width: 1024px) {
-  .empresa-grid {
+  .perfil-grid,
+  .configuracion-grid {
     grid-template-columns: 1fr;
   }
 
@@ -788,7 +796,7 @@
   .field-container {
     flex-direction: column;
     align-items: stretch;
-    gap: 10px;
+    gap: 15px;
   }
 
   .btn-edit {

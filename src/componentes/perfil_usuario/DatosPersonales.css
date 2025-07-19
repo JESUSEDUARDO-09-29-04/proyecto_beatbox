@@ -1,4 +1,23 @@
 /* Estilos específicos para datos personales */
+.usuario-icono-D {
+  font-size: 3.5rem;
+  color: #ff6600;
+  margin-bottom: 0.5rem;
+}
+
+.usuario-D {
+  font-size: 2.3rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.usuario-info-D {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px solid #ddd;
+}
 .datos-personales-container {
   width: 100%;
   max-width: 1200px;

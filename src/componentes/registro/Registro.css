@@ -14,26 +14,34 @@
 
 .formulario-imagenr {
   display: flex;
-  align-items: center;
+  align-items: flex-start; /* Mantener flex-start para alineación superior */
   justify-content: space-between;
-  gap: 30px;
+  gap: 40px;
   width: 100%;
-  padding: 20px 40px;
+  max-width: 100vw;
+  padding: 20px 30px;
   flex: 1;
+  margin: 0 auto;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 .registro-form {
-  width: 40%;
-  max-width: 500px;
+  width: 50%;
+  max-width: none;
+  min-height: 600px;
   display: flex;
   flex-direction: column;
   background-color: white;
   padding: 30px;
   border-radius: 16px;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
-  margin-top: -30px;
+  margin: 0; /* Cambiar de margin-top: 0 a margin: 0 para eliminar cualquier margen */
   position: relative;
   overflow: hidden;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  align-self: flex-start; /* Agregar para forzar alineación superior */
 }
 
 .dark .registro-form {
@@ -709,9 +717,13 @@
   text-decoration: underline;
 }
 
-/* Imagen lateral */
+/* ===================== */
+/* 🎨 IMAGEN LATERAL MEJORADA */
+/* ===================== */
 .imagen-lateralr {
-  width: 60%;
+  width: 50%;
+  min-height: 600px;
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -719,16 +731,23 @@
   border-radius: 16px;
   overflow: hidden;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+  background-color: #f5f5f5;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  margin: 0; /* Agregar margin: 0 para eliminar cualquier margen */
+  align-self: flex-start; /* Agregar para forzar alineación superior */
 }
 
 .dark .imagen-lateralr {
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+  background-color: #2a2a2a;
 }
 
 .imagen-lateralr img {
   width: 100%;
-  max-width: 750px;
-  height: auto;
+  height: 100%; /* Cambiar de calc(100% - 80px) a 100% */
+  object-fit: cover;
+  object-position: center;
   transition: transform 0.5s ease;
 }
 
@@ -798,31 +817,53 @@
   animation: fadeIn 0.5s ease-in-out;
 }
 
-/* Media Query para Pantallas Pequeñas */
+/* ===================== */
+/* 🎨 RESPONSIVE MEJORADO */
+/* ===================== */
+@media (max-width: 1024px) {
+  .formulario-imagenr {
+    padding: 20px 40px;
+    gap: 30px;
+  }
+}
+
 @media (max-width: 768px) {
   .formulario-imagenr {
     flex-direction: column;
     align-items: center;
     gap: 20px;
-    padding: 20px;
+    padding: 20px; /* Padding uniforme */
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  .registro-form,
+  .imagen-lateralr {
+    margin-top: 0 !important;
+    align-self: flex-start;
+  }
+
+  .registro-form::before,
+  .registro-form > *:first-child {
+    margin-top: 0;
   }
 
   .registro-form {
     width: 100%;
-    max-width: 450px;
+    max-width: 100%;
     padding: 25px;
-    margin-top: 0;
+    margin: 0 auto; /* Centrar el formulario */
+    min-height: auto;
+    box-sizing: border-box;
   }
 
   .imagen-lateralr {
     width: 100%;
-    max-width: 450px;
-    height: 200px;
-  }
-
-  .imagen-lateralr img {
-    height: 100%;
-    object-fit: cover;
+    max-width: 100%;
+    height: 250px;
+    min-height: auto;
+    margin: 0 auto; /* Centrar la imagen */
+    box-sizing: border-box;
   }
 
   .imagen-overlay h3 {
@@ -834,14 +875,17 @@
   }
 }
 
-/* Otros ajustes para pantallas aún más pequeñas */
 @media (max-width: 576px) {
   .formulario-imagenr {
-    padding: 15px;
+    padding: 15px; /* Padding más pequeño pero uniforme */
+    gap: 15px;
   }
 
   .registro-form {
     padding: 20px;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 100%;
   }
 
   .form-progress {
@@ -874,7 +918,9 @@
   }
 
   .imagen-lateralr {
-    height: 180px;
+    height: 200px;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 100%;
   }
 }
-

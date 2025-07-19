@@ -9,87 +9,12 @@ import Breadcrumbs from "../Breadcrumbs"
 import { CartContext } from "../../context/CartContext"
 import "./DetalleProducto.css"
 
-// Agregar esta definición de productos relacionados para asegurar que funcione correctamente
-const productosRelacionados = [
-  {
-    id: 16,
-    nombre: "Multivitamínico Deportivo",
-    precio: "$750.00 MXN",
-    precioNumerico: 750,
-    imagen: "/placeholder.svg?height=180&width=180",
-    categoria: "Suplementos",
-    subcategoria: "Vitaminas",
-    descripcion:
-      "Multivitamínico completo diseñado específicamente para deportistas, con dosis optimizadas de vitaminas y minerales para mejorar el rendimiento y la recuperación.",
-    caracteristicas: [
-      "Complejo de vitaminas y minerales en dosis óptimas",
-      "Antioxidantes para combatir el estrés oxidativo",
-      "Extractos de hierbas para soporte hormonal",
-      "Sin colorantes ni conservantes artificiales",
-      "30 porciones por envase",
-    ],
-  },
-  {
-    id: 15,
-    nombre: "Carbohidratos Rápida Absorción 1.5kg",
-    precio: "$1,100.00 MXN",
-    precioNumerico: 1100,
-    imagen: "/placeholder.svg?height=180&width=180",
-    categoria: "Suplementos",
-    subcategoria: "Ganadores de Masa",
-    descripcion:
-      "Carbohidratos de Rápida Absorción diseñados para reponer rápidamente los niveles de glucógeno muscular después del entrenamiento. Ideal para atletas que buscan maximizar la recuperación y el crecimiento muscular.",
-    caracteristicas: [
-      "50g de carbohidratos por porción",
-      "Mezcla de maltodextrina y dextrosa",
-      "Rápida absorción para reposición de glucógeno",
-      "Ideal para tomar post-entrenamiento",
-      "30 porciones por envase",
-    ],
-  },
-  {
-    id: 14,
-    nombre: "Omega 3 Ultra Concentrado",
-    precio: "$500.00 MXN",
-    precioNumerico: 500,
-    imagen: "/placeholder.svg?height=180&width=180",
-    categoria: "Suplementos",
-    subcategoria: "Aceites Esenciales",
-    descripcion:
-      "Omega 3 Ultra Concentrado proporciona altas dosis de EPA y DHA, ácidos grasos esenciales que apoyan la salud cardiovascular, cerebral y articular. Extraído de pescados salvajes de aguas frías.",
-    caracteristicas: [
-      "1100mg de Omega 3 por porción",
-      "650mg de EPA y 450mg de DHA",
-      "Apoya la salud cardiovascular y cerebral",
-      "Reduce la inflamación y mejora la recuperación",
-      "Sabor a limón para evitar regurgitación",
-    ],
-  },
-  {
-    id: 13,
-    nombre: "Caseína Micelar 2lb",
-    precio: "$1,800.00 MXN",
-    precioNumerico: 1800,
-    imagen: "/placeholder.svg?height=180&width=180",
-    categoria: "Suplementos",
-    subcategoria: "Proteínas",
-    descripcion:
-      "La Caseína Micelar es una proteína de liberación lenta, ideal para tomar antes de dormir o entre comidas. Proporciona un flujo constante de aminoácidos durante varias horas, ayudando a prevenir el catabolismo muscular.",
-    caracteristicas: [
-      "24g de proteína por porción",
-      "Liberación lenta de aminoácidos (hasta 8 horas)",
-      "Ideal para tomar antes de dormir",
-      "Ayuda a prevenir el catabolismo muscular",
-      "Contiene enzimas digestivas para mejor absorción",
-    ],
-  },
-]
-
 const DetalleProducto = () => {
   const { id } = useParams()
   const navigate = useNavigate()
   const location = useLocation()
   const [producto, setProducto] = useState(null)
+  const [productosRelacionados, setProductosRelacionados] = useState([])
   const [cargando, setCargando] = useState(true)
   const [imagenPrincipal, setImagenPrincipal] = useState("")
   const [cantidad, setCantidad] = useState(1)
@@ -100,84 +25,128 @@ const DetalleProducto = () => {
   // Obtener el contexto del carrito
   const { addToCart } = useContext(CartContext)
 
-  // Modificar la función obtenerProductosRelacionados para usar la lista local
-  const obtenerProductosRelacionados = (producto) => {
-    if (!producto) return []
-
-    // Filtrar productos de la misma subcategoría
-    return productosRelacionados
-      .filter((p) => p.id !== producto.id && p.subcategoria === producto.subcategoria)
-      .slice(0, 4) // Limitar a 4 productos relacionados
-  }
-
-  // Simular la carga del producto desde una API
+  // Cargar producto desde la API
   useEffect(() => {
-    // Verificar si el producto viene en el state de location (desde la navegación)
-    if (location.state && location.state.producto) {
-      setProducto(location.state.producto)
-      setImagenPrincipal(location.state.producto.imagen)
-      setCargando(false)
-      return
-    }
-
-    // Si no viene en el state, buscar en la lista de productos
     const cargarProducto = async () => {
-      setCargando(true)
+      try {
+        setCargando(true)
 
-      // Buscar el producto por ID en la lista de productos
-      const productoEncontrado = productosRelacionados.find((p) => p.id === Number.parseInt(id))
-
-      if (productoEncontrado) {
-        setProducto(productoEncontrado)
-        setImagenPrincipal(productoEncontrado.imagen)
-      } else {
-        // Si no se encuentra, usar un producto de ejemplo
-        const productoEjemplo = {
-          id: 2,
-          nombre: "Proteína Dymatize ISO 100 Hidrolizada 5lbs",
-          precio: "$1,750.00 MXN",
-          precioNumerico: 1750,
-          categoria: "Suplementos",
-          subcategoria: "Proteínas",
-          marca: "Dymatize",
-          calificacion: 5,
-          descuento: "10%",
-          imagen: "/placeholder.svg?height=400&width=400",
-          imagenes: [
-            "/placeholder.svg?height=80&width=80&text=1",
-            "/placeholder.svg?height=80&width=80&text=2",
-            "/placeholder.svg?height=80&width=80&text=3",
-            "/placeholder.svg?height=80&width=80&text=4",
-            "/placeholder.svg?height=80&width=80&text=5",
-          ],
-          descripcion:
-            "Dymatize ISO 100 es una proteína de suero hidrolizada de la más alta calidad y pureza. Cada porción proporciona 25g de proteína de rápida absorción y está virtualmente libre de grasas y azúcares, ideal para atletas que buscan maximizar la recuperación muscular.",
-          caracteristicas: [
-            "25g de proteína por porción",
-            "Aislado de proteína de suero hidrolizado",
-            "Menos de 1g de azúcar y grasa por porción",
-            "5.5g de BCAAs por porción",
-            "Certificado por Informed-Choice",
-          ],
-          stock: 0,
-          vendidos: 50,
-          envioGratis: true,
+        // Si el producto viene en el state de location, usarlo
+        if (location.state && location.state.producto) {
+          const productoFromState = location.state.producto
+          setProducto(productoFromState)
+          setImagenPrincipal(productoFromState.imagen)
+          await cargarProductosRelacionados(productoFromState)
+          setCargando(false)
+          return
         }
 
-        setProducto(productoEjemplo)
-        setImagenPrincipal(productoEjemplo.imagen)
-      }
+        // Si no, cargar desde la API
+        const response = await fetch(`http://localhost:3000/productos/${id}`, {
+          method: "GET",
+          credentials: "include",
+        })
 
-      setCargando(false)
+        if (!response.ok) {
+          throw new Error("Producto no encontrado")
+        }
+
+        const data = await response.json()
+
+        // Formatear el producto
+        const productoFormateado = {
+          ...data,
+          precio: `$${Number.parseFloat(data.precio).toFixed(2)} MXN`,
+          precioNumerico: Number.parseFloat(data.precio),
+          imagen: data.imagen || "/placeholder.svg?height=400&width=400",
+          calificacion: data.calificacion || 5,
+          descuento: data.descuento > 0 ? `${data.descuento}%` : null,
+          caracteristicas: data.caracteristicas ? data.caracteristicas.split("\n") : [],
+          imagenes: data.imagenes ? data.imagenes.split(",") : [data.imagen || "/placeholder.svg?height=400&width=400"],
+          // Asegurar que la categoría tenga el formato correcto
+          categoria: data.categoria ? data.categoria.nombre || data.categoria : null,
+          // Manejar subcategorías como array de objetos
+          subcategorias: data.subcategorias || [],
+        }
+
+        setProducto(productoFormateado)
+        setImagenPrincipal(productoFormateado.imagen)
+        await cargarProductosRelacionados(productoFormateado)
+      } catch (error) {
+        console.error("Error al cargar producto:", error)
+        setProducto(null)
+      } finally {
+        setCargando(false)
+      }
     }
 
     cargarProducto()
   }, [id, location.state])
 
+  // Cargar productos relacionados
+  const cargarProductosRelacionados = async (productoActual) => {
+    try {
+      const response = await fetch("http://localhost:3000/productos", {
+        method: "GET",
+        credentials: "include",
+      })
+
+      if (response.ok) {
+        const productos = await response.json()
+
+        // Filtrar productos de la misma categoría/subcategoría
+        const relacionados = productos
+          .filter((p) => {
+            if (p.id === productoActual.id || !p.vigente || p.eliminado) return false
+
+            // Comparar por categoría
+            const categoriaActual =
+              productoActual.categoria || (productoActual.categoria && productoActual.categoria.nombre)
+            const categoriaProducto = p.categoria ? p.categoria.nombre || p.categoria : null
+
+            if (
+              categoriaActual &&
+              categoriaProducto &&
+              categoriaActual.toLowerCase() === categoriaProducto.toLowerCase()
+            ) {
+              return true
+            }
+
+            // Comparar por subcategorías
+            if (
+              productoActual.subcategorias &&
+              productoActual.subcategorias.length > 0 &&
+              p.subcategorias &&
+              p.subcategorias.length > 0
+            ) {
+              const subcategoriasActuales = productoActual.subcategorias.map((sub) => sub.nombre || sub)
+              const subcategoriasProducto = p.subcategorias.map((sub) => sub.nombre || sub)
+
+              return subcategoriasActuales.some((subActual) => subcategoriasProducto.includes(subActual))
+            }
+
+            return false
+          })
+          .slice(0, 4)
+          .map((p) => ({
+            ...p,
+            precio: `$${Number.parseFloat(p.precio).toFixed(2)} MXN`,
+            precioNumerico: Number.parseFloat(p.precio),
+            imagen: p.imagen || "/placeholder.svg?height=180&width=180",
+            descuento: p.descuento > 0 ? `${p.descuento}%` : null,
+          }))
+
+        setProductosRelacionados(relacionados)
+      }
+    } catch (error) {
+      console.error("Error al cargar productos relacionados:", error)
+    }
+  }
+
   // Manejar cambio de cantidad
   const cambiarCantidad = (valor) => {
     const nuevaCantidad = cantidad + valor
-    if (nuevaCantidad >= 1 && nuevaCantidad <= (producto?.stock || 10)) {
+    if (nuevaCantidad >= 1 && nuevaCantidad <= (producto?.existencia || 10)) {
       setCantidad(nuevaCantidad)
     }
   }
@@ -185,7 +154,7 @@ const DetalleProducto = () => {
   // Manejar entrada directa de cantidad
   const manejarInputCantidad = (e) => {
     const valor = Number.parseInt(e.target.value)
-    if (!isNaN(valor) && valor >= 1 && valor <= (producto?.stock || 10)) {
+    if (!isNaN(valor) && valor >= 1 && valor <= (producto?.existencia || 10)) {
       setCantidad(valor)
     }
   }
@@ -213,7 +182,6 @@ const DetalleProducto = () => {
   // Comprar ahora
   const comprarAhora = () => {
     if (producto) {
-      // Agregar al carrito y redirigir al checkout
       agregarAlCarrito()
       navigate("/carrito")
     }
@@ -355,9 +323,11 @@ const DetalleProducto = () => {
                 )}
               </div>
 
-              <div className="marca-producto">
-                <span className="etiqueta">Marca:</span> {producto.marca}
-              </div>
+              {producto.marca && (
+                <div className="marca-producto">
+                  <span className="etiqueta">Marca:</span> {producto.marca}
+                </div>
+              )}
 
               <div className="pestanas-info">
                 <button
@@ -396,8 +366,8 @@ const DetalleProducto = () => {
               </div>
 
               <div className="disponibilidad">
-                <span className={`estado ${producto.stock > 0 ? "disponible" : "agotado"}`}>
-                  {producto.stock > 0 ? "Disponible" : "Agotado"}
+                <span className={`estado ${producto.existencia > 0 ? "disponible" : "agotado"}`}>
+                  {producto.existencia > 0 ? "Disponible" : "Agotado"}
                 </span>
               </div>
 
@@ -411,19 +381,19 @@ const DetalleProducto = () => {
                   <button
                     className="btn-cantidad"
                     onClick={() => cambiarCantidad(1)}
-                    disabled={cantidad >= (producto.stock || 10)}
+                    disabled={cantidad >= (producto.existencia || 10)}
                   >
                     +
                   </button>
                 </div>
-                {producto.stock && <span className="stock-disponible">{producto.stock} disponibles</span>}
+                {producto.existencia && <span className="stock-disponible">{producto.existencia} disponibles</span>}
               </div>
 
               <div className="botones-accion">
                 <button
                   className={`btn-agregar-carrito ${agregadoAlCarrito ? "agregado" : ""}`}
                   onClick={agregarAlCarrito}
-                  disabled={agregadoAlCarrito || producto.stock === 0}
+                  disabled={agregadoAlCarrito || producto.existencia === 0}
                 >
                   {agregadoAlCarrito ? (
                     <>
@@ -436,7 +406,7 @@ const DetalleProducto = () => {
                   )}
                 </button>
 
-                <button className="btn-comprar-ahora" onClick={comprarAhora} disabled={producto.stock === 0}>
+                <button className="btn-comprar-ahora" onClick={comprarAhora} disabled={producto.existencia === 0}>
                   <FaBolt /> Comprar ahora
                 </button>
               </div>
@@ -474,39 +444,41 @@ const DetalleProducto = () => {
         </div>
 
         {/* Productos relacionados */}
-        <div className="productos-relacionados">
-          <h2 className="titulo-relacionados">Productos relacionados</h2>
+        {productosRelacionados.length > 0 && (
+          <div className="productos-relacionados">
+            <h2 className="titulo-relacionados">Productos relacionados</h2>
 
-          <div className="grid-relacionados">
-            {obtenerProductosRelacionados(producto).map((productoRel) => (
-              <div
-                key={productoRel.id}
-                className="tarjeta-relacionado"
-                onClick={() => verProductoRelacionado(productoRel)}
-              >
-                {productoRel.descuento && (
-                  <div className="etiqueta-descuento-relacionado">{productoRel.descuento || "10%"}</div>
-                )}
-                <img
-                  src={productoRel.imagen || "/placeholder.svg"}
-                  alt={productoRel.nombre}
-                  className="imagen-relacionado"
-                />
-                <h3 className="nombre-relacionado">{productoRel.nombre}</h3>
-                <p className="precio-relacionado">{productoRel.precio}</p>
-                <button
-                  className="btn-agregar-relacionado"
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    addToCart(productoRel)
-                  }}
+            <div className="grid-relacionados">
+              {productosRelacionados.map((productoRel) => (
+                <div
+                  key={productoRel.id}
+                  className="tarjeta-relacionado"
+                  onClick={() => verProductoRelacionado(productoRel)}
                 >
-                  Agregar al carrito
-                </button>
-              </div>
-            ))}
+                  {productoRel.descuento && (
+                    <div className="etiqueta-descuento-relacionado">{productoRel.descuento}</div>
+                  )}
+                  <img
+                    src={productoRel.imagen || "/placeholder.svg"}
+                    alt={productoRel.nombre}
+                    className="imagen-relacionado"
+                  />
+                  <h3 className="nombre-relacionado">{productoRel.nombre}</h3>
+                  <p className="precio-relacionado">{productoRel.precio}</p>
+                  <button
+                    className="btn-agregar-relacionado"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      addToCart(productoRel)
+                    }}
+                  >
+                    Agregar al carrito
+                  </button>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
       <FooterH />
@@ -515,4 +487,3 @@ const DetalleProducto = () => {
 }
 
 export default DetalleProducto
-

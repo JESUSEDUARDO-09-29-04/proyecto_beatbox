@@ -4,6 +4,7 @@
   flex-direction: column;
   min-height: 100vh;
   font-family: "Arial", sans-serif;
+  line-height: 1.6;
 }
 
 /* Theme Styles */
@@ -23,218 +24,356 @@
   background-color: transparent;
 }
 
-/* Contenedor principal del aviso de privacidad */
+/* Contenedor principal */
 .privacidad-contenedor {
-  max-width: 1200px;
+  max-width: 1000px;
   margin: 0 auto;
-  padding: 20px 40px 60px;
+  padding: 40px 20px 60px;
   width: 100%;
 }
 
 /* Título principal */
-.title {
+.main-title {
   text-align: center;
   font-size: 2.5rem;
-  font-weight: bold;
-  margin-bottom: 15px;
-  color: #ff6600;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: #000000;
 }
 
-.aviso-privacidad-container.dark .title {
-  color: #ff8800;
+.aviso-privacidad-container.dark .main-title {
+  color: #ffffff;
 }
 
-/* Fecha de última actualización */
-.last-updated {
+/* Subtítulo */
+.subtitle {
   text-align: center;
-  font-size: 0.9rem;
-  margin-bottom: 30px;
-  color: #666;
+  font-size: 1.1rem;
+  margin-bottom: 50px;
+  color: #666666;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-.aviso-privacidad-container.dark .last-updated {
+.aviso-privacidad-container.dark .subtitle {
   color: #aaaaaa;
 }
 
-/* Contenido principal */
-.privacy-content {
-  margin-bottom: 40px;
-}
-
-.intro-text {
-  font-size: 1.1rem;
-  line-height: 1.6;
-  margin-bottom: 30px;
-}
-
-/* Secciones */
-.privacy-section {
-  margin-bottom: 40px;
-}
-
-.section-header {
+/* Sección de documentos */
+.documentos-section {
   display: flex;
-  align-items: center;
-  margin-bottom: 15px;
+  flex-direction: column;
+  gap: 40px;
+  margin-bottom: 60px;
 }
 
-.icon-circle {
+/* Item de documento */
+.documento-item {
+  border-bottom: 1px solid #e5e5e5;
+  padding-bottom: 40px;
+}
+
+.aviso-privacidad-container.dark .documento-item {
+  border-color: #333333;
+}
+
+.documento-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+/* Header del documento */
+.documento-header {
+  margin-bottom: 25px;
+}
+
+.documento-header h2 {
+  font-size: 2rem;
+  font-weight: 600;
+  margin: 0 0 10px 0;
+  color: #000000;
+}
+
+.aviso-privacidad-container.dark .documento-header h2 {
+  color: #ffffff;
+}
+
+.documento-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 0.9rem;
+  color: #666666;
+}
+
+.aviso-privacidad-container.dark .documento-meta {
+  color: #aaaaaa;
+}
+
+.version {
+  font-weight: 600;
+  color: #333333;
+}
+
+.aviso-privacidad-container.dark .version {
+  color: #cccccc;
+}
+
+.fecha {
+  font-style: italic;
+}
+
+/* Contenido del documento */
+.documento-content {
+  margin-top: 20px;
+}
+
+.content-text {
+  font-size: 1rem;
+  line-height: 1.8;
+  color: #444444;
+  white-space: pre-wrap;
+  text-align: justify;
+}
+
+.aviso-privacidad-container.dark .content-text {
+  color: #dddddd;
+}
+
+/* Estados de carga y error */
+.loading-container,
+.error-container {
+  text-align: center;
+  padding: 80px 20px;
+}
+
+.loading-spinner {
   width: 40px;
   height: 40px;
+  border: 3px solid #e5e5e5;
   border-radius: 50%;
-  background-color: #ff6600;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 15px;
+  border-top-color: #333333;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 20px;
 }
 
-.aviso-privacidad-container.dark .icon-circle {
-  background-color: #ff8800;
+.aviso-privacidad-container.dark .loading-spinner {
+  border-color: #333333;
+  border-top-color: #ffffff;
 }
 
-.section-icon {
-  color: white;
-  font-size: 1.2rem;
+.loading-container h2,
+.error-container h2 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  color: #333333;
 }
 
-.privacy-section h2 {
-  font-size: 1.8rem;
-  color: #ff6600;
-  margin: 0;
+.aviso-privacidad-container.dark .loading-container h2,
+.aviso-privacidad-container.dark .error-container h2 {
+  color: #ffffff;
 }
 
-.aviso-privacidad-container.dark .privacy-section h2 {
-  color: #ff8800;
-}
-
-.privacy-section p {
-  line-height: 1.6;
-  margin-bottom: 15px;
-  padding-left: 55px;
-}
-
-/* Listas */
-.privacy-list {
-  list-style: none;
-  padding-left: 55px;
+.loading-container p,
+.error-container p {
+  font-size: 1rem;
+  color: #666666;
   margin-bottom: 20px;
 }
 
-.privacy-list li {
-  margin-bottom: 12px;
-  padding-left: 30px;
-  position: relative;
-  line-height: 1.5;
+.aviso-privacidad-container.dark .loading-container p,
+.aviso-privacidad-container.dark .error-container p {
+  color: #aaaaaa;
 }
 
-.privacy-list li::before {
-  content: "✓";
-  position: absolute;
-  left: 0;
-  top: 0;
-  font-size: 1.2rem;
-  color: #ff6600;
-}
-
-.aviso-privacidad-container.dark .privacy-list li::before {
-  color: #ff8800;
-}
-
-/* Enlaces */
-.privacy-section a {
-  color: #ff6600;
-  text-decoration: none;
-  transition: color 0.3s ease;
-}
-
-.aviso-privacidad-container.dark .privacy-section a {
-  color: #ff8800;
-}
-
-.privacy-section a:hover {
-  text-decoration: underline;
-}
-
-/* CTA Section */
-.privacy-cta {
-  text-align: center;
-  margin-top: 40px;
-}
-
-.cta-button {
-  background-color: #ff6600;
+.retry-button {
+  background-color: #000000;
   color: white;
   border: none;
-  border-radius: 5px;
-  padding: 12px 25px;
+  padding: 12px 24px;
+  border-radius: 4px;
   font-size: 1rem;
-  font-weight: bold;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s ease;
 }
 
-.aviso-privacidad-container.dark .cta-button {
-  background-color: #ff8800;
+.retry-button:hover {
+  background-color: #333333;
 }
 
-.cta-button:hover {
-  background-color: #e65c00;
+.aviso-privacidad-container.dark .retry-button {
+  background-color: #ffffff;
+  color: #000000;
 }
 
-.aviso-privacidad-container.dark .cta-button:hover {
-  background-color: #e67300;
+.aviso-privacidad-container.dark .retry-button:hover {
+  background-color: #e5e5e5;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Mensaje sin documentos */
+.no-documentos {
+  text-align: center;
+  padding: 80px 20px;
+  color: #666666;
+}
+
+.aviso-privacidad-container.dark .no-documentos {
+  color: #aaaaaa;
+}
+
+.no-documentos h3 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  color: #333333;
+}
+
+.aviso-privacidad-container.dark .no-documentos h3 {
+  color: #ffffff;
+}
+
+.no-documentos p {
+  font-size: 1rem;
+  margin-bottom: 30px;
+}
+
+/* Sección de contacto */
+.contact-section {
+  text-align: center;
+  margin-top: 60px;
+  padding: 40px 20px;
+  border-top: 1px solid #e5e5e5;
+}
+
+.aviso-privacidad-container.dark .contact-section {
+  border-color: #333333;
+}
+
+.contact-section p {
+  font-size: 1.1rem;
+  margin-bottom: 20px;
+  color: #666666;
+}
+
+.aviso-privacidad-container.dark .contact-section p {
+  color: #aaaaaa;
+}
+
+.contact-button {
+    padding: 10px 15px;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    align-items: center;
+    gap: 8px;
+    border: none;
+     background: var(--primary-orange);
+     color: var(--text-white);
+   transition: var(--transition-smooth);
+}
+
+.contact-button:hover {
+  background-color: #f2952a;
+}
+
+.aviso-privacidad-container.dark .contact-button {
+  background-color: #aaaaaa;
+  color: #000000;
+}
+
+.aviso-privacidad-container.dark .contact-button:hover {
+  background-color: #e5e5e5;
 }
 
 /* Responsive Styles */
-@media (max-width: 992px) {
-  .privacidad-contenedor {
-    padding: 20px 30px 40px;
-  }
-}
-
 @media (max-width: 768px) {
-  .title {
+  .privacidad-contenedor {
+    padding: 30px 15px 40px;
+  }
+
+  .main-title {
     font-size: 2rem;
   }
 
-  .privacy-section h2 {
+  .subtitle {
+    font-size: 1rem;
+    margin-bottom: 40px;
+  }
+
+  .documento-header h2 {
     font-size: 1.5rem;
   }
 
-  .icon-circle {
-    width: 35px;
-    height: 35px;
+  .documento-meta {
+    font-size: 0.85rem;
   }
 
-  .privacy-section p,
-  .privacy-list {
-    padding-left: 40px;
+  .content-text {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    text-align: left;
+  }
+
+  .documentos-section {
+    gap: 30px;
+    margin-bottom: 40px;
+  }
+
+  .documento-item {
+    padding-bottom: 30px;
+  }
+
+  .contact-section {
+    margin-top: 40px;
+    padding: 30px 15px;
+  }
+
+  .contact-section p {
+    font-size: 1rem;
+  }
+
+  .contact-button {
+    width: 100%;
+    padding: 15px 20px;
   }
 }
 
-@media (max-width: 576px) {
+@media (max-width: 480px) {
   .privacidad-contenedor {
-    padding: 15px 20px 30px;
+    padding: 20px 10px 30px;
   }
 
-  .title {
+  .main-title {
     font-size: 1.8rem;
   }
 
-  .privacy-section p,
-  .privacy-list {
-    padding-left: 0;
-    margin-top: 15px;
+  .subtitle {
+    font-size: 0.95rem;
+    margin-bottom: 30px;
   }
 
-  .section-header {
-    flex-direction: column;
-    align-items: flex-start;
+  .documento-header h2 {
+    font-size: 1.3rem;
   }
 
-  .icon-circle {
-    margin-bottom: 10px;
+  .content-text {
+    font-size: 0.9rem;
+  }
+
+  .documentos-section {
+    gap: 25px;
+  }
+
+  .documento-item {
+    padding-bottom: 25px;
   }
 }
-

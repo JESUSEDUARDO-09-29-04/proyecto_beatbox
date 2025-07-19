@@ -4,11 +4,13 @@ import { useState, useEffect, useContext } from "react"
 import { Link } from "react-router-dom"
 import { FaHeart, FaFacebook } from "react-icons/fa"
 import { ThemeContext } from "../context/ThemeContext"
+import { useEmpresa } from "../context/EmpresaContext"
 import logo from "../assets/logo.png"
 import "./FooterH.css"
 
 const FooterH = () => {
   const { theme } = useContext(ThemeContext)
+  const { logoVigente, cargando } = useEmpresa()
   const [socialLinks, setSocialLinks] = useState({
     facebook: null,
     instagram: null,
@@ -28,7 +30,7 @@ const FooterH = () => {
             if (response.ok) {
               const data = await response.json()
               return { [type]: data.linkRed || null }
- // Guardar link o null si no hay
+              // Guardar link o null si no hay
             } else {
               console.warn(`No se pudo cargar el link para ${type}`)
               return { [type]: null }
@@ -51,11 +53,17 @@ const FooterH = () => {
     fetchSocialLinks()
   }, [])
 
+  // Determinar qué logo usar: vigente del backend o logo por defecto
+  const getLogoSrc = () => {
+    if (cargando) return logo // Usar logo por defecto mientras carga
+    return logoVigente || logo // Usar logo vigente si existe, sino el por defecto
+  }
+
   return (
     <footer className={`footer ${theme === "dark" ? "dark-mode" : ""}`}>
       <div className="footer-main">
         <div className="footer-logo-container">
-          <img src={logo || "/placeholder.svg"} alt="Logo Beatbox" className="logo-footer" />
+          <img src={getLogoSrc() || "/placeholder.svg"} alt="Logo Beatbox" className="logo-footer" />
         </div>
 
         <div className="footer-columns">
@@ -63,7 +71,7 @@ const FooterH = () => {
             <h3>Beatbox</h3>
             <ul>
               <li>
-                <Link to="/quienes_somos">Quienes Somos</Link>
+                <Link to="/quienes_somos">Quiénes Somos</Link>
               </li>
               <li>
                 <Link to="/contactanos">Contáctanos</Link>
@@ -108,7 +116,6 @@ const FooterH = () => {
                 </a>
               )}
             </div>
-
           </div>
         </div>
       </div>
@@ -124,4 +131,3 @@ const FooterH = () => {
 }
 
 export default FooterH
-

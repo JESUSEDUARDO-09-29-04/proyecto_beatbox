@@ -298,7 +298,7 @@ const EmpresaAdmin = () => {
       </div>
 
       <div className="empresa-content">
-        {/* Sección de Logo */}
+        {/* Sección de Logo - Fila 1 */}
         <div className="empresa-section logo-section">
           <div className="section-header">
             <h2>
@@ -338,17 +338,16 @@ const EmpresaAdmin = () => {
           </div>
         </div>
 
-        {/* Secciones de Perfil y Configuración */}
-        <div className="empresa-grid">
-          {/* Perfil de la Empresa */}
-          <div className="empresa-section">
-            <div className="section-header">
-              <h2>
-                <FaBuilding className="section-icon" />
-                Perfil de la Empresa
-              </h2>
-            </div>
-            <div className="section-content">
+        {/* Perfil de la Empresa - Fila 2 */}
+        <div className="empresa-section perfil-section">
+          <div className="section-header">
+            <h2>
+              <FaBuilding className="section-icon" />
+              Perfil de la Empresa
+            </h2>
+          </div>
+          <div className="section-content">
+            <div className="perfil-grid">
               <div className="field-group">
                 <label className="field-label">
                   <FaEdit className="field-icon" />
@@ -384,16 +383,18 @@ const EmpresaAdmin = () => {
               </div>
             </div>
           </div>
+        </div>
 
-          {/* Configuración de Bloqueo */}
-          <div className="empresa-section">
-            <div className="section-header">
-              <h2>
-                <FaShieldAlt className="section-icon" />
-                Configuración de Seguridad
-              </h2>
-            </div>
-            <div className="section-content">
+        {/* Configuración de Seguridad - Fila 3 */}
+        <div className="empresa-section configuracion-section">
+          <div className="section-header">
+            <h2>
+              <FaShieldAlt className="section-icon" />
+              Configuración de Seguridad
+            </h2>
+          </div>
+          <div className="section-content">
+            <div className="configuracion-grid">
               <div className="field-group">
                 <label className="field-label">
                   <FaExclamationTriangle className="field-icon" />

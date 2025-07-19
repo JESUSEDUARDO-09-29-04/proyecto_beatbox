@@ -6,7 +6,7 @@ import DOMPurify from "dompurify" // 🛡 Protección contra XSS
 import "./Registro.css"
 import "../home/Home.css"
 import { ThemeContext } from "../../context/ThemeContext"
-import jim from "../../assets/jim.png"
+import jim from "../../assets/jim2.jpg"
 import {
   FaEye,
   FaEyeSlash,

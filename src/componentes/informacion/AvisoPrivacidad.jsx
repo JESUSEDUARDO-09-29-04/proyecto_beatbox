@@ -1,6 +1,6 @@
 "use client"
 
-import { useContext } from "react"
+import { useContext, useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { ThemeContext } from "../../context/ThemeContext"
 import FooterH from "../FooterH"
@@ -11,6 +11,102 @@ import "./AvisoPrivacidad.css"
 const AvisoPrivacidad = () => {
   const navigate = useNavigate()
   const { theme } = useContext(ThemeContext)
+  const [documentos, setDocumentos] = useState([])
+  const [cargando, setCargando] = useState(true)
+  const [error, setError] = useState("")
+
+  useEffect(() => {
+    cargarDocumentos()
+  }, [])
+
+  const cargarDocumentos = async () => {
+    setCargando(true)
+    setError("")
+    try {
+      const response = await fetch("http://localhost:3000/documentos", {
+        method: "GET",
+        credentials: "include",
+      })
+
+      if (!response.ok) {
+        throw new Error("Error al cargar documentos")
+      }
+
+      const data = await response.json()
+
+      if (Array.isArray(data)) {
+        // Filtrar solo documentos vigentes y no eliminados
+        const documentosVigentes = data.filter((doc) => doc.vigente && !doc.eliminado)
+        setDocumentos(documentosVigentes)
+      } else {
+        setDocumentos([])
+        setError("Los datos recibidos no tienen el formato esperado")
+      }
+    } catch (error) {
+      console.error("Error al cargar documentos:", error)
+      setDocumentos([])
+      setError("Error al cargar los documentos. Intente nuevamente.")
+    } finally {
+      setCargando(false)
+    }
+  }
+
+  const formatearFecha = (fecha) => {
+    if (!fecha) return "No disponible"
+    return new Date(fecha).toLocaleDateString("es-ES", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    })
+  }
+
+  const obtenerDocumentoPorTipo = (tipo) => {
+    return documentos.find((doc) => doc.tipo.toLowerCase() === tipo.toLowerCase())
+  }
+
+  if (cargando) {
+    return (
+      <div className={`aviso-privacidad-container ${theme}`}>
+        <HeaderH />
+        <div className="breadcrumb-container">
+          <Breadcrumbs />
+        </div>
+        <main className="privacidad-contenedor">
+          <div className="loading-container">
+            <div className="loading-spinner"></div>
+            <h2>Cargando documentos legales...</h2>
+            <p>Por favor espere mientras obtenemos la información más actualizada.</p>
+          </div>
+        </main>
+        <FooterH />
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className={`aviso-privacidad-container ${theme}`}>
+        <HeaderH />
+        <div className="breadcrumb-container">
+          <Breadcrumbs />
+        </div>
+        <main className="privacidad-contenedor">
+          <div className="error-container">
+            <h2>Error al cargar documentos</h2>
+            <p>{error}</p>
+            <button className="retry-button" onClick={cargarDocumentos}>
+              Reintentar
+            </button>
+          </div>
+        </main>
+        <FooterH />
+      </div>
+    )
+  }
+
+  const politicasPrivacidad = obtenerDocumentoPorTipo("Políticas de privacidad")
+  const terminosCondiciones = obtenerDocumentoPorTipo("Términos y condiciones")
+  const deslinde = obtenerDocumentoPorTipo("Deslinde")
 
   return (
     <div className={`aviso-privacidad-container ${theme}`}>
@@ -21,122 +117,71 @@ const AvisoPrivacidad = () => {
       </div>
 
       <main className="privacidad-contenedor">
-        <h1 className="title">Políticas de Privacidad</h1>
-        <p className="last-updated">Última actualización: 17/01/2025</p>
+        <h1 className="main-title">Documentos Legales</h1>
+        <p className="subtitle">Consulta nuestros documentos regulatorios y políticas actualizadas</p>
 
-        <div className="privacy-content">
-          <p className="intro-text">
-            En Beatbox, valoramos tu privacidad y nos comprometemos a proteger la información personal que compartes con
-            nosotros. Este documento detalla cómo recopilamos, usamos y protegemos tus datos.
-          </p>
-
-          <div className="privacy-section">
-            <div className="section-header">
-              <div className="icon-circle">
-                <span className="section-icon">📊</span>
+        <div className="documentos-section">
+          {/* Políticas de Privacidad */}
+          {politicasPrivacidad && (
+            <div className="documento-item">
+              <div className="documento-header">
+                <h2>{politicasPrivacidad.tipo}</h2>
+                <div className="documento-meta">
+                  <span className="version">Versión {politicasPrivacidad.version}</span>
+                  <span className="fecha">Última actualización: {formatearFecha(politicasPrivacidad.updatedAt)}</span>
+                </div>
               </div>
-              <h2>1. Información que recopilamos</h2>
-            </div>
-            <p>Recopilamos los siguientes datos cuando utilizas nuestro sitio web:</p>
-            <ul className="privacy-list">
-              <li>
-                <strong>Información personal:</strong> Nombre, correo electrónico, número de teléfono, dirección, y
-                datos sobre enfermedades o discapacidades (opcional y bajo tu consentimiento).
-              </li>
-              <li>
-                <strong>Información de pago:</strong> Datos necesarios para procesar transacciones, como el método de
-                pago (estos datos son manejados por proveedores de pago seguros y no se almacenan directamente en
-                nuestros servidores).
-              </li>
-              <li>
-                <strong>Información técnica:</strong> Dirección IP, navegador y sistema operativo, y datos de navegación
-                en nuestro sitio.
-              </li>
-            </ul>
-          </div>
-
-          <div className="privacy-section">
-            <div className="section-header">
-              <div className="icon-circle">
-                <span className="section-icon">🔍</span>
+              <div className="documento-content">
+                <div className="content-text">{politicasPrivacidad.descripcion}</div>
               </div>
-              <h2>2. Uso de la información</h2>
             </div>
-            <p>Utilizamos la información recopilada para:</p>
-            <ul className="privacy-list">
-              <li>Gestionar el registro y el perfil de usuario.</li>
-              <li>Ofrecer servicios personalizados, como planes de entrenamiento adaptados a tus necesidades.</li>
-              <li>Mostrar perfiles de instructores y sus certificaciones.</li>
-              <li>Procesar pagos de suscripciones.</li>
-              <li>Mejorar nuestro sitio y servicios mediante análisis de datos.</li>
-            </ul>
-          </div>
+          )}
 
-          <div className="privacy-section">
-            <div className="section-header">
-              <div className="icon-circle">
-                <span className="section-icon">🔒</span>
+          {/* Términos y Condiciones */}
+          {terminosCondiciones && (
+            <div className="documento-item">
+              <div className="documento-header">
+                <h2>{terminosCondiciones.tipo}</h2>
+                <div className="documento-meta">
+                  <span className="version">Versión {terminosCondiciones.version}</span>
+                  <span className="fecha">Última actualización: {formatearFecha(terminosCondiciones.updatedAt)}</span>
+                </div>
               </div>
-              <h2>3. Protección de tus datos</h2>
+              <div className="documento-content">
+                <div className="content-text">{terminosCondiciones.descripcion}</div>
+              </div>
             </div>
-            <p>
-              Implementamos medidas de seguridad físicas, electrónicas y administrativas para proteger tu información.
-              Sin embargo, ninguna transmisión de datos por Internet es 100% segura.
-            </p>
-          </div>
+          )}
 
-          <div className="privacy-section">
-            <div className="section-header">
-              <div className="icon-circle">
-                <span className="section-icon">🔄</span>
+          {/* Deslinde Legal */}
+          {deslinde && (
+            <div className="documento-item">
+              <div className="documento-header">
+                <h2>{deslinde.tipo}</h2>
+                <div className="documento-meta">
+                  <span className="version">Versión {deslinde.version}</span>
+                  <span className="fecha">Última actualización: {formatearFecha(deslinde.updatedAt)}</span>
+                </div>
               </div>
-              <h2>4. Compartir información</h2>
-            </div>
-            <p>No compartimos tus datos personales con terceros, salvo en los siguientes casos:</p>
-            <ul className="privacy-list">
-              <li>
-                <strong>Proveedores de servicios:</strong> Plataformas de pago y servicios de correo electrónico.
-              </li>
-              <li>
-                <strong>Obligaciones legales:</strong> Cuando sea requerido por ley o autoridad competente.
-              </li>
-            </ul>
-          </div>
-
-          <div className="privacy-section">
-            <div className="section-header">
-              <div className="icon-circle">
-                <span className="section-icon">⚖️</span>
+              <div className="documento-content">
+                <div className="content-text">{deslinde.descripcion}</div>
               </div>
-              <h2>5. Tus derechos</h2>
             </div>
-            <p>Tienes derecho a:</p>
-            <ul className="privacy-list">
-              <li>Acceder, corregir o eliminar tus datos personales.</li>
-              <li>Retirar tu consentimiento para el procesamiento de datos sensibles en cualquier momento.</li>
-              <li>Solicitar la portabilidad de tus datos.</li>
-            </ul>
-          </div>
-
-          <div className="privacy-section">
-            <div className="section-header">
-              <div className="icon-circle">
-                <span className="section-icon">📞</span>
-              </div>
-              <h2>6. Contacto</h2>
-            </div>
-            <p>
-              Si tienes preguntas o inquietudes sobre nuestras políticas de privacidad, contáctanos en:
-              <br />
-              <strong>Correo electrónico:</strong>{" "}
-              <a href="mailto:soportebeatbox@gmail.com">soportebeatbox@gmail.com</a>
-            </p>
-          </div>
+          )}
         </div>
 
-        <div className="privacy-cta">
-          <button className="cta-button" onClick={() => navigate("/contactanos")}>
-            ¿Tienes preguntas? Contáctanos
+        {/* Mensaje si no hay documentos */}
+        {documentos.length === 0 && (
+          <div className="no-documentos">
+            <h3>No hay documentos disponibles</h3>
+            <p>Los documentos legales estarán disponibles próximamente.</p>
+          </div>
+        )}
+
+        <div className="contact-section">
+          <p>¿Tienes preguntas sobre nuestros documentos legales?</p>
+          <button className="contact-button" onClick={() => navigate("/contactanos")}>
+            Contáctanos
           </button>
         </div>
       </main>
@@ -147,4 +192,3 @@ const AvisoPrivacidad = () => {
 }
 
 export default AvisoPrivacidad
-

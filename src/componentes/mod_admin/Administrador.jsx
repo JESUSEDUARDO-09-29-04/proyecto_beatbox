@@ -2,7 +2,8 @@
 
 import { useState, useEffect, useContext } from "react"
 import { useNavigate, useLocation } from "react-router-dom"
-import { ThemeContext } from "../../context/ThemeContext" 
+import { ThemeContext } from "../../context/ThemeContext"
+import { useEmpresa } from "../../context/EmpresaContext"
 import {
   FaUsers,
   FaDollarSign,
@@ -16,8 +17,7 @@ import {
   FaTachometerAlt,
   FaBars,
   FaTimes,
-  FaMoon, // For dark mode toggle
-  FaSun, // For dark mode toggle
+  FaMusic, // Agregar esta línea
 } from "react-icons/fa"
 import FooterH from "../FooterH"
 import HeaderH from "../HeaderH"
@@ -33,10 +33,12 @@ import UsuariosAdmin from "../mod_admin/usuarios_admin/UsuariosAdmin"
 // Añadir la importación del componente CategoriasAdmin
 import CategoriasAdmin from "../mod_admin/Tienda/Categorias"
 import Productos from "../mod_admin/Tienda/productos"
+import PlaylistAdmin from "../mod_admin/playlist_admin/PlaylistAdmin"
 
 const Administrador = () => {
   const navigate = useNavigate()
-   const { theme, toggleTheme } = useContext(ThemeContext);
+  const { theme, toggleTheme } = useContext(ThemeContext)
+  const { logoVigente, cargando } = useEmpresa()
   const location = useLocation()
   const [menuAbierto, setMenuAbierto] = useState({
     tienda: false,
@@ -57,9 +59,6 @@ const Administrador = () => {
     suscripciones: 85,
     tienda: 50, // New stat for "Tienda"
   })
-
- 
-
 
   // Simulación de carga de estadísticas
   useEffect(() => {
@@ -119,9 +118,8 @@ const Administrador = () => {
     } else if (path.includes("/administrador/reportes-usuarios")) {
       setVistaActual("reportes-usuarios")
       setMenuAbierto((prev) => ({ ...prev, reportes: true }))
-    } else if (path.includes("/administrador/reportes-asistencia")) {
-      setVistaActual("reportes-asistencia")
-      setMenuAbierto((prev) => ({ ...prev, reportes: true }))
+    } else if (path.includes("/administrador/playlistadmin")) {
+      setVistaActual("playlist")
     }
   }, [location.pathname])
 
@@ -167,8 +165,8 @@ const Administrador = () => {
       case "reportes-usuarios":
         navigate("/administrador/reportes-usuarios")
         break
-      case "reportes-asistencia":
-        navigate("/administrador/reportes-asistencia")
+      case "playlist":
+        navigate("/administrador/playlistadmin")
         break
       default:
         navigate("/administrador")
@@ -200,6 +198,12 @@ const Administrador = () => {
     navigate("/iniciar-sesion")
   }
 
+  // Determinar qué logo usar: vigente del backend o logo por defecto
+  const getLogoSrc = () => {
+    if (cargando) return logo // Usar logo por defecto mientras carga
+    return logoVigente || logo // Usar logo vigente si existe, sino el por defecto
+  }
+
   // Filtrar opciones de menú según búsqueda
   const menuFiltrado =
     busqueda.trim() === ""
@@ -212,6 +216,7 @@ const Administrador = () => {
           { id: "documentos", nombre: "Documentos Regulatorios", icono: <FaFileAlt /> },
           { id: "incidencias", nombre: "Incidencias", icono: <FaExclamationTriangle /> },
           { id: "redesSociales", nombre: "Redes Sociales", icono: <FaGlobe /> },
+          { id: "playlist", nombre: "Playlist", icono: <FaGlobe /> },
           { id: "reportes", nombre: "Reportes y Estadísticas", icono: <FaChartBar /> },
         ].filter((item) => item.nombre.toLowerCase().includes(busqueda.toLowerCase()))
 
@@ -245,7 +250,13 @@ const Administrador = () => {
           <div className="menu-header">
             {!menuColapsado && (
               <div className="menu-logo">
-                <img src={logo || "/placeholder.svg"} alt="Beatbox Logo" />
+                {cargando ? (
+                  <div className="logo-loading">
+                    <div className="loading-spinner-small"></div>
+                  </div>
+                ) : (
+                  <img src={getLogoSrc() || "/placeholder.svg"} alt="Beatbox Logo" />
+                )}
               </div>
             )}
           </div>
@@ -267,6 +278,11 @@ const Administrador = () => {
             >
               <FaDollarSign className="icono-menu" />
               {!menuColapsado && <span>Gestión de Suscripciones</span>}
+            </li>
+
+            <li className={vistaActual === "playlist" ? "active" : ""} onClick={() => handleNavigation("playlist")}>
+              <FaMusic className="icono-menu" />
+              {!menuColapsado && <span>Playlists de Spotify</span>}
             </li>
 
             <li
@@ -375,15 +391,6 @@ const Administrador = () => {
                 >
                   Usuarios
                 </li>
-                <li
-                  className={vistaActual === "reportes-asistencia" ? "active" : ""}
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    handleNavigation("reportes-asistencia")
-                  }}
-                >
-                  Asistencia
-                </li>
               </ul>
             )}
           </ul>
@@ -401,12 +408,18 @@ const Administrador = () => {
                   <p>"El éxito es la suma de pequeños esfuerzos repetidos día tras día."</p>
                 </div>
                 <div className="welcome-logo">
-                  <img src={logo || "/placeholder.svg"} alt="Beatbox Logo" />
+                  {cargando ? (
+                    <div className="logo-loading">
+                      <div className="loading-spinner-small"></div>
+                    </div>
+                  ) : (
+                    <img src={getLogoSrc() || "/placeholder.svg"} alt="Beatbox Logo" />
+                  )}
                 </div>
               </div>
 
               <div className="stats-cards">
-                <div className="stat-card">
+                <div className="stat-card" onClick={() => handleNavigation("usuarios")}>
                   <div className="stat-icon users">
                     <FaUsers />
                   </div>
@@ -417,7 +430,7 @@ const Administrador = () => {
                   </div>
                 </div>
 
-                <div className="stat-card">
+                <div className="stat-card" onClick={() => handleNavigation("suscripciones")}>
                   <div className="stat-icon subscriptions">
                     <FaDollarSign />
                   </div>
@@ -428,8 +441,7 @@ const Administrador = () => {
                   </div>
                 </div>
 
-                {/* New stat card for Tienda */}
-                <div className="stat-card">
+                <div className="stat-card" onClick={() => handleNavigation("tienda-productos")}>
                   <div className="stat-icon store">
                     <FaStore />
                   </div>
@@ -439,10 +451,7 @@ const Administrador = () => {
                     <p className="stat-change positive">+10 nuevos productos</p>
                   </div>
                 </div>
-
-                {/* Removed "Clases" and "Entrenadores" stat cards */}
               </div>
-
               <div className="dashboard-sections">
                 <div className="dashboard-section recent-activity">
                   <h2>Actividad Reciente</h2>
@@ -490,6 +499,7 @@ const Administrador = () => {
               {vistaActual === "incidencias" && <IncidentesAdmin />}
               {vistaActual === "redesSociales" && <RedesSocialesAdmin />}
               {vistaActual === "usuarios" && <UsuariosAdmin />}
+              {vistaActual === "playlist" && <PlaylistAdmin />}
               {vistaActual === "tienda-categorias" && <CategoriasAdmin />}
               {vistaActual === "tienda-productos" && <Productos />}
               {/* Aquí se pueden agregar más vistas según sea necesario */}
@@ -497,7 +507,6 @@ const Administrador = () => {
           )}
         </section>
       </div>
-
 
       {/* Usar FooterH sin modificaciones */}
       <FooterH />

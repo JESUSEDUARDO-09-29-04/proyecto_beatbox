@@ -12,6 +12,7 @@ import RecuperarContrasenaOpciones from "./componentes/recuperar_contrasena/Opci
 import VerificarCorreo from "./componentes/verificar_correo/VerificarCorreo"
 import CambiarContrasena from "./componentes/cambiar_contraseña/CambiarContrasena"
 import { ThemeProvider } from "./context/ThemeContext" // Asegúrate que la ruta sea correcta
+import { EmpresaProvider } from "./context/EmpresaContext";
 import DocumentosRegulatoriosAdmin from "./componentes/mod_admin/documentos_admin/DocumentosRegulatoriosAdmin"
 import EmpresaAdmin from "./componentes/mod_admin/empresa_admin/EmpresaAdmin"
 import IncidentesAdmin from "./componentes/mod_admin/incidentes_admin/IncidentesAdmin"
@@ -40,9 +41,11 @@ import PagoSuscripcion from "./componentes/suscripciones/PagoSuscripcion"
 import ConfirmacionSuscripcion from "./componentes/suscripciones/ConfirmacionSuscripcion"
 // Importar el componente PerfilUsuario y sus subcomponentes
 import PerfilUsuario from "./componentes/perfil_usuario/PerfilUsuario"
+import PlaylistAdmin from "./componentes/mod_admin/playlist_admin/PlaylistAdmin"
 
 const App = () => {
   return (
+    <EmpresaProvider> {/* ⬅️ Agregado aquí */}
     <ThemeProvider>
       <CartProvider>
         <div className="app">
@@ -65,6 +68,7 @@ const App = () => {
               <Route path="/empresa_admin" element={<EmpresaAdmin />} />
               <Route path="/deslinde_admin" element={<DocumentosRegulatoriosAdmin />} />
               <Route path="/incidentes_admin" element={<IncidentesAdmin />} />
+              <Route path="/playlistadmin" element={<PlaylistAdmin />} />
               <Route path="/detalle-producto/:id" element={<DetalleProducto />} />
               <Route path="/Preguntas_Frecuentes" element={<PreguntasFrecuentes />} />
               <Route path="/Tienda" element={<Tienda />} />
@@ -102,6 +106,7 @@ const App = () => {
               <Route path="/administrador/documentos" element={<Administrador />} />
               <Route path="/administrador/incidencias" element={<Administrador />} />
               <Route path="/administrador/redes-sociales" element={<Administrador />} />
+              <Route path="/administrador/playlistadmin" element={<Administrador />} />
               <Route path="/administrador/reportes-ventas" element={<Administrador />} />
               <Route path="/administrador/reportes-usuarios" element={<Administrador />} />
               <Route path="/administrador/reportes-asistencia" element={<Administrador />} />
@@ -117,6 +122,7 @@ const App = () => {
         </div>
       </CartProvider>
     </ThemeProvider>
+    </EmpresaProvider>
   )
 }
 

@@ -32,7 +32,10 @@ const DatosPersonales = ({ userData }) => {
   const [errores, setErrores] = useState({})
   const [guardando, setGuardando] = useState(false)
   const [mensaje, setMensaje] = useState({ texto: "", tipo: "" })
-
+const getUserName = () => {
+  if (!userData) return ""
+  return userData.nombre || userData.username || userData.usuario || userData.name || ""
+}
   // Cargar datos del usuario
   useEffect(() => {
     if (userData) {
@@ -331,14 +334,10 @@ const DatosPersonales = ({ userData }) => {
 
         <div className="user-info-container">
           <div className="user-info-card">
-            <div className="user-avatar-large">
-              {datosForm.nombre?.charAt(0) || "U"}
-              {datosForm.apellidos?.charAt(0) || ""}
-            </div>
-            <h3>
-              {datosForm.nombre} {datosForm.apellidos}
-            </h3>
-            <p className="user-id">ID: {userData?.id || "USR12345"}</p>
+            <div className="usuario-info-D">
+                          <FaUser className="usuario-icono-D" />
+                          <span className="usuario-D">{getUserName()}</span>
+          </div>
 
             <div className="user-info-details">
               <div className="info-item">

@@ -84,6 +84,28 @@
   background-color: #ff6600;
 }
 
+/* Información del usuario */
+.usuario-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #333;
+  font-weight: 500;
+}
+
+.dark-mode .usuario-info {
+  color: #e0e0e0;
+}
+
+.usuario-icono {
+  color: #ff8800;
+  font-size: 16px;
+}
+
+.usuario-saludo {
+  font-size: 14px;
+}
+
 /* Icono del menú hamburguesa */
 .menu-icono {
   background: none;
@@ -100,6 +122,11 @@
 
 .menu-icono:hover {
   color: #ff8800;
+}
+
+/* Contenedor del menú hover */
+.menu-hover-container {
+  position: relative;
 }
 
 /* Menú desplegable */
@@ -223,6 +250,12 @@
   color: #ff8800;
 }
 
+/* Sección de administrador */
+.admin-section {
+  border-top: 2px solid #ff8800;
+  margin-top: 10px;
+}
+
 /* Separador del menú */
 .menu-separador {
   display: none;
@@ -233,6 +266,10 @@
   .btn-inicio,
   .btn-registrarse,
   .btn-cerrar-sesion {
+    display: none;
+  }
+
+  .usuario-info {
     display: none;
   }
 
@@ -269,9 +306,8 @@
   color: #f0f0f0;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 768px) {a
   .usuario-nombre {
     display: none;
   }
 }
-

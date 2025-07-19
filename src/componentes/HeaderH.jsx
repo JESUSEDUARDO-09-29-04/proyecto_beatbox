@@ -4,6 +4,7 @@ import { useState, useEffect, useContext } from "react"
 import { useNavigate } from "react-router-dom"
 import { FaHome, FaShoppingCart, FaEnvelope, FaBars, FaExclamationTriangle, FaUsersCog, FaUser } from "react-icons/fa"
 import { ThemeContext } from "../context/ThemeContext"
+import { useEmpresa } from "../context/EmpresaContext"
 import logo from "../assets/logo.png"
 import "./HeaderH.css"
 import SuccessModal from "./SuccessModal"
@@ -14,6 +15,7 @@ const HeaderH = () => {
   const [user, setUser] = useState(null)
   const [showLogoutModal, setShowLogoutModal] = useState(false)
   const { theme } = useContext(ThemeContext)
+  const { logoVigente, cargando } = useEmpresa()
   const navigate = useNavigate()
 
   const toggleAdminMenu = () => setAdminMenuAbierto(!adminMenuAbierto)
@@ -80,9 +82,15 @@ const HeaderH = () => {
     setMenuAbierto(false)
   }
 
+  // Determinar qué logo usar: vigente del backend o logo por defecto
+  const getLogoSrc = () => {
+    if (cargando) return logo // Usar logo por defecto mientras carga
+    return logoVigente || logo // Usar logo vigente si existe, sino el por defecto
+  }
+
   return (
     <header className={`navbar ${theme === "dark" ? "dark-mode" : ""}`}>
-      <img src={logo || "/placeholder.svg"} alt="Logo" className="logo" onClick={() => navigate("/")} />
+      <img src={getLogoSrc() || "/placeholder.svg"} alt="Logo" className="logo" onClick={() => navigate("/")} />
 
       <nav className="nav-enlaces">
         {!user ? (
@@ -114,7 +122,7 @@ const HeaderH = () => {
           {/* Menú desplegable */}
           <div className={`menu-desplegable ${menuAbierto ? "activo" : ""} ${theme === "dark" ? "dark-mode" : ""}`}>
             <div className="menu-header">
-              <img src={logo || "/placeholder.svg"} alt="Logo" className="menu-logo" />
+              <img src={getLogoSrc() || "/placeholder.svg"} alt="Logo" className="menu-logo" />
               <button className="btn-suscribirse" onClick={() => navigate("/suscripcion")}>
                 ¡Suscríbete!
               </button>
@@ -154,19 +162,19 @@ const HeaderH = () => {
                 <FaEnvelope /> Contáctanos
               </li>
             </ul>
-              {/* Opción para perfil de usuario, solo si está logueado */}
-              {user && (
-                <ul className="menu-secciones">
-                  <li
-                    onClick={() => {
-                      navigate("/perfil")
-                      setMenuAbierto(false)
-                    }}
-                  >
-                    <FaUser /> Perfil de Usuario
-                  </li>
-                </ul>
-              )}
+            {/* Opción para perfil de usuario, solo si está logueado */}
+            {user && (
+              <ul className="menu-secciones">
+                <li
+                  onClick={() => {
+                    navigate("/perfil")
+                    setMenuAbierto(false)
+                  }}
+                >
+                  <FaUser /> Perfil de Usuario
+                </li>
+              </ul>
+            )}
             {/* Sección solo para admin */}
             {user?.role === "admin" && (
               <ul className="menu-secciones admin-section">
@@ -198,4 +206,3 @@ const HeaderH = () => {
 }
 
 export default HeaderH
-

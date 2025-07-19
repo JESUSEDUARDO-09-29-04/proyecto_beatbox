@@ -8,15 +8,13 @@ import {
   FaShoppingBag,
   FaWeight,
   FaChartLine,
-  FaCalendarAlt,
   FaChevronDown,
-  FaCog,
-  FaSignOutAlt,
   FaBars,
   FaTimes,
   FaAddressCard,
   FaHistory,
   FaTachometerAlt,
+  FaUser,
 } from "react-icons/fa"
 import "./PerfilUsuario.css"
 import HeaderH from "../HeaderH"
@@ -29,9 +27,6 @@ import DatosPersonales from "./DatosPersonales"
 import DatosFisicos from "./DatosFisicos"
 import HistorialCompras from "./HistorialCompras"
 import Suscripciones from "./SuscripcionesPerfil"
-import HistorialActividad from "./HistorialActividad"
-import Configuracion from "./Configuracion"
-// Añadir la importación del componente ProgresoFisico
 import ProgresoFisico from "./ProgresoFisico"
 
 const PerfilUsuario = () => {
@@ -40,7 +35,6 @@ const PerfilUsuario = () => {
   const { theme } = useContext(ThemeContext)
   const [menuAbierto, setMenuAbierto] = useState({
     tienda: false,
-    actividad: false,
   })
   const [vistaActual, setVistaActual] = useState("bienvenida")
   const [menuColapsado, setMenuColapsado] = useState(false)
@@ -57,7 +51,6 @@ const PerfilUsuario = () => {
           method: "GET",
           credentials: "include",
         })
-
         if (res.ok) {
           const data = await res.json()
           setUserData(data)
@@ -78,7 +71,6 @@ const PerfilUsuario = () => {
   // Efecto para establecer la vista actual basada en la URL
   useEffect(() => {
     const path = location.pathname.toLowerCase()
-
     if (path === "/perfil" || path === "/perfil/") {
       setVistaActual("bienvenida")
       return
@@ -93,15 +85,15 @@ const PerfilUsuario = () => {
     } else if (path.includes("/perfil/historial-compras")) {
       setVistaActual("historial-compras")
       setMenuAbierto((prev) => ({ ...prev, tienda: true }))
-    } else if (path.includes("/perfil/historial-actividad")) {
-      setVistaActual("historial-actividad")
-      setMenuAbierto((prev) => ({ ...prev, actividad: true }))
-    } else if (path.includes("/perfil/configuracion")) {
-      setVistaActual("configuracion")
     } else if (path.includes("/perfil/progreso-fisico")) {
       setVistaActual("progreso-fisico")
     }
   }, [location.pathname])
+
+  const getUserName = () => {
+    if (!userData) return ""
+    return userData.nombre || userData.username || userData.usuario || userData.name || ""
+  }
 
   const handleNavigation = (view) => {
     setVistaActual(view)
@@ -121,13 +113,6 @@ const PerfilUsuario = () => {
       case "historial-compras":
         navigate("/perfil/historial-compras")
         break
-      case "historial-actividad":
-        navigate("/perfil/historial-actividad")
-        break
-      case "configuracion":
-        navigate("/perfil/configuracion")
-        break
-      // En el switch statement dentro de handleNavigation, añadir:
       case "progreso-fisico":
         navigate("/perfil/progreso-fisico")
         break
@@ -142,18 +127,6 @@ const PerfilUsuario = () => {
       ...prev,
       [menu]: !prev[menu],
     }))
-  }
-
-  const cerrarSesion = async () => {
-    try {
-      await fetch("http://localhost:3000/auth/logout", {
-        method: "POST",
-        credentials: "include",
-      })
-      navigate("/iniciar-sesion")
-    } catch (error) {
-      console.error("Error al cerrar sesión:", error)
-    }
   }
 
   if (loading) {
@@ -172,7 +145,6 @@ const PerfilUsuario = () => {
   return (
     <div className={`contenedor-perfil ${theme === "dark" ? "dark-mode" : ""}`}>
       <HeaderH />
-
       <div className="breadcrumb-container">
         <Breadcrumbs />
       </div>
@@ -200,18 +172,10 @@ const PerfilUsuario = () => {
           </div>
 
           <div className="usuario-info">
-            <div className="avatar">
-              {userData?.nombre?.charAt(0) || "U"}
-              {userData?.apellidos?.charAt(0) || ""}
+            <div className="usuario-info">
+              <FaUser className="usuario-icono-p" />
+              <span className="usuario">{getUserName()}</span>
             </div>
-            {!menuColapsado && (
-              <div className="usuario-datos">
-                <h3>
-                  {userData?.nombre} {userData?.apellidos}
-                </h3>
-                <p className="usuario-plan">{userData?.suscripcion || "Usuario Básico"}</p>
-              </div>
-            )}
           </div>
 
           <ul className="menu-perfil">
@@ -235,7 +199,7 @@ const PerfilUsuario = () => {
               <FaWeight className="icono-menu" />
               {!menuColapsado && <span>Datos Físicos</span>}
             </li>
-            {/* Añadir una nueva opción en el menú lateral, después de "Datos Físicos" */}
+
             <li
               className={vistaActual === "progreso-fisico" ? "active" : ""}
               onClick={() => handleNavigation("progreso-fisico")}
@@ -281,49 +245,6 @@ const PerfilUsuario = () => {
                 </li>
               </ul>
             )}
-
-            <li
-              className={`menu-item ${menuAbierto.actividad ? "submenu-open" : ""} ${
-                vistaActual.startsWith("actividad") || vistaActual === "historial-actividad" ? "active" : ""
-              }`}
-              onClick={() => toggleSubmenu("actividad")}
-            >
-              <FaChartLine className="icono-menu" />
-              {!menuColapsado && (
-                <>
-                  <span>Actividad</span>
-                  <FaChevronDown className={`arrow ${menuAbierto.actividad ? "open" : ""}`} />
-                </>
-              )}
-            </li>
-
-            {menuAbierto.actividad && !menuColapsado && (
-              <ul className="submenu-perfil">
-                <li
-                  className={vistaActual === "historial-actividad" ? "active" : ""}
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    handleNavigation("historial-actividad")
-                  }}
-                >
-                  <FaCalendarAlt className="icono-submenu" />
-                  <span>Historial de Actividad</span>
-                </li>
-              </ul>
-            )}
-
-            <li
-              className={vistaActual === "configuracion" ? "active" : ""}
-              onClick={() => handleNavigation("configuracion")}
-            >
-              <FaCog className="icono-menu" />
-              {!menuColapsado && <span>Configuración</span>}
-            </li>
-
-            <li className="menu-footer" onClick={cerrarSesion}>
-              <FaSignOutAlt className="icono-menu" />
-              {!menuColapsado && <span>Cerrar Sesión</span>}
-            </li>
           </ul>
         </section>
 
@@ -340,12 +261,6 @@ const PerfilUsuario = () => {
                     En esta sección podrás gestionar tu información personal, realizar seguimiento de tu progreso y
                     revisar tu historial de actividades en Beatbox.
                   </p>
-                </div>
-                <div className="welcome-avatar">
-                  <div className="avatar-large">
-                    {userData?.nombre?.charAt(0) || "U"}
-                    {userData?.apellidos?.charAt(0) || ""}
-                  </div>
                 </div>
               </div>
 
@@ -377,6 +292,19 @@ const PerfilUsuario = () => {
                 </div>
 
                 <div className="stat-card">
+                  <div className="stat-icon progreso">
+                    <FaChartLine />
+                  </div>
+                  <div className="stat-info">
+                    <h3>Progreso Físico</h3>
+                    <p className="stat-description">Visualiza tu evolución y logros</p>
+                    <button className="stat-action" onClick={() => handleNavigation("progreso-fisico")}>
+                      Ver Detalles
+                    </button>
+                  </div>
+                </div>
+
+                <div className="stat-card">
                   <div className="stat-icon suscripcion">
                     <FaCreditCard />
                   </div>
@@ -390,65 +318,20 @@ const PerfilUsuario = () => {
                 </div>
 
                 <div className="stat-card">
-                  <div className="stat-icon actividad">
-                    <FaChartLine />
+                  <div className="stat-icon tienda">
+                    <FaShoppingBag />
                   </div>
                   <div className="stat-info">
-                    <h3>Actividad</h3>
-                    <p className="stat-description">Revisa tu historial de entrenamientos</p>
-                    <button className="stat-action" onClick={() => handleNavigation("historial-actividad")}>
+                    <h3>Historial de Compras</h3>
+                    <p className="stat-description">Revisa tus compras y pedidos</p>
+                    <button className="stat-action" onClick={() => handleNavigation("historial-compras")}>
                       Ver Detalles
                     </button>
                   </div>
                 </div>
               </div>
 
-              <div className="dashboard-sections">
-                <div className="dashboard-section progress-summary">
-                  <h2>Resumen de Progreso</h2>
-                  <div className="progress-container">
-                    <div className="progress-item">
-                      <div className="progress-title">
-                        <span>Asistencia este mes</span>
-                        <span>12/30 días</span>
-                      </div>
-                      <div className="progress-bar">
-                        <div className="progress-fill" style={{ width: "40%" }}></div>
-                      </div>
-                    </div>
-                    <div className="progress-item">
-                      <div className="progress-title">
-                        <span>Progreso a meta de peso</span>
-                        <span>65%</span>
-                      </div>
-                      <div className="progress-bar">
-                        <div className="progress-fill" style={{ width: "65%" }}></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="dashboard-section upcoming-classes">
-                  <h2>Próximas Clases</h2>
-                  <div className="classes-list">
-                    <div className="class-item">
-                      <div className="class-time">10:00 - 11:00</div>
-                      <div className="class-details">
-                        <h4>CrossFit</h4>
-                        <p>Coach: Juan Pérez</p>
-                      </div>
-                    </div>
-                    <div className="class-item">
-                      <div className="class-time">18:00 - 19:00</div>
-                      <div className="class-details">
-                        <h4>Spinning</h4>
-                        <p>Coach: Ana López</p>
-                      </div>
-                    </div>
-                  </div>
-                  <button className="see-all-button">Ver Todas las Clases</button>
-                </div>
-              </div>
+              {/* Sección de dashboard sections removida completamente */}
             </div>
           ) : (
             <>
@@ -456,8 +339,6 @@ const PerfilUsuario = () => {
               {vistaActual === "datos-fisicos" && <DatosFisicos userData={userData} />}
               {vistaActual === "suscripciones" && <Suscripciones userData={userData} />}
               {vistaActual === "historial-compras" && <HistorialCompras userData={userData} />}
-              {vistaActual === "historial-actividad" && <HistorialActividad userData={userData} />}
-              {vistaActual === "configuracion" && <Configuracion userData={userData} />}
               {vistaActual === "progreso-fisico" && <ProgresoFisico userData={userData} />}
             </>
           )}
@@ -470,4 +351,3 @@ const PerfilUsuario = () => {
 }
 
 export default PerfilUsuario
-

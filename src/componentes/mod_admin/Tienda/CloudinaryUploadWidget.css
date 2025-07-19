@@ -1,0 +1,26 @@
+.btn-cloudinary {
+    display: block; /* Para centrar fácilmente */
+    margin: 20px auto; /* Centrado automático en el contenedor */
+    padding: 10px 20px; /* Espaciado interno */
+    font-size: 16px; /* Tamaño de fuente */
+    font-weight: bold; /* Negrita */
+    color: #fff; /* Texto blanco */
+    background-color: #007bff; /* Azul primario */
+    border: none; /* Sin bordes */
+    border-radius: 5px; /* Bordes redondeados */
+    cursor: pointer; /* Cambia el cursor al pasar */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra */
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Animación suave */
+  }
+  
+  .btn-cloudinary:hover {
+    background-color: #0056b3; /* Azul oscuro al pasar */
+    transform: scale(1.05); /* Efecto de agrandar ligeramente */
+  }
+  
+  .btn-cloudinary:active {
+    background-color: #004494; /* Azul más oscuro al hacer clic */
+    transform: scale(0.95); /* Efecto de reducir ligeramente */
+  }
+  
+  

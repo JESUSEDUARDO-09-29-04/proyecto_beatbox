@@ -4,9 +4,9 @@ import { useState, useEffect, useContext } from "react"
 import { useNavigate } from "react-router-dom"
 import { ThemeContext } from "../../context/ThemeContext"
 import "./Home.css"
-import c1 from "../../assets/c4.jpg"
-import c2 from "../../assets/c5.jpg"
-import c3 from "../../assets/c6.jpg"
+import c1 from "../../assets/c7.png"
+import c2 from "../../assets/c8.jpg"
+import c3 from "../../assets/c9.jpg"
 import cert1 from "../../assets/cert1.jpeg"
 import cert2 from "../../assets/cert2.jpeg"
 import cert3 from "../../assets/cert3.jpeg"
@@ -33,7 +33,7 @@ const Home = () => {
       image: c2,
       title: "Los mejores productos",
       subtitle: "Explora nuestra tienda y equipa tu entrenamiento",
-      cta: "Ver Tienda", // ← SE QUEDA IGUAL
+      cta: "Ver Tienda",
     },
     {
       image: c3,
@@ -63,7 +63,6 @@ const Home = () => {
   const goToSlide = (index) => {
     setCurrentSlide(index)
   }
-
 
   // Certificados mejorados de Home2
   const certificados = [
@@ -175,13 +174,12 @@ const Home = () => {
   ]
 
   // Función para manejar la selección de membresía
-const handleSeleccionarMembresia = (id) => {
-  navigate(`/suscripcion?plan=${id}`)
-}
-
+  const handleSeleccionarMembresia = (id) => {
+    navigate(`/suscripcion?plan=${id}`)
+  }
 
   return (
-    <div className={`contenedor ${theme === "dark" ? "dark" : ""}`}>
+    <div className={`home-contenedor ${theme === "dark" ? "dark" : ""}`}>
       {/* Navbar */}
       <HeaderH />
 
@@ -189,31 +187,28 @@ const handleSeleccionarMembresia = (id) => {
       <main className="contenido-principal">
         {/* Carrusel mejorado de Home2 */}
         <section className="carousel-section">
-          <div
-            className="carousel-slide active"
-            style={{ backgroundImage: `url(${slides[currentSlide].image})` }}
-            >
+          <div className="carousel-slide active" style={{ backgroundImage: `url(${slides[currentSlide].image})` }}>
             <div className="carousel-overlay" />
             <div className="carousel-content">
-                <h1 className="carousel-title">{slides[currentSlide].title}</h1>
-                <p className="carousel-subtitle">{slides[currentSlide].subtitle}</p>
-                <button
+              <h1 className="carousel-title">{slides[currentSlide].title}</h1>
+              <p className="carousel-subtitle">{slides[currentSlide].subtitle}</p>
+              <button
                 className="btn btn-cta"
                 onClick={() => {
-                    const cta = slides[currentSlide].cta
-                    if (cta === "Ver Tienda") {
+                  const cta = slides[currentSlide].cta
+                  if (cta === "Ver Tienda") {
                     navigate("/tienda")
-                    } else if (cta === "Suscríbete") {
+                  } else if (cta === "Suscríbete") {
                     navigate("/suscripcion")
-                    } else {
+                  } else {
                     navigate("/quienes_somos")
-                    }
+                  }
                 }}
-                >
+              >
                 {slides[currentSlide].cta}
-                </button>
+              </button>
             </div>
-            </div>
+          </div>
           {/* Controles del carrusel */}
           <button className="carousel-control prev" onClick={prevSlide}>
             <i className="fas fa-chevron-left"></i>
@@ -302,8 +297,7 @@ const handleSeleccionarMembresia = (id) => {
                   </ul>
                   <button
                     className={`btn btn-membership ${membresia.destacado ? "featured" : ""}`}
-                   onClick={() => handleSeleccionarMembresia(membresia.id)}
-
+                    onClick={() => handleSeleccionarMembresia(membresia.id)}
                   >
                     Seleccionar
                   </button>
