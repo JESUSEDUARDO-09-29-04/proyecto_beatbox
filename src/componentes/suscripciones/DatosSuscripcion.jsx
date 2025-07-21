@@ -20,6 +20,7 @@ import {
   FaSignInAlt,
   FaUserPlus,
 } from "react-icons/fa"
+import { verificarSesion } from "../../utils/verificarSesion"
 
 const DatosSuscripcion = () => {
   const navigate = useNavigate()
@@ -48,8 +49,25 @@ const DatosSuscripcion = () => {
   const [errores, setErrores] = useState({})
   const [enviando, setEnviando] = useState(false)
 
-  // Verificar si el usuario está autenticado
- 
+  // Verificar si el usuario está autenticado - CORREGIDO
+  useEffect(() => {
+    const verificarAutenticacion = async () => {
+      try {
+        const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error("Timeout")), 5000))
+
+        const usuario = await Promise.race([verificarSesion(), timeoutPromise])
+
+        setIsAuthenticated(!!usuario)
+      } catch (error) {
+        console.error("Error al verificar autenticación:", error)
+        setIsAuthenticated(false)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    verificarAutenticacion()
+  }, [])
 
   // Efecto para detectar si el usuario es menor de edad cuando cambia la fecha de nacimiento
   useEffect(() => {
@@ -331,181 +349,189 @@ const DatosSuscripcion = () => {
 
             <div className="datos-container">
               <form onSubmit={handleSubmit} className="datos-form">
-                {/* Primero la Información Personal */}
-                <div className="seccion-formulario">
-                  <h3>Información Personal</h3>
-                  <div className="campos-grid tres-columnas">
-                    <div className="campo-formulario-sus">
-                      <label htmlFor="nombre">
-                        <FaUser className="campo-icono" /> Nombre
-                      </label>
-                      <input
-                        type="text"
-                        id="nombre"
-                        name="nombre"
-                        value={formData.nombre}
-                        onChange={handleChange}
-                        className={errores.nombre ? "error" : ""}
-                        placeholder="Ingresa tu nombre"
-                      />
-                      {errores.nombre && (
-                        <div className="mensaje-error">
-                          <FaExclamationTriangle /> {errores.nombre}
-                        </div>
-                      )}
-                    </div>
+                <div className="formulario-layout">
+                  {/* Columna izquierda - Información Personal */}
+                  <div className="seccion-formulario">
+                    <h3>Información Personal</h3>
+                    <div className="campos-lista">
+                      <div className="campo-formulario-sus">
+                        <label htmlFor="nombre">
+                          <FaUser className="campo-icono" /> Nombre
+                        </label>
+                        <input
+                          type="text"
+                          id="nombre"
+                          name="nombre"
+                          value={formData.nombre}
+                          onChange={handleChange}
+                          className={errores.nombre ? "error" : ""}
+                          placeholder="Ingresa tu nombre"
+                        />
+                        {errores.nombre && (
+                          <div className="mensaje-error">
+                            <FaExclamationTriangle /> {errores.nombre}
+                          </div>
+                        )}
+                      </div>
 
-                    <div className="campo-formulario-sus">
-                      <label htmlFor="apellidos">
-                        <FaUser className="campo-icono" /> Apellidos
-                      </label>
-                      <input
-                        type="text"
-                        id="apellidos"
-                        name="apellidos"
-                        value={formData.apellidos}
-                        onChange={handleChange}
-                        className={errores.apellidos ? "error" : ""}
-                        placeholder="Ingresa tus apellidos"
-                      />
-                      {errores.apellidos && (
-                        <div className="mensaje-error">
-                          <FaExclamationTriangle /> {errores.apellidos}
-                        </div>
-                      )}
-                    </div>
+                      <div className="campo-formulario-sus">
+                        <label htmlFor="apellidos">
+                          <FaUser className="campo-icono" /> Apellidos
+                        </label>
+                        <input
+                          type="text"
+                          id="apellidos"
+                          name="apellidos"
+                          value={formData.apellidos}
+                          onChange={handleChange}
+                          className={errores.apellidos ? "error" : ""}
+                          placeholder="Ingresa tus apellidos"
+                        />
+                        {errores.apellidos && (
+                          <div className="mensaje-error">
+                            <FaExclamationTriangle /> {errores.apellidos}
+                          </div>
+                        )}
+                      </div>
 
-                    <div className="campo-formulario-sus">
-                      <label htmlFor="fechaNacimiento">
-                        <FaCalendarAlt className="campo-icono" /> Fecha de Nacimiento
-                      </label>
-                      <input
-                        type="text"
-                        id="fechaNacimiento"
-                        name="fechaNacimiento"
-                        value={formData.fechaNacimiento}
-                        onChange={handleChange}
-                        className={errores.fechaNacimiento ? "error" : ""}
-                        placeholder="dd/mm/aaaa"
-                        onFocus={(e) => (e.target.type = "date")}
-                        onBlur={(e) => (e.target.type = "text")}
-                      />
-                      {errores.fechaNacimiento && (
-                        <div className="mensaje-error">
-                          <FaExclamationTriangle /> {errores.fechaNacimiento}
-                        </div>
-                      )}
-                    </div>
+                      <div className="campo-formulario-sus">
+                        <label htmlFor="fechaNacimiento">
+                          <FaCalendarAlt className="campo-icono" /> Fecha de Nacimiento
+                        </label>
+                        <input
+                          type="text"
+                          id="fechaNacimiento"
+                          name="fechaNacimiento"
+                          value={formData.fechaNacimiento}
+                          onChange={handleChange}
+                          className={errores.fechaNacimiento ? "error" : ""}
+                          placeholder="dd/mm/aaaa"
+                          onFocus={(e) => (e.target.type = "date")}
+                          onBlur={(e) => (e.target.type = "text")}
+                        />
+                        {errores.fechaNacimiento && (
+                          <div className="mensaje-error">
+                            <FaExclamationTriangle /> {errores.fechaNacimiento}
+                          </div>
+                        )}
+                      </div>
 
-                    <div className="campo-formulario-sus">
-                      <label htmlFor="email">
-                        <FaEnvelope className="campo-icono" /> Correo Electrónico
-                      </label>
-                      <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        className={errores.email ? "error" : ""}
-                        placeholder="ejemplo@correo.com"
-                      />
-                      {errores.email && (
-                        <div className="mensaje-error">
-                          <FaExclamationTriangle /> {errores.email}
-                        </div>
-                      )}
-                    </div>
+                      <div className="campo-formulario-sus">
+                        <label htmlFor="email">
+                          <FaEnvelope className="campo-icono" /> Correo Electrónico
+                        </label>
+                        <input
+                          type="email"
+                          id="email"
+                          name="email"
+                          value={formData.email}
+                          onChange={handleChange}
+                          className={errores.email ? "error" : ""}
+                          placeholder="ejemplo@correo.com"
+                        />
+                        {errores.email && (
+                          <div className="mensaje-error">
+                            <FaExclamationTriangle /> {errores.email}
+                          </div>
+                        )}
+                      </div>
 
-                    <div className="campo-formulario-sus">
-                      <label htmlFor="telefono">
-                        <FaPhone className="campo-icono" /> Teléfono
-                      </label>
-                      <input
-                        type="tel"
-                        id="telefono"
-                        name="telefono"
-                        value={formData.telefono}
-                        onChange={handleChange}
-                        className={errores.telefono ? "error" : ""}
-                        placeholder="10 dígitos"
-                      />
-                      {errores.telefono && (
-                        <div className="mensaje-error">
-                          <FaExclamationTriangle /> {errores.telefono}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Luego la Información de Emergencia */}
-                <div className="seccion-formulario">
-                  <h3>Información de Emergencia</h3>
-                  <div className="campos-grid dos-columnas">
-                    <div className="campo-formulario-sus">
-                      <label htmlFor="emergenciaNombre">
-                        <FaUser className="campo-icono" /> Nombre de Contacto
-                      </label>
-                      <input
-                        type="text"
-                        id="emergenciaNombre"
-                        name="emergenciaNombre"
-                        value={formData.emergenciaNombre}
-                        onChange={handleChange}
-                        className={errores.emergenciaNombre ? "error" : ""}
-                        placeholder="Nombre de contacto de emergencia"
-                      />
-                      {errores.emergenciaNombre && (
-                        <div className="mensaje-error">
-                          <FaExclamationTriangle /> {errores.emergenciaNombre}
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="campo-formulario-sus">
-                      <label htmlFor="emergenciaTelefono">
-                        <FaPhone className="campo-icono" /> Teléfono de Contacto
-                      </label>
-                      <input
-                        type="tel"
-                        id="emergenciaTelefono"
-                        name="emergenciaTelefono"
-                        value={formData.emergenciaTelefono}
-                        onChange={handleChange}
-                        className={errores.emergenciaTelefono ? "error" : ""}
-                        placeholder="10 dígitos"
-                      />
-                      {errores.emergenciaTelefono && (
-                        <div className="mensaje-error">
-                          <FaExclamationTriangle /> {errores.emergenciaTelefono}
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="campo-formulario-sus">
-                      <label htmlFor="condicionesMedicas">Condiciones Médicas (opcional)</label>
-                      <input
-                        type="text"
-                        id="condicionesMedicas"
-                        name="condicionesMedicas"
-                        value={formData.condicionesMedicas}
-                        onChange={handleChange}
-                        placeholder="Menciona cualquier condición médica relevante"
-                      />
+                      <div className="campo-formulario-sus">
+                        <label htmlFor="telefono">
+                          <FaPhone className="campo-icono" /> Teléfono
+                        </label>
+                        <input
+                          type="tel"
+                          id="telefono"
+                          name="telefono"
+                          value={formData.telefono}
+                          onChange={handleChange}
+                          className={errores.telefono ? "error" : ""}
+                          placeholder="10 dígitos"
+                        />
+                        {errores.telefono && (
+                          <div className="mensaje-error">
+                            <FaExclamationTriangle /> {errores.telefono}
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                {/* Información del tutor (si es menor de edad) */}
-                {formData.fechaNacimiento &&
-                  new Date().getFullYear() - new Date(formData.fechaNacimiento).getFullYear() < 18 && (
-                    <div className="seccion-formulario">
+                  {/* Columna derecha - Información de Emergencia */}
+                  <div className="seccion-formulario">
+                    <h3>Información de Emergencia</h3>
+                    <div className="campos-lista">
+                      <div className="campo-formulario-sus">
+                        <label htmlFor="emergenciaNombre">
+                          <FaUser className="campo-icono" /> Nombre de Contacto
+                        </label>
+                        <input
+                          type="text"
+                          id="emergenciaNombre"
+                          name="emergenciaNombre"
+                          value={formData.emergenciaNombre}
+                          onChange={handleChange}
+                          className={errores.emergenciaNombre ? "error" : ""}
+                          placeholder="Nombre de contacto de emergencia"
+                        />
+                        {errores.emergenciaNombre && (
+                          <div className="mensaje-error">
+                            <FaExclamationTriangle /> {errores.emergenciaNombre}
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="campo-formulario-sus">
+                        <label htmlFor="emergenciaTelefono">
+                          <FaPhone className="campo-icono" /> Teléfono de Contacto
+                        </label>
+                        <input
+                          type="tel"
+                          id="emergenciaTelefono"
+                          name="emergenciaTelefono"
+                          value={formData.emergenciaTelefono}
+                          onChange={handleChange}
+                          className={errores.emergenciaTelefono ? "error" : ""}
+                          placeholder="10 dígitos"
+                        />
+                        {errores.emergenciaTelefono && (
+                          <div className="mensaje-error">
+                            <FaExclamationTriangle /> {errores.emergenciaTelefono}
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="campo-formulario-sus">
+                        <label htmlFor="condicionesMedicas">Condiciones Médicas (opcional)</label>
+                        <textarea
+                          id="condicionesMedicas"
+                          name="condicionesMedicas"
+                          value={formData.condicionesMedicas}
+                          onChange={handleChange}
+                          placeholder="Menciona cualquier condición médica relevante"
+                          rows="4"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Información del tutor (si es menor de edad) - Ancho completo */}
+                  {formData.esMenorDeEdad && (
+                    <div className="seccion-formulario seccion-tutor">
                       <h3>Información del Tutor</h3>
-                      <div className="campos-grid tres-columnas">
+                      <div className="alerta-menor">
+                        <FaExclamationTriangle className="alerta-icono" />
+                        <p>
+                          Hemos detectado que eres menor de edad. Para continuar con la suscripción, necesitamos el
+                          consentimiento y los datos de contacto de tu padre, madre o tutor legal.
+                        </p>
+                      </div>
+
+                      <div className="campos-lista">
                         <div className="campo-formulario-sus">
                           <label htmlFor="tutorNombre">
-                            <FaUser className="campo-icono" /> Nombre del Tutor
+                            <FaUser className="campo-icono" /> Nombre del Padre/Madre/Tutor
                           </label>
                           <input
                             type="text"
@@ -514,7 +540,7 @@ const DatosSuscripcion = () => {
                             value={formData.tutorNombre}
                             onChange={handleChange}
                             className={errores.tutorNombre ? "error" : ""}
-                            placeholder="Nombre del tutor"
+                            placeholder="Nombre completo del tutor"
                           />
                           {errores.tutorNombre && (
                             <div className="mensaje-error">
@@ -534,7 +560,7 @@ const DatosSuscripcion = () => {
                             value={formData.tutorTelefono}
                             onChange={handleChange}
                             className={errores.tutorTelefono ? "error" : ""}
-                            placeholder="Teléfono del tutor (10 dígitos)"
+                            placeholder="10 dígitos"
                           />
                           {errores.tutorTelefono && (
                             <div className="mensaje-error">
@@ -544,16 +570,22 @@ const DatosSuscripcion = () => {
                         </div>
 
                         <div className="campo-formulario-sus">
-                          <label htmlFor="parentesco">Parentesco</label>
-                          <input
-                            type="text"
+                          <label htmlFor="parentesco">
+                            <FaUser className="campo-icono" /> Parentesco
+                          </label>
+                          <select
                             id="parentesco"
                             name="parentesco"
                             value={formData.parentesco}
                             onChange={handleChange}
                             className={errores.parentesco ? "error" : ""}
-                            placeholder="Parentesco con el menor"
-                          />
+                          >
+                            <option value="">Selecciona una opción</option>
+                            <option value="Padre">Padre</option>
+                            <option value="Madre">Madre</option>
+                            <option value="Tutor Legal">Tutor Legal</option>
+                            <option value="Otro">Otro</option>
+                          </select>
                           {errores.parentesco && (
                             <div className="mensaje-error">
                               <FaExclamationTriangle /> {errores.parentesco}
@@ -561,133 +593,55 @@ const DatosSuscripcion = () => {
                           )}
                         </div>
                       </div>
+
+                      <div className="consentimiento-checkbox">
+                        <input
+                          type="checkbox"
+                          id="consentimientoParental"
+                          name="consentimientoParental"
+                          checked={formData.consentimientoParental}
+                          onChange={handleChange}
+                        />
+                        <label htmlFor="consentimientoParental">
+                          Como padre/madre/tutor legal, doy mi consentimiento para que el menor se suscriba a los
+                          servicios del gimnasio y acepto la responsabilidad de supervisar su actividad.
+                        </label>
+                      </div>
+                      {errores.consentimientoParental && (
+                        <div className="mensaje-error">
+                          <FaExclamationTriangle /> {errores.consentimientoParental}
+                        </div>
+                      )}
                     </div>
                   )}
 
-                {/* Sección de Consentimiento Parental (solo visible si es menor de edad) */}
-                {formData.esMenorDeEdad && (
-                  <div className="seccion-formulario consentimiento-parental">
-                    <h3>Consentimiento Parental</h3>
-                    <div className="alerta-menor">
-                      <FaExclamationTriangle className="alerta-icono" />
-                      <p>
-                        Hemos detectado que eres menor de edad. Para continuar con la suscripción, necesitamos el
-                        consentimiento y los datos de contacto de tu padre, madre o tutor legal.
-                      </p>
-                    </div>
-
-                    <div className="campos-grid dos-columnas">
-                      <div className="campo-formulario-sus">
-                        <label htmlFor="tutorNombre">
-                          <FaUser className="campo-icono" /> Nombre del Padre/Madre/Tutor
-                        </label>
-                        <input
-                          type="text"
-                          id="tutorNombre"
-                          name="tutorNombre"
-                          value={formData.tutorNombre}
-                          onChange={handleChange}
-                          className={errores.tutorNombre ? "error" : ""}
-                          placeholder="Nombre completo del tutor"
-                        />
-                        {errores.tutorNombre && (
-                          <div className="mensaje-error">
-                            <FaExclamationTriangle /> {errores.tutorNombre}
-                          </div>
-                        )}
-                      </div>
-
-                      <div className="campo-formulario-sus">
-                        <label htmlFor="tutorTelefono">
-                          <FaPhone className="campo-icono" /> Teléfono del Tutor
-                        </label>
-                        <input
-                          type="tel"
-                          id="tutorTelefono"
-                          name="tutorTelefono"
-                          value={formData.tutorTelefono}
-                          onChange={handleChange}
-                          className={errores.tutorTelefono ? "error" : ""}
-                          placeholder="10 dígitos"
-                        />
-                        {errores.tutorTelefono && (
-                          <div className="mensaje-error">
-                            <FaExclamationTriangle /> {errores.tutorTelefono}
-                          </div>
-                        )}
-                      </div>
-
-                      <div className="campo-formulario-sus">
-                        <label htmlFor="parentesco">
-                          <FaUser className="campo-icono" /> Parentesco
-                        </label>
-                        <select
-                          id="parentesco"
-                          name="parentesco"
-                          value={formData.parentesco}
-                          onChange={handleChange}
-                          className={errores.parentesco ? "error" : ""}
-                        >
-                          <option value="">Selecciona una opción</option>
-                          <option value="Padre">Padre</option>
-                          <option value="Madre">Madre</option>
-                          <option value="Tutor Legal">Tutor Legal</option>
-                          <option value="Otro">Otro</option>
-                        </select>
-                        {errores.parentesco && (
-                          <div className="mensaje-error">
-                            <FaExclamationTriangle /> {errores.parentesco}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-
-                    <div className="consentimiento-checkbox">
+                  {/* Términos y condiciones - Ancho completo */}
+                  <div className="terminos-seccion">
+                    <div className="terminos-checkbox">
                       <input
                         type="checkbox"
-                        id="consentimientoParental"
-                        name="consentimientoParental"
-                        checked={formData.consentimientoParental}
+                        id="aceptaTerminos"
+                        name="aceptaTerminos"
+                        checked={formData.aceptaTerminos}
                         onChange={handleChange}
                       />
-                      <label htmlFor="consentimientoParental">
-                        Como padre/madre/tutor legal, doy mi consentimiento para que el menor se suscriba a los
-                        servicios del gimnasio y acepto la responsabilidad de supervisar su actividad.
+                      <label htmlFor="aceptaTerminos">
+                        Acepto los{" "}
+                        <a href="/aviso_privacidad" target="_blank" rel="noopener noreferrer">
+                          términos y condiciones
+                        </a>{" "}
+                        y la{" "}
+                        <a href="/aviso_privacidad" target="_blank" rel="noopener noreferrer">
+                          política de privacidad
+                        </a>
                       </label>
                     </div>
-                    {errores.consentimientoParental && (
+                    {errores.aceptaTerminos && (
                       <div className="mensaje-error">
-                        <FaExclamationTriangle /> {errores.consentimientoParental}
+                        <FaExclamationTriangle /> {errores.aceptaTerminos}
                       </div>
                     )}
                   </div>
-                )}
-
-                <div className="terminos-seccion">
-                  <div className="terminos-checkbox">
-                    <input
-                      type="checkbox"
-                      id="aceptaTerminos"
-                      name="aceptaTerminos"
-                      checked={formData.aceptaTerminos}
-                      onChange={handleChange}
-                    />
-                    <label htmlFor="aceptaTerminos">
-                      Acepto los{" "}
-                      <a href="/aviso_privacidad" target="_blank" rel="noopener noreferrer">
-                        términos y condiciones
-                      </a>{" "}
-                      y la{" "}
-                      <a href="/aviso_privacidad" target="_blank" rel="noopener noreferrer">
-                        política de privacidad
-                      </a>
-                    </label>
-                  </div>
-                  {errores.aceptaTerminos && (
-                    <div className="mensaje-error">
-                      <FaExclamationTriangle /> {errores.aceptaTerminos}
-                    </div>
-                  )}
                 </div>
 
                 <div className="suscripcion-acciones">
@@ -710,4 +664,3 @@ const DatosSuscripcion = () => {
 }
 
 export default DatosSuscripcion
-

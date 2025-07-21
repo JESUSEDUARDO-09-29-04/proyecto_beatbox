@@ -29,7 +29,7 @@ const PagoSuscripcion = () => {
   const { theme } = useContext(ThemeContext)
   const [planId, setPlanId] = useState(null)
   const [datosPersonales, setDatosPersonales] = useState(null)
-  const [metodoPago, setMetodoPago] = useState("tarjeta")
+  const [metodoPago, setMetodoPago] = useState("paypal")
   const [formData, setFormData] = useState({
     numeroTarjeta: "",
     nombreTitular: "",
@@ -40,16 +40,25 @@ const PagoSuscripcion = () => {
   const [enviando, setEnviando] = useState(false)
   const [planInfo, setPlanInfo] = useState(null)
 
+  // Verificar autenticación - CORREGIDO
   useEffect(() => {
-      const checarUsuario = async () => {
-        const usuario = await verificarSesion()
+    const checarUsuario = async () => {
+      try {
+        const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error("Timeout")), 5000))
+
+        const usuario = await Promise.race([verificarSesion(), timeoutPromise])
+
         if (!usuario) {
           navigate("/iniciar-sesion")
         }
+      } catch (error) {
+        console.error("Error al verificar usuario:", error)
+        navigate("/iniciar-sesion")
       }
-    
-      checarUsuario()
-    }, [])
+    }
+
+    checarUsuario()
+  }, [navigate])
 
   // Planes de suscripción
   const planes = [
@@ -163,55 +172,8 @@ const PagoSuscripcion = () => {
 
   // Función para validar el formulario
   const validarFormulario = () => {
-    const nuevosErrores = {}
-
-    if (metodoPago === "tarjeta") {
-      // Validar número de tarjeta
-      const numeroSinEspacios = formData.numeroTarjeta.replace(/\s/g, "")
-      if (!numeroSinEspacios) {
-        nuevosErrores.numeroTarjeta = "El número de tarjeta es obligatorio"
-      } else if (numeroSinEspacios.length < 15 || numeroSinEspacios.length > 16) {
-        nuevosErrores.numeroTarjeta = "El número de tarjeta debe tener 15 o 16 dígitos"
-      }
-
-      // Validar nombre del titular
-      if (!formData.nombreTitular.trim()) {
-        nuevosErrores.nombreTitular = "El nombre del titular es obligatorio"
-      } else if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/.test(formData.nombreTitular)) {
-        nuevosErrores.nombreTitular = "El nombre solo debe contener letras"
-      }
-
-      // Validar fecha de expiración
-      if (!formData.fechaExpiracion) {
-        nuevosErrores.fechaExpiracion = "La fecha de expiración es obligatoria"
-      } else if (!/^\d{2}\/\d{2}$/.test(formData.fechaExpiracion)) {
-        nuevosErrores.fechaExpiracion = "Formato inválido (MM/YY)"
-      } else {
-        const [mes, anio] = formData.fechaExpiracion.split("/")
-        const fechaActual = new Date()
-        const anioActual = fechaActual.getFullYear() % 100
-        const mesActual = fechaActual.getMonth() + 1
-
-        if (Number.parseInt(mes) < 1 || Number.parseInt(mes) > 12) {
-          nuevosErrores.fechaExpiracion = "Mes inválido"
-        } else if (
-          Number.parseInt(anio) < anioActual ||
-          (Number.parseInt(anio) === anioActual && Number.parseInt(mes) < mesActual)
-        ) {
-          nuevosErrores.fechaExpiracion = "La tarjeta ha expirado"
-        }
-      }
-
-      // Validar CVV
-      if (!formData.cvv) {
-        nuevosErrores.cvv = "El código de seguridad es obligatorio"
-      } else if (!/^\d{3,4}$/.test(formData.cvv)) {
-        nuevosErrores.cvv = "El CVV debe tener 3 o 4 dígitos"
-      }
-    }
-
-    setErrores(nuevosErrores)
-    return Object.keys(nuevosErrores).length === 0
+    // Como solo tenemos PayPal y Efectivo, no necesitamos validar campos de tarjeta
+    return true
   }
 
   // Función para manejar el envío del formulario
@@ -309,28 +271,10 @@ const PagoSuscripcion = () => {
 
             <div className="metodos-tabs">
               <button
-                className={`metodo-tab ${metodoPago === "tarjeta" ? "activo" : ""}`}
-                onClick={() => cambiarMetodoPago("tarjeta")}
-              >
-                <FaCreditCard /> Tarjeta
-              </button>
-              <button
                 className={`metodo-tab ${metodoPago === "paypal" ? "activo" : ""}`}
                 onClick={() => cambiarMetodoPago("paypal")}
               >
                 <FaPaypal /> PayPal
-              </button>
-              <button
-                className={`metodo-tab ${metodoPago === "applepay" ? "activo" : ""}`}
-                onClick={() => cambiarMetodoPago("applepay")}
-              >
-                <FaApplePay /> Apple Pay
-              </button>
-              <button
-                className={`metodo-tab ${metodoPago === "googlepay" ? "activo" : ""}`}
-                onClick={() => cambiarMetodoPago("googlepay")}
-              >
-                <FaGooglePay /> Google Pay
               </button>
               <button
                 className={`metodo-tab ${metodoPago === "efectivo" ? "activo" : ""}`}
@@ -341,119 +285,17 @@ const PagoSuscripcion = () => {
             </div>
 
             <form className="pago-form" onSubmit={handleSubmit}>
-              {metodoPago === "tarjeta" && (
-                <div className="tarjeta-form">
-                  <div className="campos-grid">
-                    <div className="campo-formulario-sus">
-                      <label htmlFor="numeroTarjeta">
-                        <FaCreditCard className="form-icon-sus" /> Número de Tarjeta
-                      </label>
-                      <input
-                        type="text"
-                        id="numeroTarjeta"
-                        name="numeroTarjeta"
-                        value={formData.numeroTarjeta}
-                        onChange={handleChange}
-                        className={errores.numeroTarjeta ? "error" : ""}
-                        placeholder="0000 0000 0000 0000"
-                      />
-                      {errores.numeroTarjeta && (
-                        <div className="error-mensaje">
-                          <FaExclamationTriangle /> {errores.numeroTarjeta}
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="campo-formulario-sus">
-                      <label htmlFor="nombreTitular">
-                        <FaUser className="form-icon-sus" /> Nombre del Titular
-                      </label>
-                      <input
-                        type="text"
-                        id="nombreTitular"
-                        name="nombreTitular"
-                        value={formData.nombreTitular}
-                        onChange={handleChange}
-                        className={errores.nombreTitular ? "error" : ""}
-                        placeholder="Como aparece en la tarjeta"
-                      />
-                      {errores.nombreTitular && (
-                        <div className="error-mensaje">
-                          <FaExclamationTriangle /> {errores.nombreTitular}
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="form-row tarjeta-detalles">
-                      <div className="campo-formulario-sus">
-                        <label htmlFor="fechaExpiracion">
-                          <FaCalendarAlt className="form-icon-sus" /> Fecha de Expiración
-                        </label>
-                        <input
-                          type="text"
-                          id="fechaExpiracion"
-                          name="fechaExpiracion"
-                          value={formData.fechaExpiracion}
-                          onChange={handleChange}
-                          className={errores.fechaExpiracion ? "error" : ""}
-                          placeholder="MM/YY"
-                        />
-                        {errores.fechaExpiracion && (
-                          <div className="error-mensaje">
-                            <FaExclamationTriangle /> {errores.fechaExpiracion}
-                          </div>
-                        )}
-                      </div>
-
-                      <div className="campo-formulario-sus">
-                        <label htmlFor="cvv">
-                          <FaLock className="form-icon-sus" /> Código de Seguridad
-                        </label>
-                        <input
-                          type="password"
-                          id="cvv"
-                          name="cvv"
-                          value={formData.cvv}
-                          onChange={handleChange}
-                          className={errores.cvv ? "error" : ""}
-                          placeholder="CVV"
-                        />
-                        {errores.cvv && (
-                          <div className="error-mensaje">
-                            <FaExclamationTriangle /> {errores.cvv}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-
               {metodoPago === "paypal" && (
                 <div className="metodo-alternativo">
                   <FaPaypal className="metodo-icono" />
-                  <p>Serás redirigido a PayPal para completar el pago.</p>
-                </div>
-              )}
-
-              {metodoPago === "applepay" && (
-                <div className="metodo-alternativo">
-                  <FaApplePay className="metodo-icono" />
-                  <p>Serás redirigido a Apple Pay para completar el pago.</p>
-                </div>
-              )}
-
-              {metodoPago === "googlepay" && (
-                <div className="metodo-alternativo">
-                  <FaGooglePay className="metodo-icono" />
-                  <p>Serás redirigido a Google Pay para completar el pago.</p>
+                  <p>Serás redirigido a PayPal para completar el pago de forma segura.</p>
                 </div>
               )}
 
               {metodoPago === "efectivo" && (
                 <div className="metodo-alternativo">
                   <FaMoneyBillWave className="metodo-icono" />
-                  <p>Podrás pagar en efectivo en nuestras instalaciones. Se generará un código de referencia.</p>
+                  <p>Podrás pagar en efectivo en nuestras instalaciones. Se generará un código de referencia que deberás presentar en recepción.</p>
                 </div>
               )}
 
@@ -481,4 +323,3 @@ const PagoSuscripcion = () => {
 }
 
 export default PagoSuscripcion
-

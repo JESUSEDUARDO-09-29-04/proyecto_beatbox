@@ -11,13 +11,12 @@ import "./Suscripcion.css"
 import { FaCheck, FaArrowRight } from "react-icons/fa"
 import { verificarSesion } from "../../utils/verificarSesion" // ajusta el path si cambia
 
-
-
 const Suscripcion = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const { theme } = useContext(ThemeContext)
   const [planSeleccionado, setPlanSeleccionado] = useState(null)
+  const [cargandoContinuar, setCargandoContinuar] = useState(false)
 
   // Planes de suscripción
   const planes = [
@@ -74,21 +73,41 @@ const Suscripcion = () => {
     setPlanSeleccionado(id)
   }
 
-  // Función para continuar al siguiente paso
-const continuarProceso = async () => {
-  const usuario = await verificarSesion()
-  if (!usuario) {
-    navigate("/iniciar-sesion", {
-      state: { aviso: "Primero debes iniciar sesión para poder suscribirte." }
-    })
-    return
-  }
+  // Función para continuar al siguiente paso - CORREGIDA
+  const continuarProceso = async () => {
+    if (!planSeleccionado) {
+      alert("Por favor selecciona un plan antes de continuar")
+      return
+    }
 
-  if (planSeleccionado) {
-    navigate(`/suscripcion/datos?plan=${planSeleccionado}`)
-  }
-}
+    setCargandoContinuar(true)
 
+    try {
+      // Agregar timeout para evitar que se quede colgado
+      const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error("Timeout")), 5000))
+
+      const usuario = await Promise.race([verificarSesion(), timeoutPromise])
+
+      if (!usuario) {
+        navigate("/iniciar-sesion", {
+          state: { aviso: "Primero debes iniciar sesión para poder suscribirte." },
+        })
+        return
+      }
+
+      // Si llegamos aquí, el usuario está autenticado
+      navigate(`/suscripcion/datos?plan=${planSeleccionado}`)
+    } catch (error) {
+      console.error("Error al verificar sesión:", error)
+
+      // Si hay error, asumir que no está autenticado y redirigir a login
+      navigate("/iniciar-sesion", {
+        state: { aviso: "Por favor inicia sesión para continuar con la suscripción." },
+      })
+    } finally {
+      setCargandoContinuar(false)
+    }
+  }
 
   return (
     <div className={`contenedor ${theme === "dark" ? "dark" : ""}`}>
@@ -159,8 +178,13 @@ const continuarProceso = async () => {
           <button className="btn btn-volver" onClick={() => navigate("/")}>
             Volver
           </button>
-          <button className="btn btn-continuar" onClick={continuarProceso} disabled={!planSeleccionado}>
-            Continuar <FaArrowRight />
+          <button
+            className="btn btn-continuar"
+            onClick={continuarProceso}
+            disabled={!planSeleccionado || cargandoContinuar}
+          >
+            {cargandoContinuar ? "Verificando..." : "Continuar"}
+            {!cargandoContinuar && <FaArrowRight />}
           </button>
         </div>
       </main>
@@ -171,4 +195,3 @@ const continuarProceso = async () => {
 }
 
 export default Suscripcion
-

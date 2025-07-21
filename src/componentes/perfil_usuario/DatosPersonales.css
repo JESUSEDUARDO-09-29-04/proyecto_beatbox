@@ -18,6 +18,7 @@
   padding: 1rem;
   border-bottom: 1px solid #ddd;
 }
+
 .datos-personales-container {
   width: 100%;
   max-width: 1200px;
@@ -300,4 +301,3 @@
     gap: 15px;
   }
 }
-

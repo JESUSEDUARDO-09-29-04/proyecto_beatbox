@@ -6,7 +6,6 @@ import {
   FaEnvelope,
   FaPhone,
   FaIdCard,
-  FaMapMarkerAlt,
   FaCalendarAlt,
   FaSave,
   FaExclamationTriangle,
@@ -20,9 +19,6 @@ const DatosPersonales = ({ userData }) => {
     apellidos: "",
     email: "",
     telefono: "",
-    direccion: "",
-    ciudad: "",
-    codigoPostal: "",
     fechaNacimiento: "",
     genero: "",
     emergenciaNombre: "",
@@ -32,10 +28,12 @@ const DatosPersonales = ({ userData }) => {
   const [errores, setErrores] = useState({})
   const [guardando, setGuardando] = useState(false)
   const [mensaje, setMensaje] = useState({ texto: "", tipo: "" })
-const getUserName = () => {
-  if (!userData) return ""
-  return userData.nombre || userData.username || userData.usuario || userData.name || ""
-}
+
+  const getUserName = () => {
+    if (!userData) return ""
+    return userData.nombre || userData.username || userData.usuario || userData.name || ""
+  }
+
   // Cargar datos del usuario
   useEffect(() => {
     if (userData) {
@@ -44,9 +42,6 @@ const getUserName = () => {
         apellidos: userData.apellidos || "",
         email: userData.email || "",
         telefono: userData.telefono || "",
-        direccion: userData.direccion || "",
-        ciudad: userData.ciudad || "",
-        codigoPostal: userData.codigoPostal || "",
         fechaNacimiento: userData.fechaNacimiento || "",
         genero: userData.genero || "",
         emergenciaNombre: userData.emergenciaNombre || "",
@@ -246,47 +241,6 @@ const getUserName = () => {
             </div>
 
             <h2>
-              <FaMapMarkerAlt /> Dirección
-            </h2>
-
-            <div className="form-row-f">
-              <div className="form-group full-width">
-                <label htmlFor="direccion">
-                  <FaMapMarkerAlt /> Dirección
-                </label>
-                <input
-                  type="text"
-                  id="direccion"
-                  name="direccion"
-                  value={datosForm.direccion}
-                  onChange={handleChange}
-                />
-              </div>
-            </div>
-
-            <div className="form-row-f">
-              <div className="form-group">
-                <label htmlFor="ciudad">
-                  <FaMapMarkerAlt /> Ciudad
-                </label>
-                <input type="text" id="ciudad" name="ciudad" value={datosForm.ciudad} onChange={handleChange} />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="codigoPostal">
-                  <FaMapMarkerAlt /> Código Postal
-                </label>
-                <input
-                  type="text"
-                  id="codigoPostal"
-                  name="codigoPostal"
-                  value={datosForm.codigoPostal}
-                  onChange={handleChange}
-                />
-              </div>
-            </div>
-
-            <h2>
               <FaIdCard /> Contacto de Emergencia
             </h2>
 
@@ -335,9 +289,9 @@ const getUserName = () => {
         <div className="user-info-container">
           <div className="user-info-card">
             <div className="usuario-info-D">
-                          <FaUser className="usuario-icono-D" />
-                          <span className="usuario-D">{getUserName()}</span>
-          </div>
+              <FaUser className="usuario-icono-D" />
+              <span className="usuario-D">{getUserName()}</span>
+            </div>
 
             <div className="user-info-details">
               <div className="info-item">
@@ -351,12 +305,6 @@ const getUserName = () => {
               <div className="info-item">
                 <FaCalendarAlt className="info-icon" />
                 <span>{datosForm.fechaNacimiento}</span>
-              </div>
-              <div className="info-item">
-                <FaMapMarkerAlt className="info-icon" />
-                <span>
-                  {datosForm.direccion ? `${datosForm.direccion}, ${datosForm.ciudad}` : "Dirección no registrada"}
-                </span>
               </div>
             </div>
           </div>
@@ -378,4 +326,3 @@ const getUserName = () => {
 }
 
 export default DatosPersonales
-

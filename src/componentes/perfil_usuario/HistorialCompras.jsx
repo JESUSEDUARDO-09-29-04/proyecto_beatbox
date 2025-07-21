@@ -12,6 +12,7 @@ import {
   FaCalendarAlt,
   FaExclamationTriangle,
   FaListAlt,
+  FaPaypal,
 } from "react-icons/fa"
 import "./HistorialCompras.css"
 
@@ -20,89 +21,53 @@ const HistorialCompras = ({ userData }) => {
   const [cargando, setCargando] = useState(true)
   const [filtro, setFiltro] = useState("todos")
   const [busqueda, setBusqueda] = useState("")
+  const [error, setError] = useState("")
 
   useEffect(() => {
-    // Simular carga de datos desde una API
-    setTimeout(() => {
-      const comprasSimuladas = [
-        {
-          id: "ORD123456",
-          fecha: "2023-05-10",
-          total: "1,299.00",
-          estado: "Entregado",
-          productos: [
-            {
-              id: 1,
-              nombre: "Proteína Whey - 1kg",
-              cantidad: 1,
-              precio: "599.00",
-              imagen: "/placeholder.svg?height=80&width=80",
-            },
-            {
-              id: 2,
-              nombre: "Guantes de entrenamiento",
-              cantidad: 1,
-              precio: "349.00",
-              imagen: "/placeholder.svg?height=80&width=80",
-            },
-            {
-              id: 3,
-              nombre: "Botella deportiva",
-              cantidad: 2,
-              precio: "179.00",
-              imagen: "/placeholder.svg?height=80&width=80",
-            },
-          ],
-          direccion: "Calle Principal 123, Ciudad",
-          metodoPago: "Tarjeta terminada en 4532",
-        },
-        {
-          id: "ORD123455",
-          fecha: "2023-04-05",
-          total: "899.00",
-          estado: "Entregado",
-          productos: [
-            {
-              id: 4,
-              nombre: "Tenis para entrenamiento",
-              cantidad: 1,
-              precio: "899.00",
-              imagen: "/placeholder.svg?height=80&width=80",
-            },
-          ],
-          direccion: "Calle Principal 123, Ciudad",
-          metodoPago: "PayPal",
-        },
-        {
-          id: "ORD123454",
-          fecha: "2023-03-20",
-          total: "449.00",
-          estado: "Cancelado",
-          productos: [
-            {
-              id: 5,
-              nombre: "Playera deportiva",
-              cantidad: 1,
-              precio: "249.00",
-              imagen: "/placeholder.svg?height=80&width=80",
-            },
-            {
-              id: 6,
-              nombre: "Shorts deportivos",
-              cantidad: 1,
-              precio: "199.00",
-              imagen: "/placeholder.svg?height=80&width=80",
-            },
-          ],
-          direccion: "Calle Principal 123, Ciudad",
-          metodoPago: "Tarjeta terminada en 4532",
-        },
-      ]
-
-      setCompras(comprasSimuladas)
-      setCargando(false)
-    }, 800)
+    cargarHistorialCompras()
   }, [])
+
+  const cargarHistorialCompras = async () => {
+    try {
+      setCargando(true)
+      setError("")
+
+      const response = await fetch(`http://localhost:3000/orders/user/${userData.id}`, {
+        method: "GET",
+        credentials: "include",
+      })
+
+      if (!response.ok) {
+        throw new Error("Error al cargar el historial de compras")
+      }
+
+      const data = await response.json()
+
+      // Formatear los datos para que coincidan con el formato esperado
+      const comprasFormateadas = data.map((order) => ({
+        id: order.id,
+        fecha: new Date(order.fecha_creacion).toLocaleDateString(),
+        total: order.total.toFixed(2),
+        estado: order.estado,
+        productos: order.items.map((item) => ({
+          id: item.id,
+          nombre: item.nombre,
+          cantidad: item.cantidad,
+          precio: item.precio.toFixed(2),
+          imagen: "/placeholder.svg?height=80&width=80", // Podrías obtener esto de la base de datos
+        })),
+        metodoPago: order.metodo_pago === "PayPal" ? "PayPal" : order.metodo_pago,
+        paypalOrderId: order.paypal_order_id,
+      }))
+
+      setCompras(comprasFormateadas)
+    } catch (error) {
+      console.error("Error al cargar historial:", error)
+      setError("Error al cargar el historial de compras")
+    } finally {
+      setCargando(false)
+    }
+  }
 
   const filtrarCompras = () => {
     if (!compras) return []
@@ -111,7 +76,7 @@ const HistorialCompras = ({ userData }) => {
 
     // Filtrar por estado
     if (filtro !== "todos") {
-      comprasFiltradas = comprasFiltradas.filter((compra) => compra.estado.toLowerCase() === filtro)
+      comprasFiltradas = comprasFiltradas.filter((compra) => compra.estado.toLowerCase() === filtro.toLowerCase())
     }
 
     // Filtrar por búsqueda
@@ -119,7 +84,7 @@ const HistorialCompras = ({ userData }) => {
       const terminoBusqueda = busqueda.toLowerCase()
       comprasFiltradas = comprasFiltradas.filter(
         (compra) =>
-          compra.id.toLowerCase().includes(terminoBusqueda) ||
+          compra.id.toString().includes(terminoBusqueda) ||
           compra.productos.some((producto) => producto.nombre.toLowerCase().includes(terminoBusqueda)),
       )
     }
@@ -129,6 +94,7 @@ const HistorialCompras = ({ userData }) => {
 
   const getIconoEstado = (estado) => {
     switch (estado.toLowerCase()) {
+      case "pagado":
       case "entregado":
         return <FaCheckCircle className="estado-icon entregado" />
       case "en camino":
@@ -142,9 +108,16 @@ const HistorialCompras = ({ userData }) => {
     }
   }
 
+  const getIconoMetodoPago = (metodo) => {
+    if (metodo === "PayPal") {
+      return <FaPaypal />
+    }
+    return <FaCreditCard />
+  }
+
   const verDetallePedido = (id) => {
     console.log(`Ver detalle del pedido ${id}`)
-    // Aquí iría la lógica para ver el detalle
+    // Aquí podrías navegar a una página de detalle o abrir un modal
   }
 
   if (cargando) {
@@ -152,6 +125,18 @@ const HistorialCompras = ({ userData }) => {
       <div className="cargando-container">
         <div className="cargando-spinner"></div>
         <p>Cargando historial de compras...</p>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="error-container">
+        <FaExclamationTriangle className="error-icon" />
+        <p>{error}</p>
+        <button onClick={cargarHistorialCompras} className="btn-reintentar">
+          Reintentar
+        </button>
       </div>
     )
   }
@@ -184,6 +169,9 @@ const HistorialCompras = ({ userData }) => {
         <div className="filtro-estados">
           <button className={filtro === "todos" ? "activo" : ""} onClick={() => setFiltro("todos")}>
             Todos
+          </button>
+          <button className={filtro === "pagado" ? "activo" : ""} onClick={() => setFiltro("pagado")}>
+            Pagados
           </button>
           <button className={filtro === "entregado" ? "activo" : ""} onClick={() => setFiltro("entregado")}>
             Entregados
@@ -254,8 +242,9 @@ const HistorialCompras = ({ userData }) => {
 
               <div className="compra-footer">
                 <div className="compra-metodo">
-                  <FaCreditCard />
+                  {getIconoMetodoPago(compra.metodoPago)}
                   <span>{compra.metodoPago}</span>
+                  {compra.paypalOrderId && <span className="paypal-id">ID: {compra.paypalOrderId}</span>}
                 </div>
                 <div className="compra-total">
                   <span className="total-label">Total:</span>
@@ -274,4 +263,3 @@ const HistorialCompras = ({ userData }) => {
 }
 
 export default HistorialCompras
-

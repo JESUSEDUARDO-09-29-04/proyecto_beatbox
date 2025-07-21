@@ -43,6 +43,9 @@ import ConfirmacionSuscripcion from "./componentes/suscripciones/ConfirmacionSus
 import PerfilUsuario from "./componentes/perfil_usuario/PerfilUsuario"
 import PlaylistAdmin from "./componentes/mod_admin/playlist_admin/PlaylistAdmin"
 
+import Checkout from "./componentes/tienda/checkout"
+import Reportes from "./componentes/mod_admin/reportes/reportes-ventas"
+
 const App = () => {
   return (
     <EmpresaProvider> {/* ⬅️ Agregado aquí */}
@@ -107,9 +110,15 @@ const App = () => {
               <Route path="/administrador/incidencias" element={<Administrador />} />
               <Route path="/administrador/redes-sociales" element={<Administrador />} />
               <Route path="/administrador/playlistadmin" element={<Administrador />} />
-              <Route path="/administrador/reportes-ventas" element={<Administrador />} />
+              
               <Route path="/administrador/reportes-usuarios" element={<Administrador />} />
               <Route path="/administrador/reportes-asistencia" element={<Administrador />} />
+
+//////////////////////////////
+              <Route path="/reportes" element={<Reportes />} />
+              <Route path="/administrador/reportes-ventas" element={<Administrador />} />
+              <Route path="/checkout" element={<Checkout />} />
+
 
               <Route path="*" element={<Error404 />} />
               <Route path="/error400" element={<Error400 />} />

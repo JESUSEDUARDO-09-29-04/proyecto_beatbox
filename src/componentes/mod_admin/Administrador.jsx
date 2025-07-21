@@ -34,6 +34,7 @@ import UsuariosAdmin from "../mod_admin/usuarios_admin/UsuariosAdmin"
 import CategoriasAdmin from "../mod_admin/Tienda/Categorias"
 import Productos from "../mod_admin/Tienda/productos"
 import PlaylistAdmin from "../mod_admin/playlist_admin/PlaylistAdmin"
+import Reportes from "../mod_admin/reportes/reportes-ventas"
 
 const Administrador = () => {
   const navigate = useNavigate()
@@ -502,6 +503,7 @@ const Administrador = () => {
               {vistaActual === "playlist" && <PlaylistAdmin />}
               {vistaActual === "tienda-categorias" && <CategoriasAdmin />}
               {vistaActual === "tienda-productos" && <Productos />}
+              {vistaActual === "reportes-ventas" && <Reportes />}
               {/* Aquí se pueden agregar más vistas según sea necesario */}
             </>
           )}
