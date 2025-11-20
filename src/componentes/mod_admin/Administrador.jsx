@@ -28,7 +28,7 @@ import logo from "../../assets/logo.png"
 // Importamos los módulos de administración
 import DocumentosRegulatoriosAdmin from "../mod_admin/documentos_admin/DocumentosRegulatoriosAdmin"
 import EmpresaAdmin from "../mod_admin/empresa_admin/EmpresaAdmin"
-import IncidentesAdmin from "../mod_admin/incidentes_admin/IncidentesAdmin"
+import IncidentesAdmin from "../mod_admin/incidentes_admin/incidentesAdmin"
 import RedesSocialesAdmin from "../mod_admin/redes_sociales_admin/RedesSocialesAdmin"
 import UsuariosAdmin from "../mod_admin/usuarios_admin/UsuariosAdmin"
 import CategoriasAdmin from "../mod_admin/Tienda/Categorias"
