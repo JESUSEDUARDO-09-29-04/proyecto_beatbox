@@ -3,7 +3,7 @@
 import { useState, useEffect, useContext } from "react"
 import { useNavigate } from "react-router-dom"
 import { ThemeContext } from "../../../context/ThemeContext" // Import ThemeContext
-import "./IncidentesAdmin.css"
+import "./incidentesAdmin.css"
 import {
   FaEye,
   FaExclamationTriangle,
