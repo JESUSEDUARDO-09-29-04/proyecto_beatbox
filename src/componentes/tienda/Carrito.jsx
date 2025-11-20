@@ -16,7 +16,7 @@ import {
   FaExclamationTriangle,
 } from "react-icons/fa"
 import { CartContext } from "../../context/CartContext" // Importar el contexto del carrito
-import "./carrito.css"
+import "./Carrito.css"
 
 const Carrito = () => {
   const navigate = useNavigate()
