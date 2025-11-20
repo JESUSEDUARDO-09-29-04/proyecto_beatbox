@@ -67,7 +67,7 @@ export default defineConfig({
             options: { cacheName: 'assets' }
           },
 
-          // API dinámica (productos y categorías)
+          // API dinámica (productos y categorías) - Usar la URL completa del backend en producción
           {
             urlPattern: ({ url }) =>
               url.origin === self.location.origin ||
@@ -140,12 +140,9 @@ export default defineConfig({
     })
   ],
 
+  // Elimina la configuración del proxy, ya no es necesaria en producción
   server: {
-    proxy: {
-      '/productos': { target: 'https://backendbeat-serverbeat.586pa0.easypanel.host', changeOrigin: true, secure: false },
-      '/categorias': { target: 'https://backendbeat-serverbeat.586pa0.easypanel.host', changeOrigin: true, secure: false },
-      '/empresa': { target: 'https://backendbeat-serverbeat.586pa0.easypanel.host', changeOrigin: true, secure: false },
-    }
+    proxy: {}  // Elimina el proxy para producción
   },
 
   base: '/',
