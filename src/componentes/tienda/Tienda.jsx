@@ -67,48 +67,49 @@ const Tienda = () => {
   const { categoria } = useParams()
 
   // Cargar categorías desde la API
+// Cargar categorías
 useEffect(() => {
   const cargarCategorias = async () => {
     try {
-      setCargandoCategorias(true)
-      setError("")
+      setCargandoCategorias(true);
+      setError("");
 
-      const response = await fetch("/categorias", { credentials: "include" })
-      if (!response.ok) throw new Error("Error al cargar categorías")
+      const response = await fetch(`${backendUrl}/categorias`, { credentials: "include" });
+      if (!response.ok) throw new Error("Error al cargar categorías");
 
-      const data = await response.json()
+      const data = await response.json();
 
       // Guardar en localStorage
-      localStorage.setItem("categorias_cache", JSON.stringify(data))
+      localStorage.setItem("categorias_cache", JSON.stringify(data));
 
       const categoriasConIconos = data.map((cat) => ({
         ...cat,
         icono: obtenerIconoCategoria(cat.nombre),
         ruta: "/",
-      }))
-      setCategorias(categoriasConIconos)
+      }));
+      setCategorias(categoriasConIconos);
     } catch (error) {
-      console.warn("Error al cargar categorías:", error.message)
-      const cache = localStorage.getItem("categorias_cache")
+      console.warn("Error al cargar categorías:", error.message);
+      const cache = localStorage.getItem("categorias_cache");
       if (cache) {
-        const data = JSON.parse(cache)
+        const data = JSON.parse(cache);
         const categoriasConIconos = data.map((cat) => ({
           ...cat,
           icono: obtenerIconoCategoria(cat.nombre),
           ruta: "/",
-        }))
-        setCategorias(categoriasConIconos)
-        setError("Mostrando categorías guardadas.")
+        }));
+        setCategorias(categoriasConIconos);
+        setError("Mostrando categorías guardadas.");
       } else {
-        setError("Error al cargar las categorías")
+        setError("Error al cargar las categorías");
       }
     } finally {
-      setCargandoCategorias(false)
+      setCargandoCategorias(false);
     }
-  }
+  };
 
-  cargarCategorias()
-}, [])
+  cargarCategorias();
+}, []);
 
 useEffect(() => {
   const obtenerDatos = async () => {
@@ -158,19 +159,22 @@ useEffect(() => {
   obtenerDatos()
 }, [])
   // Cargar productos desde la API
+const backendUrl = "https://backendbeat-serverbeat.586pa0.easypanel.host";  // URL completa de tu backend
+
+// Cargar productos
 useEffect(() => {
   const cargarProductos = async () => {
     try {
-      setCargandoProductos(true)
-      setError("")
+      setCargandoProductos(true);
+      setError("");
 
-      const response = await fetch("/productos", { credentials: "include" })
-      if (!response.ok) throw new Error("Error al cargar productos")
+      const response = await fetch(`${backendUrl}/productos`, { credentials: "include" });
+      if (!response.ok) throw new Error("Error al cargar productos");
 
-      const data = await response.json()
+      const data = await response.json();
 
       // Guardar en localStorage
-      localStorage.setItem("productos_cache", JSON.stringify(data))
+      localStorage.setItem("productos_cache", JSON.stringify(data));
 
       const productosFormateados = data.map((producto) => ({
         ...producto,
@@ -182,14 +186,14 @@ useEffect(() => {
         caracteristicas: producto.caracteristicas ? producto.caracteristicas.split("\n") : [],
         categoria: producto.categoria ? producto.categoria.nombre || producto.categoria : null,
         subcategorias: producto.subcategorias || [],
-      }))
+      }));
 
-      setProductos(productosFormateados)
+      setProductos(productosFormateados);
     } catch (error) {
-      console.warn("Error al cargar productos:", error.message)
-      const cache = localStorage.getItem("productos_cache")
+      console.warn("Error al cargar productos:", error.message);
+      const cache = localStorage.getItem("productos_cache");
       if (cache) {
-        const data = JSON.parse(cache)
+        const data = JSON.parse(cache);
         const productosFormateados = data.map((producto) => ({
           ...producto,
           precio: `$${Number.parseFloat(producto.precio).toFixed(2)} MXN`,
@@ -200,19 +204,20 @@ useEffect(() => {
           caracteristicas: producto.caracteristicas ? producto.caracteristicas.split("\n") : [],
           categoria: producto.categoria ? producto.categoria.nombre || producto.categoria : null,
           subcategorias: producto.subcategorias || [],
-        }))
-        setProductos(productosFormateados)
-        setError("Mostrando productos guardados en caché.")
+        }));
+        setProductos(productosFormateados);
+        setError("Mostrando productos guardados en caché.");
       } else {
-        setError("No hay productos disponibles sin conexión.")
+        setError("No hay productos disponibles sin conexión.");
       }
     } finally {
-      setCargandoProductos(false)
+      setCargandoProductos(false);
     }
-  }
+  };
 
-  cargarProductos()
-}, [])
+  cargarProductos();
+}, []);
+
   // Función para obtener icono según la categoría
   const obtenerIconoCategoria = (nombreCategoria) => {
     const nombre = nombreCategoria.toLowerCase()
