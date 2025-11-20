@@ -29,7 +29,7 @@ const IncidentesAdmin = () => {
   useEffect(() => {
     const verificarRol = async () => {
       try {
-        const userResponse = await fetch("http://localhost:3000/auth/validate-user", {
+        const userResponse = await fetch("https://backendbeat-serverbeat.586pa0.easypanel.host/auth/validate-user", {
           method: "GET",
           credentials: "include",
         })
@@ -54,7 +54,7 @@ const IncidentesAdmin = () => {
     const cargarUsuarios = async () => {
       setCargando(true)
       try {
-        const response = await fetch("http://localhost:3000/usuarios", {
+        const response = await fetch("https://backendbeat-serverbeat.586pa0.easypanel.host/usuarios", {
           method: "GET",
           credentials: "include",
         })
@@ -81,7 +81,7 @@ const IncidentesAdmin = () => {
     setMensajeError("")
 
     try {
-      const response = await fetch(`http://localhost:3000/incident/${usuario.id}`, {
+      const response = await fetch(`https://backendbeat-serverbeat.586pa0.easypanel.host/incident/${usuario.id}`, {
         method: "GET",
         credentials: "include",
       })

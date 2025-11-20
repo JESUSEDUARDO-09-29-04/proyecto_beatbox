@@ -482,7 +482,7 @@ const ProductosAdmin = () => {
   useEffect(() => {
     const verificarRol = async () => {
       try {
-        const userResponse = await fetch("http://localhost:3000/auth/validate-user", {
+        const userResponse = await fetch("https://backendbeat-serverbeat.586pa0.easypanel.host/auth/validate-user", {
           method: "GET",
           credentials: "include",
         })
@@ -560,7 +560,7 @@ const ProductosAdmin = () => {
       setCargando(true)
       setError(null)
 
-      const response = await fetch("http://localhost:3000/productos", {
+      const response = await fetch("https://backendbeat-serverbeat.586pa0.easypanel.host/productos", {
         credentials: "include",
       })
 
@@ -585,7 +585,7 @@ const ProductosAdmin = () => {
       setCargando(true)
       setError(null)
 
-      const response = await fetch("http://localhost:3000/categorias", {
+      const response = await fetch("https://backendbeat-serverbeat.586pa0.easypanel.host/categorias", {
         credentials: "include",
       })
 
@@ -606,7 +606,7 @@ const ProductosAdmin = () => {
   // Función para cargar todas las subcategorías
   const cargarTodasLasSubcategorias = async () => {
     try {
-      const response = await fetch("http://localhost:3000/subcategorias", {
+      const response = await fetch("https://backendbeat-serverbeat.586pa0.easypanel.host/subcategorias", {
         credentials: "include",
       })
 
@@ -624,7 +624,7 @@ const ProductosAdmin = () => {
   // Función para cargar subcategorías por categoría
   const cargarSubcategoriasPorCategoria = async (categoriaId) => {
     try {
-      const response = await fetch(`http://localhost:3000/subcategorias/by-categoria/${categoriaId}`, {
+      const response = await fetch(`https://backendbeat-serverbeat.586pa0.easypanel.host/subcategorias/by-categoria/${categoriaId}`, {
         credentials: "include",
       })
 
@@ -802,10 +802,10 @@ const ProductosAdmin = () => {
 
       let url, method
       if (modoEdicionProducto) {
-        url = `http://localhost:3000/productos/${formularioProducto.id}`
+        url = `https://backendbeat-serverbeat.586pa0.easypanel.host/productos/${formularioProducto.id}`
         method = "PUT"
       } else {
-        url = "http://localhost:3000/productos"
+        url = "https://backendbeat-serverbeat.586pa0.easypanel.host/productos"
         method = "POST"
       }
 
@@ -863,7 +863,7 @@ const ProductosAdmin = () => {
       setCargando(true)
       setError(null)
 
-      const response = await fetch(`http://localhost:3000/productos/${productoSeleccionado.id}`, {
+      const response = await fetch(`https://backendbeat-serverbeat.586pa0.easypanel.host/productos/${productoSeleccionado.id}`, {
         method: "DELETE",
         credentials: "include",
       })

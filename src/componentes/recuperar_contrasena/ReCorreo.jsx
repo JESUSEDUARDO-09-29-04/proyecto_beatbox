@@ -87,7 +87,7 @@ const RecuperarContrasenaCorreo = () => {
 
       // Código real para cuando se implemente la API
 
-      const response = await fetch('http://localhost:3000/auth/forgot/password', {
+      const response = await fetch('https://backendbeat-serverbeat.586pa0.easypanel.host/auth/forgot/password', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

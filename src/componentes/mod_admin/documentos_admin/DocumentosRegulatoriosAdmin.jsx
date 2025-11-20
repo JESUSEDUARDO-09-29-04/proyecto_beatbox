@@ -27,7 +27,7 @@ const DocumentosRegulatoriosAdmin = () => {
   useEffect(() => {
     const verificarRol = async () => {
       try {
-        const userResponse = await fetch("http://localhost:3000/auth/validate-user", {
+        const userResponse = await fetch("https://backendbeat-serverbeat.586pa0.easypanel.host/auth/validate-user", {
           method: "GET",
           credentials: "include", // Incluye las cookies en la solicitud
         })
@@ -64,7 +64,7 @@ const DocumentosRegulatoriosAdmin = () => {
     setCargando(true)
     setError("")
     try {
-      const response = await fetch("http://localhost:3000/documentos", {
+      const response = await fetch("https://backendbeat-serverbeat.586pa0.easypanel.host/documentos", {
         method: "GET",
         credentials: "include",
       })
@@ -118,7 +118,7 @@ const DocumentosRegulatoriosAdmin = () => {
   const handleFormSubmitCrear = async (e) => {
     e.preventDefault()
     try {
-      const response = await fetch("http://localhost:3000/documentos", {
+      const response = await fetch("https://backendbeat-serverbeat.586pa0.easypanel.host/documentos", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formDataCrear),
@@ -143,7 +143,7 @@ const DocumentosRegulatoriosAdmin = () => {
   const handleFormSubmitEditar = async (e) => {
     e.preventDefault()
     try {
-      const response = await fetch(`http://localhost:3000/documentos/${documentoId}`, {
+      const response = await fetch(`https://backendbeat-serverbeat.586pa0.easypanel.host/documentos/${documentoId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formDataEditar),
@@ -169,7 +169,7 @@ const DocumentosRegulatoriosAdmin = () => {
     if (!confirmar) return
 
     try {
-      const response = await fetch(`http://localhost:3000/documentos/${id}`, {
+      const response = await fetch(`https://backendbeat-serverbeat.586pa0.easypanel.host/documentos/${id}`, {
         method: "DELETE",
         credentials: "include",
       })

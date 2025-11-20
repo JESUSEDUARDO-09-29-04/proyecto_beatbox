@@ -7,7 +7,7 @@ const Productos = () => {
   const navigate = useNavigate(); // 📌 Para redirigir si hay error
 
   useEffect(() => {
-    fetch('https://api.ejemplo.com/productos')  // URL de tu API
+    fetch('http://api.ejemplo.com/productos')  // URL de tu API
       .then(response => {
         if (!response.ok) {
           if (response.status === 400) navigate('/error-400'); // 🚨 Error 400

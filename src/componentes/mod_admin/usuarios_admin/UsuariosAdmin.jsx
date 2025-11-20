@@ -29,7 +29,7 @@ const UsuariosAdmin = () => {
   useEffect(() => {
     const obtenerCSRF = async () => {
       try {
-        const response = await fetch("http://localhost:3000/auth/csrf-token", {
+        const response = await fetch("https://backendbeat-serverbeat.586pa0.easypanel.host/auth/csrf-token", {
           method: "GET",
           credentials: "include",
         })
@@ -45,7 +45,7 @@ const UsuariosAdmin = () => {
   useEffect(() => {
     const cargarUsuarios = async () => {
       try {
-        const response = await fetch("http://localhost:3000/usuarios", {
+        const response = await fetch("https://backendbeat-serverbeat.586pa0.easypanel.host/usuarios", {
           method: "GET",
           credentials: "include",
         })
@@ -82,7 +82,7 @@ const UsuariosAdmin = () => {
     if (confirmacion !== "ELIMINAR") return
 
     try {
-      const response = await fetch(`http://localhost:3000/usuarios/${userId}`, {
+      const response = await fetch(`https://backendbeat-serverbeat.586pa0.easypanel.host/usuarios/${userId}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -108,7 +108,7 @@ const UsuariosAdmin = () => {
 
   const toggleBloqueoUsuario = async (userId, bloqueado) => {
     try {
-      const response = await fetch(`http://localhost:3000/usuarios/bloquear/${userId}`, {
+      const response = await fetch(`https://backendbeat-serverbeat.586pa0.easypanel.host/usuarios/bloquear/${userId}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -167,7 +167,7 @@ const UsuariosAdmin = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:3000/auth/registro", {
+      const response = await fetch("https://backendbeat-serverbeat.586pa0.easypanel.host/auth/registro", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -206,7 +206,7 @@ const UsuariosAdmin = () => {
     if (!editingUser || !newRole) return
 
     try {
-      const response = await fetch(`http://localhost:3000/usuarios/${editingUser.id}/role`, {
+      const response = await fetch(`https://backendbeat-serverbeat.586pa0.easypanel.host/usuarios/${editingUser.id}/role`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",

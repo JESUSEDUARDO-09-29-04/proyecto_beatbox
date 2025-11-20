@@ -80,7 +80,7 @@ const VerificarCorreo = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:3000/auth/verify/otp/code", {
+      const response = await fetch("https://backendbeat-serverbeat.586pa0.easypanel.host/auth/verify/otp/code", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

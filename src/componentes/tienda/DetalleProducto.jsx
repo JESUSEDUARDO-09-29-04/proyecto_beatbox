@@ -2,11 +2,25 @@
 
 import { useState, useEffect, useContext } from "react"
 import { useParams, useNavigate, useLocation } from "react-router-dom"
-import { FaStar, FaRegStar, FaShoppingCart, FaBolt, FaArrowLeft, FaCheck } from "react-icons/fa"
+import {
+  FaStar,
+  FaRegStar,
+  FaShoppingCart,
+  FaBolt,
+  FaArrowLeft,
+  FaCheck,
+  FaUser,
+  FaAngleDown,
+  FaDumbbell,
+  FaTshirt,
+  FaHeadphones,
+  FaFlask,
+} from "react-icons/fa"
 import HeaderH from "../HeaderH"
 import FooterH from "../FooterH"
 import Breadcrumbs from "../Breadcrumbs"
 import { CartContext } from "../../context/CartContext"
+import { ThemeContext } from "../../context/ThemeContext"
 import "./DetalleProducto.css"
 
 const DetalleProducto = () => {
@@ -15,78 +29,198 @@ const DetalleProducto = () => {
   const location = useLocation()
   const [producto, setProducto] = useState(null)
   const [productosRelacionados, setProductosRelacionados] = useState([])
+  const [productosRecomendados, setProductosRecomendados] = useState([])
   const [cargando, setCargando] = useState(true)
+  const [cargandoRecomendaciones, setCargandoRecomendaciones] = useState(false)
   const [imagenPrincipal, setImagenPrincipal] = useState("")
   const [cantidad, setCantidad] = useState(1)
   const [agregadoAlCarrito, setAgregadoAlCarrito] = useState(false)
   const [favorito, setFavorito] = useState(false)
   const [pestanaActiva, setPestanaActiva] = useState("descripcion")
 
-  // Obtener el contexto del carrito
-  const { addToCart } = useContext(CartContext)
+  // Estados para el menú de tienda
+  const [menuCategoriasAbierto, setMenuCategoriasAbierto] = useState(false)
+  const [busqueda, setBusqueda] = useState("")
+  const [categorias, setCategorias] = useState([])
+  const [cargandoCategorias, setCargandoCategorias] = useState(true)
 
-  // Cargar producto desde la API
+  // Obtener el contexto del carrito y tema
+  const { addToCart, getCartItemsCount } = useContext(CartContext)
+  const { theme } = useContext(ThemeContext)
+
+  // Función para sanitizar entrada del usuario
+  const sanitizeInput = (input) => {
+    return input
+      .replace(/(<([^>]+)>)/gi, "")
+      .replace(/['";$%&()=+]/g, "")
+      .trim()
+  }
+
+  // Función para obtener icono según la categoría
+  const obtenerIconoCategoria = (nombreCategoria) => {
+    const nombre = nombreCategoria.toLowerCase()
+    if (nombre.includes("suplementos")) return <FaFlask />
+    if (nombre.includes("ropa")) return <FaTshirt />
+    if (nombre.includes("entrenamiento")) return <FaDumbbell />
+    if (nombre.includes("tecnología")) return <FaHeadphones />
+    return <FaFlask />
+  }
+
+  // Cargar categorías desde la API
   useEffect(() => {
-    const cargarProducto = async () => {
+    const cargarCategorias = async () => {
       try {
-        setCargando(true)
+        setCargandoCategorias(true)
 
-        // Si el producto viene en el state de location, usarlo
-        if (location.state && location.state.producto) {
-          const productoFromState = location.state.producto
-          setProducto(productoFromState)
-          setImagenPrincipal(productoFromState.imagen)
-          await cargarProductosRelacionados(productoFromState)
-          setCargando(false)
-          return
-        }
-
-        // Si no, cargar desde la API
-        const response = await fetch(`http://localhost:3000/productos/${id}`, {
+        const response = await fetch("https://backendbeat-serverbeat.586pa0.easypanel.host/categorias", {
           method: "GET",
           credentials: "include",
         })
 
-        if (!response.ok) {
-          throw new Error("Producto no encontrado")
+        if (response.ok) {
+          const data = await response.json()
+
+          // Mapear categorías con iconos
+          const categoriasConIconos = data.map((cat) => ({
+            ...cat,
+            icono: obtenerIconoCategoria(cat.nombre),
+            ruta: "/",
+          }))
+
+          setCategorias(categoriasConIconos)
         }
-
-        const data = await response.json()
-
-        // Formatear el producto
-        const productoFormateado = {
-          ...data,
-          precio: `$${Number.parseFloat(data.precio).toFixed(2)} MXN`,
-          precioNumerico: Number.parseFloat(data.precio),
-          imagen: data.imagen || "/placeholder.svg?height=400&width=400",
-          calificacion: data.calificacion || 5,
-          descuento: data.descuento > 0 ? `${data.descuento}%` : null,
-          caracteristicas: data.caracteristicas ? data.caracteristicas.split("\n") : [],
-          imagenes: data.imagenes ? data.imagenes.split(",") : [data.imagen || "/placeholder.svg?height=400&width=400"],
-          // Asegurar que la categoría tenga el formato correcto
-          categoria: data.categoria ? data.categoria.nombre || data.categoria : null,
-          // Manejar subcategorías como array de objetos
-          subcategorias: data.subcategorias || [],
-        }
-
-        setProducto(productoFormateado)
-        setImagenPrincipal(productoFormateado.imagen)
-        await cargarProductosRelacionados(productoFormateado)
       } catch (error) {
-        console.error("Error al cargar producto:", error)
-        setProducto(null)
+        console.error("Error al cargar categorías:", error)
       } finally {
-        setCargando(false)
+        setCargandoCategorias(false)
       }
     }
 
-    cargarProducto()
-  }, [id, location.state])
+    cargarCategorias()
+  }, [])
+
+  // Cargar recomendaciones basadas en el producto actual
+  const cargarRecomendaciones = async (productoActual) => {
+    try {
+      setCargandoRecomendaciones(true)
+
+      const response = await fetch("https://backendbeat-serverbeat.586pa0.easypanel.host/recommendation", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          producto: productoActual.nombre,
+        }),
+      })
+
+      if (response.ok) {
+        const recomendaciones = await response.json()
+
+        // Formatear las recomendaciones para que tengan el mismo formato que los productos
+        const recomendacionesFormateadas = recomendaciones.map((rec) => ({
+          ...rec,
+          precio: `$${Number.parseFloat(rec.precio).toFixed(2)} MXN`,
+          precioNumerico: Number.parseFloat(rec.precio),
+          imagen: rec.imagen || "/placeholder.svg?height=180&width=180",
+          descuento: rec.descuento > 0 ? `${rec.descuento}%` : null,
+          // Agregar información de confianza y lift si está disponible
+          confianza: rec.confidence,
+          lift: rec.lift,
+        }))
+
+        setProductosRecomendados(recomendacionesFormateadas)
+      } else {
+        console.warn("No se pudieron cargar las recomendaciones")
+        setProductosRecomendados([])
+      }
+    } catch (error) {
+      console.error("Error al cargar recomendaciones:", error)
+      setProductosRecomendados([])
+    } finally {
+      setCargandoRecomendaciones(false)
+    }
+  }
+
+  // Cargar producto desde la API
+  useEffect(() => {
+  const cargarProducto = async () => {
+    try {
+      setCargando(true);
+
+      // ✅ Si el producto viene desde la navegación (state)
+      if (location.state && location.state.producto) {
+        const productoFromState = location.state.producto;
+        setProducto(productoFromState);
+        setImagenPrincipal(productoFromState.imagen);
+
+        // 🧩 Guardar en cache local
+        localStorage.setItem(`producto_${productoFromState.id}`, JSON.stringify(productoFromState));
+
+        await cargarProductosRelacionados(productoFromState);
+        await cargarRecomendaciones(productoFromState);
+        setCargando(false);
+        return;
+      }
+
+      // ✅ Intentar cargar desde la API
+      const response = await fetch(`/productos/${id}`, {
+        method: "GET",
+        credentials: "include",
+      });
+
+      if (!response.ok) throw new Error("Error al cargar el producto");
+
+      const data = await response.json();
+
+      const productoFormateado = {
+        ...data,
+        precio: `$${Number.parseFloat(data.precio).toFixed(2)} MXN`,
+        precioNumerico: Number.parseFloat(data.precio),
+        imagen: data.imagen || "/placeholder.svg?height=400&width=400",
+        calificacion: data.calificacion || 5,
+        descuento: data.descuento > 0 ? `${data.descuento}%` : null,
+        caracteristicas: data.caracteristicas ? data.caracteristicas.split("\n") : [],
+        imagenes: data.imagenes
+          ? data.imagenes.split(",")
+          : [data.imagen || "/placeholder.svg?height=400&width=400"],
+        categoria: data.categoria ? data.categoria.nombre || data.categoria : null,
+        subcategorias: data.subcategorias || [],
+      };
+
+      setProducto(productoFormateado);
+      setImagenPrincipal(productoFormateado.imagen);
+
+      // ✅ Guardar en cache local
+      localStorage.setItem(`producto_${id}`, JSON.stringify(productoFormateado));
+
+      await cargarProductosRelacionados(productoFormateado);
+      await cargarRecomendaciones(productoFormateado);
+    } catch (error) {
+      console.warn("Error o sin conexión, buscando en caché local:", error.message);
+
+      // 🧩 Intentar cargar desde el caché local
+      const cache = localStorage.getItem(`producto_${id}`);
+      if (cache) {
+        const productoGuardado = JSON.parse(cache);
+        setProducto(productoGuardado);
+        setImagenPrincipal(productoGuardado.imagen);
+      } else {
+        setProducto(null);
+      }
+    } finally {
+      setCargando(false);
+    }
+  };
+
+  cargarProducto();
+}, [id, location.state]);
 
   // Cargar productos relacionados
   const cargarProductosRelacionados = async (productoActual) => {
     try {
-      const response = await fetch("http://localhost:3000/productos", {
+      const response = await fetch("https://backendbeat-serverbeat.586pa0.easypanel.host/productos", {
         method: "GET",
         credentials: "include",
       })
@@ -143,6 +277,32 @@ const DetalleProducto = () => {
     }
   }
 
+  // Alternar visibilidad del menú de categorías
+  const toggleMenuCategorias = () => {
+    setMenuCategoriasAbierto(!menuCategoriasAbierto)
+  }
+
+  // Redirigir al hacer clic en una categoría
+  const manejarClickCategoria = (categoria) => {
+    setMenuCategoriasAbierto(false)
+    navigate(`/tienda/${categoria.toLowerCase().replace(/\s+/g, "-")}`)
+  }
+
+  // Función para manejar el clic en el icono del carrito
+  const irAlCarrito = () => {
+    navigate("/carrito")
+  }
+
+  // Manejar búsqueda
+  const manejarBusqueda = (e) => {
+    if (e.key === "Enter" && busqueda.trim()) {
+      navigate(`/tienda?search=${encodeURIComponent(busqueda)}`)
+    }
+  }
+
+  // Obtener el número de productos en el carrito
+  const cartItemsCount = getCartItemsCount()
+
   // Manejar cambio de cantidad
   const cambiarCantidad = (valor) => {
     const nuevaCantidad = cantidad + valor
@@ -164,15 +324,14 @@ const DetalleProducto = () => {
     if (producto) {
       const productoParaCarrito = {
         ...producto,
-        cantidad: cantidad,
+        existencia: producto.existencia || producto.stock || 999,
+        stock: producto.existencia || producto.stock || 999,
       }
 
-      addToCart(productoParaCarrito)
+      addToCart(productoParaCarrito, cantidad)
 
-      // Mostrar confirmación visual
       setAgregadoAlCarrito(true)
 
-      // Después de un tiempo, quitar la confirmación visual
       setTimeout(() => {
         setAgregadoAlCarrito(false)
       }, 2000)
@@ -220,14 +379,14 @@ const DetalleProducto = () => {
     setFavorito(!favorito)
   }
 
-  // Ir a un producto relacionado
-  const verProductoRelacionado = (producto) => {
+  // Ir a un producto relacionado o recomendado
+  const verProducto = (producto) => {
     navigate(`/detalle-producto/${producto.id}`, { state: { producto } })
   }
 
   if (cargando) {
     return (
-      <div className="contenedor-detalle-producto">
+      <div className={`contenedor-detalle-producto ${theme === "dark" ? "dark" : ""}`}>
         <HeaderH />
         <div className="breadcrumb-container">
           <Breadcrumbs />
@@ -243,7 +402,7 @@ const DetalleProducto = () => {
 
   if (!producto) {
     return (
-      <div className="contenedor-detalle-producto">
+      <div className={`contenedor-detalle-producto ${theme === "dark" ? "dark" : ""}`}>
         <HeaderH />
         <div className="breadcrumb-container">
           <Breadcrumbs />
@@ -261,11 +420,48 @@ const DetalleProducto = () => {
   }
 
   return (
-    <div className="contenedor-detalle-producto">
+    <div className={`contenedor-detalle-producto ${theme === "dark" ? "dark" : ""}`}>
       <HeaderH />
 
       <div className="breadcrumb-container">
         <Breadcrumbs />
+      </div>
+
+      {/* Menú de Categorías y Búsqueda */}
+      <div className="menu-tienda">
+        <div className="categorias-container">
+          <button className={`btn-categorias ${menuCategoriasAbierto ? "activo" : ""}`} onClick={toggleMenuCategorias}>
+            Categorías <FaAngleDown className={menuCategoriasAbierto ? "rotate" : ""} />
+          </button>
+
+          <div className={`categorias-dropdown ${menuCategoriasAbierto ? "visible" : ""}`}>
+            {categorias.map((cat) => (
+              <button key={cat.id} className="categoria-opcion" onClick={() => manejarClickCategoria(cat.nombre)}>
+                {cat.icono} {cat.nombre}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Barra de búsqueda */}
+        <div className="barra-busqueda">
+          <input
+            type="text"
+            placeholder="Buscar Productos..."
+            value={busqueda}
+            onChange={(e) => setBusqueda(sanitizeInput(e.target.value))}
+            onKeyPress={manejarBusqueda}
+          />
+        </div>
+
+        <div className="iconos-menu">
+          <div className="carrito-container">
+            <FaShoppingCart className="icono" onClick={irAlCarrito} style={{ cursor: "pointer" }} />
+            {/* MODIFICACIÓN: Mostrar el contador siempre */}
+            <span className="carrito-contador">{cartItemsCount}</span>
+          </div>
+          <FaUser className="icono" />
+        </div>
       </div>
 
       <div className="contenido-detalle">
@@ -397,11 +593,11 @@ const DetalleProducto = () => {
                 >
                   {agregadoAlCarrito ? (
                     <>
-                      <FaCheck /> Agregado al carrito
+                      <FaCheck /> Agregado al carrito ({cantidad})
                     </>
                   ) : (
                     <>
-                      <FaShoppingCart /> Agregar al carrito
+                      <FaShoppingCart /> Agregar {cantidad} al carrito
                     </>
                   )}
                 </button>
@@ -443,6 +639,63 @@ const DetalleProducto = () => {
           </div>
         </div>
 
+        {/* Productos recomendados - Nueva sección */}
+        {productosRecomendados.length > 0 && (
+          <div className="productos-recomendados">
+            <h2 className="titulo-recomendados">
+              Productos recomendados para ti
+              {cargandoRecomendaciones && <span className="cargando-texto"> (Cargando...)</span>}
+            </h2>
+            <p className="subtitulo-recomendados">Basado en análisis de compras y preferencias de otros usuarios</p>
+
+            <div className="grid-recomendados">
+              {productosRecomendados.map((productoRec) => (
+                <div key={productoRec.id} className="tarjeta-recomendado" onClick={() => verProducto(productoRec)}>
+                  {productoRec.descuento && (
+                    <div className="etiqueta-descuento-recomendado">{productoRec.descuento}</div>
+                  )}
+
+                  {/* Indicador de confianza de la recomendación */}
+                  {productoRec.confianza && (
+                    <div className="indicador-confianza">
+                      <span className="confianza-valor">{Math.round(productoRec.confianza * 100)}% match</span>
+                    </div>
+                  )}
+
+                  <img
+                    src={productoRec.imagen || "/placeholder.svg"}
+                    alt={productoRec.nombre}
+                    className="imagen-recomendado"
+                  />
+                  <h3 className="nombre-recomendado">{productoRec.nombre}</h3>
+                  <p className="precio-recomendado">{productoRec.precio}</p>
+
+                  <div className="acciones-recomendado">
+                    <button
+                      className="btn-agregar-recomendado"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        addToCart(productoRec, 1)
+                      }}
+                    >
+                      Agregar al carrito
+                    </button>
+                    <button
+                      className="btn-ver-recomendado"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        verProducto(productoRec)
+                      }}
+                    >
+                      Ver detalles
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Productos relacionados */}
         {productosRelacionados.length > 0 && (
           <div className="productos-relacionados">
@@ -450,11 +703,7 @@ const DetalleProducto = () => {
 
             <div className="grid-relacionados">
               {productosRelacionados.map((productoRel) => (
-                <div
-                  key={productoRel.id}
-                  className="tarjeta-relacionado"
-                  onClick={() => verProductoRelacionado(productoRel)}
-                >
+                <div key={productoRel.id} className="tarjeta-relacionado" onClick={() => verProducto(productoRel)}>
                   {productoRel.descuento && (
                     <div className="etiqueta-descuento-relacionado">{productoRel.descuento}</div>
                   )}
@@ -469,7 +718,7 @@ const DetalleProducto = () => {
                     className="btn-agregar-relacionado"
                     onClick={(e) => {
                       e.stopPropagation()
-                      addToCart(productoRel)
+                      addToCart(productoRel, 1)
                     }}
                   >
                     Agregar al carrito

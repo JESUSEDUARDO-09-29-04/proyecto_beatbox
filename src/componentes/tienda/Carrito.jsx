@@ -13,6 +13,7 @@ import {
   FaMinus,
   FaShoppingCart,
   FaExclamationCircle,
+  FaExclamationTriangle,
 } from "react-icons/fa"
 import { CartContext } from "../../context/CartContext" // Importar el contexto del carrito
 import "./carrito.css"
@@ -20,10 +21,19 @@ import "./carrito.css"
 const Carrito = () => {
   const navigate = useNavigate()
   const [cargando, setCargando] = useState(true)
+  const [stockWarnings, setStockWarnings] = useState({}) // Para mostrar advertencias de stock
 
   // Obtener el contexto del carrito
-  const { cartItems, updateQuantity, removeFromCart, clearCart, getSubtotal, getDiscounts, getTotal } =
-    useContext(CartContext)
+  const {
+    cartItems,
+    updateQuantity,
+    removeFromCart,
+    clearCart,
+    getSubtotal,
+    getDiscounts,
+    getTotal,
+    getAvailableStock,
+  } = useContext(CartContext)
 
   // Simular carga inicial
   useEffect(() => {
@@ -31,6 +41,18 @@ const Carrito = () => {
       setCargando(false)
     }, 800)
   }, [])
+
+  // Verificar stock al cargar el componente
+  useEffect(() => {
+    const warnings = {}
+    cartItems.forEach((item) => {
+      const availableStock = getAvailableStock(item.id)
+      if (item.cantidad > availableStock) {
+        warnings[item.id] = `Solo hay ${availableStock} unidades disponibles`
+      }
+    })
+    setStockWarnings(warnings)
+  }, [cartItems, getAvailableStock])
 
   // Formatear precio
   const formatearPrecio = (precio) => {
@@ -46,8 +68,42 @@ const Carrito = () => {
 
   // Proceder al pago
   const procederAlPago = () => {
-    // Aquí normalmente guardarías el estado del carrito y redirigirías a la página de pago
+    // Verificar que no haya problemas de stock antes de proceder
+    const hasStockIssues = Object.keys(stockWarnings).length > 0
+    if (hasStockIssues) {
+      alert("Por favor, ajusta las cantidades de los productos que exceden el stock disponible antes de continuar.")
+      return
+    }
+
     navigate("/checkout")
+  }
+
+  const actualizarCantidad = (itemId, productId, newQuantity) => {
+    const quantityToUpdate = Math.max(1, newQuantity)
+    const availableStock = getAvailableStock(productId)
+
+    if (quantityToUpdate > availableStock) {
+      setStockWarnings((prev) => ({
+        ...prev,
+        [productId]: `Solo hay ${availableStock} unidades disponibles. Se ajustó la cantidad.`,
+      }))
+      updateQuantity(itemId, availableStock)
+
+      setTimeout(() => {
+        setStockWarnings((prev) => {
+          const newWarnings = { ...prev }
+          delete newWarnings[productId]
+          return newWarnings
+        })
+      }, 3000)
+    } else {
+      setStockWarnings((prev) => {
+        const newWarnings = { ...prev }
+        delete newWarnings[productId]
+        return newWarnings
+      })
+      updateQuantity(itemId, quantityToUpdate)
+    }
   }
 
   return (
@@ -88,56 +144,76 @@ const Carrito = () => {
                 <div className="columna-acciones">Acciones</div>
               </div>
 
-              {cartItems.map((producto) => (
-                <div key={producto.id} className="fila-producto">
-                  <div className="columna-producto">
-                    <img
-                      src={producto.imagen || "/placeholder.svg"}
-                      alt={producto.nombre}
-                      className="imagen-producto-carrito"
-                    />
-                    <div className="detalles-producto">
-                      <h3 className="nombre-producto-carrito">{producto.nombre}</h3>
-                      {producto.descuento && (
-                        <span className="etiqueta-descuento-carrito">{producto.descuento} de descuento</span>
+              {cartItems.map((producto) => {
+                const availableStock = getAvailableStock(producto.id)
+                const hasStockWarning = stockWarnings[producto.id]
+
+                return (
+                  <div key={producto.id} className="fila-producto">
+                    <div className="columna-producto">
+                      <img
+                        src={producto.imagen || "/placeholder.svg"}
+                        alt={producto.nombre}
+                        className="imagen-producto-carrito"
+                      />
+                      <div className="detalles-producto">
+                        <h3 className="nombre-producto-carrito">{producto.nombre}</h3>
+                        {producto.descuento && (
+                          <span className="etiqueta-descuento-carrito">{producto.descuento} de descuento</span>
+                        )}
+                        <div className="stock-info">
+                          <span className="stock-disponible">Stock disponible: {availableStock}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="columna-precio">{producto.precio}</div>
+
+                    <div className="columna-cantidad">
+                      <div className="control-cantidad">
+                        <button
+                          className="btn-cantidad"
+                          onClick={() =>actualizarCantidad(producto.itemId, producto.id, producto.cantidad - 1)
+}
+                          disabled={producto.cantidad <= 1}
+                        >
+                          <FaMinus />
+                        </button>
+                        <span className="cantidad-actual">{producto.cantidad}</span>
+                        <button
+                          className="btn-cantidad"
+                          onClick={() =>     actualizarCantidad(producto.itemId, producto.id, producto.cantidad + 1)}
+                          disabled={producto.cantidad >= availableStock}
+                        >
+                          <FaPlus />
+                        </button>
+                      </div>
+
+                      {/* Mostrar advertencia de stock si existe */}
+                      {hasStockWarning && (
+                        <div className="stock-warning">
+                          <FaExclamationTriangle className="warning-icon" />
+                          <span className="warning-text">{hasStockWarning}</span>
+                        </div>
                       )}
                     </div>
-                  </div>
 
-                  <div className="columna-precio">{producto.precio}</div>
+                    <div className="columna-subtotal">
+                      {formatearPrecio(producto.precioNumerico * producto.cantidad)}
+                    </div>
 
-                  <div className="columna-cantidad">
-                    <div className="control-cantidad">
+                    <div className="columna-acciones">
                       <button
-                        className="btn-cantidad"
-                        onClick={() => updateQuantity(producto.id, producto.cantidad - 1)}
-                        disabled={producto.cantidad <= 1}
+                        className="btn-eliminar"
+                        onClick={() => removeFromCart(producto.id)}
+                        title="Eliminar producto"
                       >
-                        <FaMinus />
-                      </button>
-                      <span className="cantidad-actual">{producto.cantidad}</span>
-                      <button
-                        className="btn-cantidad"
-                        onClick={() => updateQuantity(producto.id, producto.cantidad + 1)}
-                      >
-                        <FaPlus />
+                        <FaTrash />
                       </button>
                     </div>
                   </div>
-
-                  <div className="columna-subtotal">{formatearPrecio(producto.precioNumerico * producto.cantidad)}</div>
-
-                  <div className="columna-acciones">
-                    <button
-                      className="btn-eliminar"
-                      onClick={() => removeFromCart(producto.id)}
-                      title="Eliminar producto"
-                    >
-                      <FaTrash />
-                    </button>
-                  </div>
-                </div>
-              ))}
+                )
+              })}
 
               <div className="acciones-carrito">
                 <button className="btn-seguir-comprando" onClick={() => navigate("/tienda")}>
@@ -172,7 +248,19 @@ const Carrito = () => {
                 </div>
               </div>
 
-              <button className="btn-proceder-pago" onClick={procederAlPago}>
+              {/* Mostrar advertencia general si hay problemas de stock */}
+              {Object.keys(stockWarnings).length > 0 && (
+                <div className="stock-alert">
+                  <FaExclamationTriangle className="alert-icon" />
+                  <span>Algunos productos exceden el stock disponible. Ajusta las cantidades para continuar.</span>
+                </div>
+              )}
+
+              <button
+                className="btn-proceder-pago"
+                onClick={procederAlPago}
+                disabled={Object.keys(stockWarnings).length > 0}
+              >
                 <FaCreditCard /> Proceder al pago
               </button>
             </div>
@@ -186,4 +274,3 @@ const Carrito = () => {
 }
 
 export default Carrito
-

@@ -2,7 +2,7 @@
 
 export const verificarSesion = async () => {
     try {
-      const res = await fetch("http://localhost:3000/auth/validate-user", {
+      const res = await fetch("https://backendbeat-serverbeat.586pa0.easypanel.host/auth/validate-user", {
         method: "GET",
         credentials: "include",
       })

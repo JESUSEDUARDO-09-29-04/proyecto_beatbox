@@ -62,7 +62,7 @@ const Registro = () => {
     const cargarPreguntasSecretas = async () => {
       setCargandoPreguntas(true)
       try {
-        const response = await fetch("http://localhost:3000/preguntas-secretas")
+        const response = await fetch("https://backendbeat-serverbeat.586pa0.easypanel.host/preguntas-secretas")
         const data = await response.json()
         setPreguntasSecretas(data)
         setCargandoPreguntas(false)
@@ -151,7 +151,7 @@ const Registro = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:3000/auth/register", {
+      const response = await fetch("https://backendbeat-serverbeat.586pa0.easypanel.host/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -44,7 +44,7 @@ const PlaylistAdmin = () => {
   useEffect(() => {
     const obtenerCSRF = async () => {
       try {
-        const response = await fetch("http://localhost:3000/auth/csrf-token", {
+        const response = await fetch("https://backendbeat-serverbeat.586pa0.easypanel.host/auth/csrf-token", {
           method: "GET",
           credentials: "include",
         })
@@ -71,7 +71,7 @@ const PlaylistAdmin = () => {
         setError(null)
 
         // Cambié la ruta a /playlists/all según la nueva convención
-        const response = await fetch("http://localhost:3000/playlists/all", {
+        const response = await fetch("https://backendbeat-serverbeat.586pa0.easypanel.host/playlists/all", {
           method: "GET",
           credentials: "include",
         })
@@ -117,7 +117,7 @@ const PlaylistAdmin = () => {
 
   const validarUrlSpotify = (url) => {
     if (!url) return false
-    const spotifyRegex = /^https:\/\/(open\.spotify\.com\/playlist\/|spotify:playlist:)/
+    const spotifyRegex = /^http:\/\/(open\.spotify\.com\/playlist\/|spotify:playlist:)/
     return spotifyRegex.test(url)
   }
 
@@ -127,7 +127,7 @@ const PlaylistAdmin = () => {
 
     try {
       // Ruta actualizada para eliminar: /playlists/delete/:id
-      const response = await fetch(`http://localhost:3000/playlists/delete/${playlistId}`, {
+      const response = await fetch(`https://backendbeat-serverbeat.586pa0.easypanel.host/playlists/delete/${playlistId}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -159,7 +159,7 @@ const PlaylistAdmin = () => {
       // Si se está activando una playlist, desactivar todas las demás del mismo tipo
       if (!vigente) {
         // Ruta actualizada: PATCH /playlists/deactivate/type/:tipo
-        const response = await fetch(`http://localhost:3000/playlists/deactivate/type/${tipo}`, {
+        const response = await fetch(`https://backendbeat-serverbeat.586pa0.easypanel.host/playlists/deactivate/type/${tipo}`, {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
@@ -177,7 +177,7 @@ const PlaylistAdmin = () => {
       }
 
       // Ruta actualizada: PATCH /playlists/toggle-active/id/:id
-      const response = await fetch(`http://localhost:3000/playlists/toggle-active/id/${playlistId}`, {
+      const response = await fetch(`https://backendbeat-serverbeat.586pa0.easypanel.host/playlists/toggle-active/id/${playlistId}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -257,7 +257,7 @@ const PlaylistAdmin = () => {
 
     try {
       // Ruta POST actualizada a /playlists/create
-      const response = await fetch("http://localhost:3000/playlists/create", {
+      const response = await fetch("https://backendbeat-serverbeat.586pa0.easypanel.host/playlists/create", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -307,7 +307,7 @@ const PlaylistAdmin = () => {
 
     try {
       // Ruta PUT actualizada a /playlists/update/:id
-      const response = await fetch(`http://localhost:3000/playlists/update/${editingPlaylist.id}`, {
+      const response = await fetch(`https://backendbeat-serverbeat.586pa0.easypanel.host/playlists/update/${editingPlaylist.id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -384,7 +384,7 @@ const PlaylistAdmin = () => {
                 name="url"
                 value={formData.url}
                 onChange={handleInputChange}
-                placeholder="https://open.spotify.com/playlist/..."
+                placeholder="http://open.spotify.com/playlist/..."
                 required
               />
               <small className="form-help">Copia el enlace de la playlist desde Spotify</small>

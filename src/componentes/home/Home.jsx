@@ -15,6 +15,7 @@ import cert5 from "../../assets/cert5.jpeg"
 import cert6 from "../../assets/cert6.jpeg"
 import FooterH from "../FooterH"
 import HeaderH from "../HeaderH"
+import AutoNotificacion from "../AutoNotificacion";
 
 const Home = () => {
   const [currentSlide, setCurrentSlide] = useState(0)
@@ -179,10 +180,12 @@ const Home = () => {
   }
 
   return (
+     <>
+      {/* 🔔 Notificación automática */}
+      <AutoNotificacion />
     <div className={`home-contenedor ${theme === "dark" ? "dark" : ""}`}>
       {/* Navbar */}
       <HeaderH />
-
       {/* Contenido principal */}
       <main className="contenido-principal">
         {/* Carrusel mejorado de Home2 */}
@@ -351,6 +354,7 @@ const Home = () => {
 
       <FooterH />
     </div>
+    </>
   )
 }
 

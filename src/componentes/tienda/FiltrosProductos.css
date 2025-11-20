@@ -37,6 +37,12 @@
   background: white;
   padding: 20px;
   flex-shrink: 0;
+  /* Asegurar que en desktop se muestre normal, sin transformaciones */
+  position: static;
+  transform: none;
+  height: auto;
+  overflow-y: visible;
+  box-shadow: none;
 }
 
 /* 🔥 Título de filtros y botón limpiar */
@@ -271,21 +277,151 @@
 @media (max-width: 768px) {
   .contenedor-filtros-productos {
     flex-direction: column;
+    padding: 15px;
   }
 
+  /* Header móvil solo en móvil */
+  .filtros-header-mobile {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid var(--color-border);
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 10;
+  }
+
+  .filtros-header-mobile h3 {
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  /* Botón para mostrar filtros en móvil - estilo mejorado */
+  .btn-mostrar-filtros-mobile {
+    display: flex;
+    background-color: transparent;
+    color: var(--color-primary);
+    border: 2px solid var(--color-primary);
+    padding: 10px 20px;
+    border-radius: var(--border-radius-md);
+    font-weight: bold;
+    cursor: pointer;
+    margin-bottom: 15px;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    transition: all var(--transition-fast);
+    width: fit-content;
+  }
+
+  .btn-mostrar-filtros-mobile:hover {
+    background-color: var(--color-primary);
+    color: white;
+  }
+
+  /* Botón para cerrar filtros en móvil - estilo como texto naranja */
+  .btn-cerrar-filtros-mobile {
+    background: none;
+    border: none;
+    font-size: 16px;
+    font-weight: bold;
+    color: var(--color-primary);
+    cursor: pointer;
+    padding: 0;
+    transition: color var(--transition-fast);
+  }
+
+  .btn-cerrar-filtros-mobile:hover {
+    color: var(--color-primary-dark);
+  }
+
+  /* Overlay para cerrar filtros en móvil - mejorado */
+  .filtros-overlay {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 998;
+    animation: fadeIn 0.3s ease;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  /* Panel de filtros móvil - mejorado con animación suave */
   .sidebar-filtros {
-    width: 100%;
-    border-right: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 85%;
+    max-width: 350px;
+    height: 100vh;
+    background: white;
+    z-index: 999;
+    overflow-y: auto;
+    box-shadow: 4px 0 15px rgba(0, 0, 0, 0.3);
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 0;
   }
 
+  /* Mostrar filtros con animación suave */
+  .sidebar-filtros.mostrar {
+    transform: translateX(0);
+  }
+
+  /* Ajustar padding del contenido de filtros en móvil */
+  .sidebar-filtros .filtros {
+    padding: 20px;
+  }
+
+  /* Productos en 2 columnas en móvil */
   .contenedor-productos-filtros {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
+/* Mantener 2 columnas incluso en pantallas muy pequeñas */
 @media (max-width: 480px) {
   .contenedor-productos-filtros {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .tarjeta-producto {
+    padding: 8px;
+  }
+
+  .imagen-producto {
+    height: 120px;
+  }
+
+  .nombre-producto {
+    font-size: 12px;
+    height: 32px;
+  }
+
+  .precio-producto {
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+
+  .btn-agregar {
+    padding: 5px 8px;
+    font-size: 12px;
   }
 }
 
@@ -354,4 +490,46 @@
 
 .dark .no-productos {
   color: #aaa;
+}
+
+.dark .btn-mostrar-filtros-mobile {
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.dark .btn-mostrar-filtros-mobile:hover {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+.dark .btn-cerrar-filtros-mobile {
+  color: var(--color-primary);
+}
+
+.dark .filtros-header-mobile {
+  background-color: #2a2a2a;
+  border-bottom: 1px solid #444;
+}
+
+.dark .filtros-header-mobile h3 {
+  color: #e0e0e0;
+}
+
+/* Ocultar elementos móviles solo en pantallas grandes (desktop) */
+@media (min-width: 769px) {
+  .btn-mostrar-filtros-mobile {
+    display: none;
+  }
+
+  .filtros-overlay {
+    display: none;
+  }
+
+  .filtros-header-mobile {
+    display: none;
+  }
+
+  .titulo-filtros-desktop {
+    display: flex;
+  }
 }

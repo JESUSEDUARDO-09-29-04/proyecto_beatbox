@@ -55,7 +55,7 @@ const EmpresaAdmin = () => {
   useEffect(() => {
     const verificarRol = async () => {
       try {
-        const userResponse = await fetch("http://localhost:3000/auth/validate-user", {
+        const userResponse = await fetch("https://backendbeat-serverbeat.586pa0.easypanel.host/auth/validate-user", {
           method: "GET",
           credentials: "include",
         })
@@ -80,7 +80,7 @@ const EmpresaAdmin = () => {
     const fetchLogoVigente = async () => {
       setCargando(true)
       try {
-        const response = await fetch("http://localhost:3000/logos/vigente", {
+        const response = await fetch("https://backendbeat-serverbeat.586pa0.easypanel.host/logos/vigente", {
           method: "GET",
           credentials: "include",
         })
@@ -98,7 +98,7 @@ const EmpresaAdmin = () => {
 
     const fetchPerfil = async () => {
       try {
-        const response = await fetch("http://localhost:3000/perfil-empresa", {
+        const response = await fetch("https://backendbeat-serverbeat.586pa0.easypanel.host/perfil-empresa", {
           method: "GET",
           credentials: "include",
         })
@@ -111,7 +111,7 @@ const EmpresaAdmin = () => {
 
     const fetchConfiguracion = async () => {
       try {
-        const response = await fetch("http://localhost:3000/configuracion", {
+        const response = await fetch("https://backendbeat-serverbeat.586pa0.easypanel.host/configuracion", {
           method: "GET",
           credentials: "include",
         })
@@ -164,7 +164,7 @@ const EmpresaAdmin = () => {
     let url, body
 
     if (seccion === "perfil") {
-      url = `http://localhost:3000/perfil-empresa/${campo}`
+      url = `https://backendbeat-serverbeat.586pa0.easypanel.host/perfil-empresa/${campo}`
 
       // Crear un objeto DTO completo según lo que espera el backend
       const perfilDto = {
@@ -179,7 +179,7 @@ const EmpresaAdmin = () => {
 
       body = JSON.stringify(perfilDto)
     } else {
-      url = `http://localhost:3000/configuracion/${campo}`
+      url = `https://backendbeat-serverbeat.586pa0.easypanel.host/configuracion/${campo}`
 
       // Crear un objeto DTO completo para configuración
       const configDto = {
@@ -221,7 +221,7 @@ const EmpresaAdmin = () => {
 
   const handleUpload = async (url) => {
     try {
-      const response = await fetch("http://localhost:3000/logos", {
+      const response = await fetch("https://backendbeat-serverbeat.586pa0.easypanel.host/logos", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -240,7 +240,7 @@ const EmpresaAdmin = () => {
 
   const fetchAllLogos = async () => {
     try {
-      const response = await fetch("http://localhost:3000/logos", {
+      const response = await fetch("https://backendbeat-serverbeat.586pa0.easypanel.host/logos", {
         method: "GET",
         credentials: "include",
       })
@@ -256,7 +256,7 @@ const EmpresaAdmin = () => {
 
   const setLogoAsVigente = async (id) => {
     try {
-      const response = await fetch(`http://localhost:3000/logos/${id}/vigente`, {
+      const response = await fetch(`https://backendbeat-serverbeat.586pa0.easypanel.host/logos/${id}/vigente`, {
         method: "PATCH",
         credentials: "include",
       })
@@ -274,7 +274,7 @@ const EmpresaAdmin = () => {
 
   const deleteLogo = async (id) => {
     try {
-      const response = await fetch(`http://localhost:3000/logos/${id}`, {
+      const response = await fetch(`https://backendbeat-serverbeat.586pa0.easypanel.host/logos/${id}`, {
         method: "DELETE",
         credentials: "include",
       })

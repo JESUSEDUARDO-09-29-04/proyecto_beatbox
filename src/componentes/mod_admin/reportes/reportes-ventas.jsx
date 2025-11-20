@@ -28,7 +28,7 @@ const ReportesVentas = () => {
   useEffect(() => {
     const verificarRol = async () => {
       try {
-        const userResponse = await fetch("http://localhost:3000/auth/validate-user", {
+        const userResponse = await fetch("https://backendbeat-serverbeat.586pa0.easypanel.host/auth/validate-user", {
           method: "GET",
           credentials: "include",
         })
@@ -64,7 +64,7 @@ const ReportesVentas = () => {
       if (filtros.metodoPago) queryParams.append("metodoPago", filtros.metodoPago)
       if (filtros.estado) queryParams.append("estado", filtros.estado)
 
-      const response = await fetch(`http://localhost:3000/admin/reportes-ventas?${queryParams}`, {
+      const response = await fetch(`https://backendbeat-serverbeat.586pa0.easypanel.host/admin/reportes-ventas?${queryParams}`, {
         method: "GET",
         credentials: "include",
       })
@@ -92,7 +92,7 @@ const ReportesVentas = () => {
       if (filtros.estado) queryParams.append("estado", filtros.estado)
       queryParams.append("formato", formato)
 
-      const response = await fetch(`http://localhost:3000/admin/exportar-ventas?${queryParams}`, {
+      const response = await fetch(`https://backendbeat-serverbeat.586pa0.easypanel.host/admin/exportar-ventas?${queryParams}`, {
         method: "GET",
         credentials: "include",
       })

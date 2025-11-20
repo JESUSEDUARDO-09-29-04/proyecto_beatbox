@@ -30,7 +30,12 @@ import "./ProgresoFisico.css"
 // Registrar componentes de Chart.js
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend, Filler)
 
-const ProgresoFisico = ({ userData }) => {
+const API_URL = "https://backendbeat-serverbeat.586pa0.easypanel.host"
+
+const ProgresoFisico = () => {
+  const [userData, setUserData] = useState(null)
+  const [perfilUsuario, setPerfilUsuario] = useState(null)
+
   // Referencias para los gráficos
   const imcGaugeRef = useRef(null)
   const modeloMatRef = useRef(null)
@@ -73,31 +78,157 @@ const ProgresoFisico = ({ userData }) => {
   // Estado para indicar si estamos guardando
   const [guardando, setGuardando] = useState(false)
 
+  const [cargando, setCargando] = useState(true)
+
   // Estado para controlar si se muestra la proyección
   const [mostrarProyeccion, setMostrarProyeccion] = useState(false)
 
   // Estado para mostrar la explicación del modelo matemático
   const [mostrarModelo, setMostrarModelo] = useState(false)
 
-  // Cargar datos desde DatosFisicos (solo si existen)
-  useEffect(() => {
-    // Intentar cargar datos desde localStorage
-    const datosFisicosGuardados = localStorage.getItem("datosFisicos")
+  const calcularEdad = (fechaNacimiento) => {
+    if (!fechaNacimiento) return ""
+    const hoy = new Date()
+    const nacimiento = new Date(fechaNacimiento)
+    let edad = hoy.getFullYear() - nacimiento.getFullYear()
+    const mes = hoy.getMonth() - nacimiento.getMonth()
+    if (mes < 0 || (mes === 0 && hoy.getDate() < nacimiento.getDate())) edad--
+    return edad
+  }
 
-    if (datosFisicosGuardados) {
-      const datos = JSON.parse(datosFisicosGuardados)
-
-      // Actualizar el formulario con los datos de DatosFisicos
-      setDatosForm((prev) => ({
-        ...prev,
-        pesoInicial: datos.pesoInicial?.toString() || "",
-        pesoObjetivo: datos.pesoObjetivo?.toString() || "",
-        altura: datos.altura?.toString() || "",
-        edad: datos.edad?.toString() || "",
-        genero: datos.genero || "masculino",
-        peso: "", // Dejamos vacío para que el usuario ingrese su peso actual
-      }))
+  // === Obtiene usuario autenticado ===
+  const obtenerUsuario = async () => {
+    try {
+      const res = await fetch(`${API_URL}/auth/validate-user`, {
+        credentials: "include",
+      })
+      if (!res.ok) throw new Error("No se pudo validar usuario")
+      const data = await res.json()
+      console.log("✅ Usuario validado:", data)
+      return data
+    } catch (err) {
+      console.error("❌ Error al obtener usuario:", err)
+      return null
     }
+  }
+
+  // === Obtiene perfil del usuario ===
+  const obtenerPerfilUsuario = async (idusuario) => {
+    try {
+      const res = await fetch(`${API_URL}/perfil-usuarios/usuario/${idusuario}`, {
+        credentials: "include",
+      })
+      if (!res.ok) throw new Error("No se pudo obtener el perfil del usuario")
+      const data = await res.json()
+      console.log("✅ Perfil obtenido:", data)
+      return data
+    } catch (err) {
+      console.error("❌ Error al obtener perfil:", err)
+      return null
+    }
+  }
+
+  useEffect(() => {
+    const cargarDatos = async () => {
+      try {
+        setCargando(true)
+
+        // Obtener usuario autenticado
+        const user = await obtenerUsuario()
+        if (!user) {
+          setMensaje({
+            texto: "No se pudo obtener la información del usuario",
+            tipo: "error",
+          })
+          setCargando(false)
+          return
+        }
+        setUserData(user)
+
+        // Obtener perfil del usuario
+        const perfil = await obtenerPerfilUsuario(user.usuario)
+        if (!perfil || !perfil.id) {
+          console.warn("⚠️ No se encontró perfil del usuario")
+          setMensaje({
+            texto: "No se encontró el perfil del usuario",
+            tipo: "error",
+          })
+          setCargando(false)
+          return
+        }
+        setPerfilUsuario(perfil)
+
+        console.log("✅ Datos del perfil:", perfil)
+
+        const edadCalculada = calcularEdad(perfil.fecha_nacimiento)
+
+        // Actualizar el formulario con los datos del perfil
+        setDatosForm((prev) => ({
+          ...prev,
+          pesoInicial: perfil.peso_inicial?.toString() || "",
+          pesoObjetivo: perfil.peso_objetivo?.toString() || "",
+          altura: perfil.altura?.toString() || "",
+          edad: edadCalculada.toString(), // Usar edad calculada
+          genero: perfil.genero || "masculino",
+        }))
+
+        // Obtener historial de pesos
+        const pesosResponse = await fetch(`${API_URL}/pesos/perfil/${perfil.id}`, {
+          credentials: "include",
+        })
+        if (!pesosResponse.ok) throw new Error("Error al cargar el historial")
+        const pesosData = await pesosResponse.json()
+
+        console.log("✅ Historial de pesos cargado:", pesosData)
+
+        // Ordenar por fecha descendente y mapear los datos
+        const historialOrdenado = pesosData
+          .sort((a, b) => new Date(b.fecha) - new Date(a.fecha))
+          .map((peso, index) => ({
+            id: peso.idpeso,
+            fecha: new Date(peso.fecha).toISOString().split("T")[0],
+            peso: peso.peso.toString(),
+            imc: peso.imc.toString(),
+            grasaCorporal: calcularGrasaCorporal(peso.peso, perfil.altura / 100, perfil.edad, perfil.genero).toString(),
+            musculo: calcularMusculo(
+              calcularGrasaCorporal(peso.peso, perfil.altura / 100, perfil.edad, perfil.genero),
+              perfil.genero,
+            ).toString(),
+            agua: calcularAgua(
+              calcularGrasaCorporal(peso.peso, perfil.altura / 100, perfil.edad, perfil.genero),
+              perfil.genero,
+            ).toString(),
+            mes: pesosData.length - index,
+          }))
+
+        setHistorialMediciones(historialOrdenado)
+
+        // Si hay mediciones, calcular resultados con la más reciente
+        if (historialOrdenado.length > 0) {
+          const pesoActual = Number.parseFloat(historialOrdenado[0].peso)
+          calcularResultados({
+            ...datosForm,
+            peso: pesoActual.toString(),
+            pesoInicial: perfil.peso_inicial?.toString() || "",
+            pesoObjetivo: perfil.peso_objetivo?.toString() || "",
+            altura: perfil.altura?.toString() || "",
+            edad: perfil.edad?.toString() || "",
+            genero: perfil.genero || "masculino",
+          })
+          setMostrarProyeccion(true)
+        }
+      } catch (error) {
+        console.error("❌ Error al cargar datos:", error)
+        setMensaje({
+          texto: "Error al cargar los datos del perfil",
+          tipo: "error",
+        })
+      } finally {
+        setCargando(false)
+      }
+    }
+
+    cargarDatos()
   }, [])
 
   // Calcular IMC cuando cambia peso o altura
@@ -540,11 +671,19 @@ const ProgresoFisico = ({ userData }) => {
     setDatosForm((prev) => ({ ...prev, [name]: value }))
   }
 
-  // Modificar el handleSubmit para agregar nuevas mediciones al historial
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     setGuardando(true)
     setMensaje({ texto: "", tipo: "" })
+
+    if (!userData || !perfilUsuario) {
+      setMensaje({
+        texto: "No se pudo obtener la información del usuario",
+        tipo: "error",
+      })
+      setGuardando(false)
+      return
+    }
 
     // Validar datos
     if (!datosForm.peso || !datosForm.altura || !datosForm.edad || !datosForm.pesoObjetivo || !datosForm.pesoInicial) {
@@ -556,8 +695,7 @@ const ProgresoFisico = ({ userData }) => {
       return
     }
 
-    // Simular envío de datos a la API
-    setTimeout(() => {
+    try {
       // Calcular IMC y composición corporal
       const peso = Number.parseFloat(datosForm.peso)
       const altura = Number.parseFloat(datosForm.altura) / 100
@@ -573,50 +711,80 @@ const ProgresoFisico = ({ userData }) => {
       const musculo = calcularMusculo(grasaCorporal, genero)
       const agua = calcularAgua(grasaCorporal, genero)
 
-      // Crear nueva medición
+      // Calcular constante K basada en la tendencia actual
+      let constanteK
+
+      if (historialMediciones.length >= 1) {
+        // Si tenemos al menos una medición, calculamos K entre el peso inicial y la nueva medición
+        const tiempoTranscurrido = historialMediciones.length + 1
+        constanteK = Math.log(peso / pesoInicial) / tiempoTranscurrido
+      } else {
+        // Primera medición
+        constanteK = Math.log(peso / pesoInicial)
+      }
+
+      // Calcular tiempo estimado (proyección)
+      let tiempoEstimado = Math.log(pesoObjetivo / pesoInicial) / constanteK
+      tiempoEstimado = Math.abs(Math.round(tiempoEstimado))
+
+      if (tiempoEstimado > 1000 || !isFinite(tiempoEstimado)) {
+        tiempoEstimado = 100
+      }
+
+      // Calcular peso perdido
+      const pesoPerdido = Math.round((pesoInicial - peso) * 10) / 10
+
+      console.log("[v0] 📤 Datos a enviar:", {
+        perfilUsuario: { id: perfilUsuario.id },
+        peso: peso,
+        fecha: datosForm.fechaRegistro,
+        proyeccion: tiempoEstimado,
+        imc: imcRedondeado,
+        peso_perdido: pesoPerdido,
+      })
+
+      const response = await fetch(`${API_URL}/pesos`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          idperfil: perfilUsuario.id,  // Asegúrate de usar 'idperfil' directamente
+          peso: peso,
+          fecha: datosForm.fechaRegistro,
+          proyeccion: tiempoEstimado,
+          imc: imcRedondeado,
+          peso_perdido: pesoPerdido,
+        }),
+      });
+
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        console.error("[v0] ❌ Error response:", errorData)
+        throw new Error(errorData.message || "Error al guardar el registro de peso")
+      }
+
+      const nuevoPeso = await response.json()
+
+      console.log("[v0] ✅ Peso guardado:", nuevoPeso)
+
+      // Crear nueva medición para el estado local
       const nuevaMedicion = {
-        id: Date.now(),
+        id: nuevoPeso.idpeso,
         fecha: datosForm.fechaRegistro,
         peso: datosForm.peso,
         imc: imcRedondeado.toString(),
         grasaCorporal: grasaCorporal.toString(),
         musculo: musculo.toString(),
         agua: agua.toString(),
-        mes: historialMediciones.length + 1, // Agregar el número de mes
+        mes: historialMediciones.length + 1,
       }
 
-      // Actualizar historial de mediciones - agregamos la nueva medición al inicio
+      // Actualizar historial de mediciones
       const nuevoHistorial = [nuevaMedicion, ...historialMediciones]
       setHistorialMediciones(nuevoHistorial)
-
-      // Calcular constante K basada en la tendencia actual
-      let constanteK
-
-      if (nuevoHistorial.length >= 2) {
-        // Si tenemos al menos dos mediciones (además del peso inicial), usamos las dos más recientes
-        const medicionActual = nuevoHistorial[0] // La más reciente
-        const medicionAnterior = nuevoHistorial[1] // La anterior
-
-        // Calcular el tiempo entre mediciones (asumimos que es 1 mes entre cada medición)
-        const tiempoTranscurrido = medicionActual.mes - medicionAnterior.mes
-
-        // Calcular K usando la fórmula de decrecimiento exponencial
-        constanteK =
-          Math.log(Number.parseFloat(medicionActual.peso) / Number.parseFloat(medicionAnterior.peso)) /
-          tiempoTranscurrido
-      } else {
-        // Si solo tenemos una medición, calculamos K entre el peso inicial y la primera medición
-        constanteK = Math.log(peso / pesoInicial)
-      }
-
-      // Calcular tiempo estimado para alcanzar el peso objetivo desde el peso inicial
-      let tiempoEstimado = Math.log(pesoObjetivo / pesoInicial) / constanteK
-      tiempoEstimado = Math.abs(Math.round(tiempoEstimado))
-
-      // Si el tiempo es demasiado grande, limitarlo
-      if (tiempoEstimado > 1000 || !isFinite(tiempoEstimado)) {
-        tiempoEstimado = "más de 100"
-      }
 
       // Generar proyección desde el peso inicial
       generarProyeccion(pesoInicial, pesoObjetivo, constanteK)
@@ -625,7 +793,7 @@ const ProgresoFisico = ({ userData }) => {
       setResultados((prev) => ({
         ...prev,
         constanteK,
-        tiempoEstimado,
+        tiempoEstimado: tiempoEstimado === 100 ? "más de 100" : tiempoEstimado.toString(),
         imc: imcRedondeado,
         categoriaIMC: prev.categoriaIMC,
         composicionCorporal: {
@@ -637,24 +805,31 @@ const ProgresoFisico = ({ userData }) => {
 
       setMostrarProyeccion(true)
 
-      setGuardando(false)
       setMensaje({
-        texto: "Datos guardados correctamente",
+        texto: "¡Datos guardados correctamente! ✅",
         tipo: "exito",
       })
 
       // Limpiar el campo de peso para la próxima medición
       setDatosForm((prev) => ({
         ...prev,
-        peso: "", // Limpiar el peso para la próxima entrada
-        fechaRegistro: new Date().toISOString().split("T")[0], // Actualizar la fecha al día actual
+        peso: "",
+        fechaRegistro: new Date().toISOString().split("T")[0],
       }))
 
-      // Ocultar mensaje después de 3 segundos
+      // Ocultar mensaje después de 5 segundos
       setTimeout(() => {
         setMensaje({ texto: "", tipo: "" })
-      }, 3000)
-    }, 1000)
+      }, 5000)
+    } catch (error) {
+      console.error("[v0] ❌ Error al guardar:", error)
+      setMensaje({
+        texto: `Error al guardar: ${error.message}`,
+        tipo: "error",
+      })
+    } finally {
+      setGuardando(false)
+    }
   }
 
   // Modificar el gráfico de proyección para incluir el peso inicial como referencia
@@ -779,6 +954,17 @@ const ProgresoFisico = ({ userData }) => {
     },
   }
 
+  if (cargando) {
+    return (
+      <div className="progreso-fisico-container">
+        <div className="datos-header">
+          <h1>Proyección de Cambio Físico</h1>
+          <p>Cargando datos...</p>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="progreso-fisico-container">
       <div className="datos-header">
@@ -876,18 +1062,7 @@ const ProgresoFisico = ({ userData }) => {
                 <label htmlFor="edad">
                   <FaCalendarAlt /> Edad
                 </label>
-                <input
-                  type="number"
-                  id="edad"
-                  name="edad"
-                  value={datosForm.edad}
-                  onChange={handleChange}
-                  step="1"
-                  min="15"
-                  max="100"
-                  placeholder="Ej. 30"
-                  readOnly={historialMediciones.length > 0}
-                />
+                <input type="number" id="edad" name="edad" value={datosForm.edad} readOnly disabled />
               </div>
             </div>
 
@@ -1279,4 +1454,3 @@ const ProgresoFisico = ({ userData }) => {
 }
 
 export default ProgresoFisico
-

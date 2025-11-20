@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useContext } from "react"
 import { useNavigate } from "react-router-dom"
-import { FaAngleDown, FaAngleUp, FaStar, FaRegStar, FaCheck } from "react-icons/fa"
+import { FaAngleDown, FaAngleUp, FaStar, FaRegStar, FaCheck, FaFilter } from "react-icons/fa"
 import { CartContext } from "../../context/CartContext"
 import "./FiltrosProductos.css"
 
@@ -21,6 +21,7 @@ const FiltrosProductos = ({ categoria, productos = [], busqueda, onAgregarAlCarr
   const [rangoPrecio, setRangoPrecio] = useState([0, 5000])
   const [subcategorias, setSubcategorias] = useState([])
   const [cargandoSubcategorias, setCargandoSubcategorias] = useState(false)
+  const [mostrarFiltros, setMostrarFiltros] = useState(false)
   const navigate = useNavigate()
 
   // Obtener el contexto del carrito
@@ -36,7 +37,7 @@ const FiltrosProductos = ({ categoria, productos = [], busqueda, onAgregarAlCarr
         console.log("Cargando subcategorías para categoría:", categoria)
 
         // Buscar la categoría por nombre para obtener su ID
-        const categoriasResponse = await fetch("http://localhost:3000/categorias", {
+        const categoriasResponse = await fetch("https://backendbeat-serverbeat.586pa0.easypanel.host/categorias", {
           method: "GET",
           credentials: "include",
         })
@@ -51,7 +52,7 @@ const FiltrosProductos = ({ categoria, productos = [], busqueda, onAgregarAlCarr
           if (categoriaEncontrada) {
             // Cargar subcategorías de esta categoría - usar el endpoint correcto
             const subcategoriasResponse = await fetch(
-              `http://localhost:3000/subcategorias/by-categoria/${categoriaEncontrada.id}`,
+              `https://backendbeat-serverbeat.586pa0.easypanel.host/subcategorias/by-categoria/${categoriaEncontrada.id}`,
               {
                 method: "GET",
                 credentials: "include",
@@ -209,10 +210,23 @@ const FiltrosProductos = ({ categoria, productos = [], busqueda, onAgregarAlCarr
 
   return (
     <div className="contenedor-filtros-productos">
+      <button className="btn-mostrar-filtros-mobile" onClick={() => setMostrarFiltros(true)}>
+        <FaFilter /> Filtros
+      </button>
+
+      {mostrarFiltros && <div className="filtros-overlay" onClick={() => setMostrarFiltros(false)} />}
+
       {/* Sidebar de Filtros */}
-      <aside className="sidebar-filtros">
+      <aside className={`sidebar-filtros ${mostrarFiltros ? "mostrar" : ""}`}>
+        <div className="filtros-header-mobile">
+          <h3>{categoria}</h3>
+          <button className="btn-cerrar-filtros-mobile" onClick={() => setMostrarFiltros(false)}>
+            Filtros
+          </button>
+        </div>
+
         <section className="filtros">
-          <div className="titulo-filtros">
+          <div className="titulo-filtros-desktop">
             <h3>Filtros para {categoria}</h3>
             <button className="btn-limpiar-filtros" onClick={limpiarFiltros}>
               Limpiar Filtros

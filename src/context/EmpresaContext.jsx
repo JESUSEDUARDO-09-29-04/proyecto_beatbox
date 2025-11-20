@@ -23,7 +23,7 @@ export const EmpresaProvider = ({ children }) => {
 
   const fetchLogoVigente = async () => {
     try {
-      const response = await fetch("http://localhost:3000/logos/vigente", {
+      const response = await fetch("https://backendbeat-serverbeat.586pa0.easypanel.host/logos/vigente", {
         method: "GET",
         credentials: "include",
       })
@@ -39,7 +39,7 @@ export const EmpresaProvider = ({ children }) => {
 
   const fetchPerfilEmpresa = async () => {
     try {
-      const response = await fetch("http://localhost:3000/perfil-empresa", {
+      const response = await fetch("https://backendbeat-serverbeat.586pa0.easypanel.host/perfil-empresa", {
         method: "GET",
         credentials: "include",
       })

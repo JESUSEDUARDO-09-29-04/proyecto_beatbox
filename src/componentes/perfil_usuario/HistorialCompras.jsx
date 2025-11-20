@@ -32,7 +32,7 @@ const HistorialCompras = ({ userData }) => {
       setCargando(true)
       setError("")
 
-      const response = await fetch(`http://localhost:3000/orders/user/${userData.id}`, {
+      const response = await fetch(`https://backendbeat-serverbeat.586pa0.easypanel.host/orders/user/${userData.id}`, {
         method: "GET",
         credentials: "include",
       })

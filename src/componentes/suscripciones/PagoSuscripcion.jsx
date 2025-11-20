@@ -9,19 +9,7 @@ import HeaderH from "../HeaderH"
 import FooterH from "../FooterH"
 import Breadcrumbs from "../Breadcrumbs"
 import "./Suscripcion.css"
-import {
-  FaArrowLeft,
-  FaArrowRight,
-  FaExclamationTriangle,
-  FaCreditCard,
-  FaCalendarAlt,
-  FaLock,
-  FaUser,
-  FaPaypal,
-  FaApplePay,
-  FaGooglePay,
-  FaMoneyBillWave,
-} from "react-icons/fa"
+import { FaArrowLeft, FaArrowRight, FaLock, FaPaypal, FaMoneyBillWave } from "react-icons/fa"
 
 const PagoSuscripcion = () => {
   const navigate = useNavigate()
@@ -220,41 +208,41 @@ const PagoSuscripcion = () => {
           <p>Selecciona tu método de pago preferido para completar la suscripción.</p>
         </div>
 
-        <div className="suscripcion-pasos">
-          <div className="paso completado">
-            <div className="paso-numero">1</div>
-            <div className="paso-texto">Elegir plan</div>
+        <div className="suscripcion-pasos-sub">
+          <div className="paso-sub completado">
+            <div className="paso-numero-sub">1</div>
+            <div className="paso-texto-sub">Elegir plan</div>
           </div>
-          <div className="paso-linea completado"></div>
-          <div className="paso completado">
-            <div className="paso-numero">2</div>
-            <div className="paso-texto">Datos personales</div>
+          <div className="paso-linea-sub completada"></div>
+          <div className="paso-sub completado">
+            <div className="paso-numero-sub">2</div>
+            <div className="paso-texto-sub">Datos personales</div>
           </div>
-          <div className="paso-linea completado"></div>
-          <div className="paso activo">
-            <div className="paso-numero">3</div>
-            <div className="paso-texto">Pago</div>
+          <div className="paso-linea-sub completada"></div>
+          <div className="paso-sub activo">
+            <div className="paso-numero-sub">3</div>
+            <div className="paso-texto-sub">Pago</div>
           </div>
-          <div className="paso-linea"></div>
-          <div className="paso">
-            <div className="paso-numero">4</div>
-            <div className="paso-texto">Confirmación</div>
+          <div className="paso-linea-sub"></div>
+          <div className="paso-sub">
+            <div className="paso-numero-sub">4</div>
+            <div className="paso-texto-sub">Confirmación</div>
           </div>
         </div>
 
-        <div className="pago-container">
-          <div className="resumen-pago">
+        <div className="pago-container-sub">
+          <div className="resumen-pago-sub">
             <h3>Resumen de tu Suscripción</h3>
             {planInfo && (
-              <div className="plan-seleccionado">
-                <div className="plan-info">
+              <div className="plan-seleccionado-sub">
+                <div className="plan-info-sub">
                   <h4>Plan {planInfo.tipo}</h4>
-                  <p className="plan-precio">
+                  <p className="plan-precio-resumen-sub">
                     ${planInfo.precio}
                     <span>{planInfo.periodo}</span>
                   </p>
                 </div>
-                <div className="plan-detalles">
+                <div className="plan-detalles-sub">
                   <p>
                     <strong>Nombre:</strong> {datosPersonales?.nombre} {datosPersonales?.apellidos}
                   </p>
@@ -266,49 +254,57 @@ const PagoSuscripcion = () => {
             )}
           </div>
 
-          <div className="metodos-pago">
+          <div className="metodos-pago-sub">
             <h3>Selecciona un método de pago</h3>
 
-            <div className="metodos-tabs">
+            <div className="metodos-tabs-sub">
               <button
-                className={`metodo-tab ${metodoPago === "paypal" ? "activo" : ""}`}
+                className={`metodo-tab-sub ${metodoPago === "paypal" ? "activo" : ""}`}
                 onClick={() => cambiarMetodoPago("paypal")}
               >
                 <FaPaypal /> PayPal
               </button>
               <button
-                className={`metodo-tab ${metodoPago === "efectivo" ? "activo" : ""}`}
+                className={`metodo-tab-sub ${metodoPago === "efectivo" ? "activo" : ""}`}
                 onClick={() => cambiarMetodoPago("efectivo")}
               >
                 <FaMoneyBillWave /> Efectivo
               </button>
             </div>
 
-            <form className="pago-form" onSubmit={handleSubmit}>
+            <form className="pago-form-sub" onSubmit={handleSubmit}>
               {metodoPago === "paypal" && (
-                <div className="metodo-alternativo">
-                  <FaPaypal className="metodo-icono" />
+                <div className="metodo-alternativo-sub">
+                  <FaPaypal className="metodo-icono-sub" />
                   <p>Serás redirigido a PayPal para completar el pago de forma segura.</p>
                 </div>
               )}
 
               {metodoPago === "efectivo" && (
-                <div className="metodo-alternativo">
-                  <FaMoneyBillWave className="metodo-icono" />
-                  <p>Podrás pagar en efectivo en nuestras instalaciones. Se generará un código de referencia que deberás presentar en recepción.</p>
+                <div className="metodo-alternativo-sub">
+                  <FaMoneyBillWave className="metodo-icono-sub" />
+                  <p>
+                    Podrás pagar en efectivo en nuestras instalaciones. Se generará un código de referencia que deberás
+                    presentar en recepción.
+                  </p>
                 </div>
               )}
 
-              <div className="pago-seguro">
-                <FaLock className="seguro-icon" />
+              <div className="pago-seguro-sub">
+                <FaLock className="seguro-icon-sub" />
                 <p>Pago 100% seguro. Tus datos están protegidos.</p>
               </div>
 
-              <div className="suscripcion-acciones">
-                <button type="button" className="btn btn-volver" onClick={volverPasoAnterior} disabled={enviando}>
+              <div className="suscripcion-acciones-sub">
+                <button
+                  type="button"
+                  className="btn-sub btn-volver-sub"
+                  onClick={volverPasoAnterior}
+                  disabled={enviando}
+                >
                   <FaArrowLeft /> Volver
                 </button>
-                <button type="submit" className="btn btn-continuar" disabled={enviando}>
+                <button type="submit" className="btn-sub btn-continuar-sub" disabled={enviando}>
                   {enviando ? "Procesando..." : "Finalizar Pago"} {!enviando && <FaArrowRight />}
                 </button>
               </div>

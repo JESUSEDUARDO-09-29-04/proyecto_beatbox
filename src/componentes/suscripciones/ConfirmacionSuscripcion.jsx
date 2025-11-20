@@ -163,86 +163,86 @@ const ConfirmacionSuscripcion = () => {
         <Breadcrumbs />
       </div>
       <main className="suscripcion-contenedor">
-        <div className="confirmacion-banner">
+        <div className="confirmacion-banner-sub">
           <h2>¡Suscripción Completada!</h2>
           <p>Tu suscripción ha sido procesada correctamente. A continuación encontrarás los detalles de tu plan.</p>
         </div>
 
-        <div className="suscripcion-pasos">
-          <div className="paso completado">
-            <div className="paso-numero">1</div>
-            <div className="paso-texto">Elegir plan</div>
+        <div className="suscripcion-pasos-sub">
+          <div className="paso-sub completado">
+            <div className="paso-numero-sub">1</div>
+            <div className="paso-texto-sub">Elegir plan</div>
           </div>
-          <div className="paso-linea completado"></div>
-          <div className="paso completado">
-            <div className="paso-numero">2</div>
-            <div className="paso-texto">Datos personales</div>
+          <div className="paso-linea-sub completada"></div>
+          <div className="paso-sub completado">
+            <div className="paso-numero-sub">2</div>
+            <div className="paso-texto-sub">Datos personales</div>
           </div>
-          <div className="paso-linea completado"></div>
-          <div className="paso completado">
-            <div className="paso-numero">3</div>
-            <div className="paso-texto">Pago</div>
+          <div className="paso-linea-sub completada"></div>
+          <div className="paso-sub completado">
+            <div className="paso-numero-sub">3</div>
+            <div className="paso-texto-sub">Pago</div>
           </div>
-          <div className="paso-linea completado"></div>
-          <div className="paso completado">
-            <div className="paso-numero">4</div>
-            <div className="paso-texto">Confirmación</div>
+          <div className="paso-linea-sub completada"></div>
+          <div className="paso-sub completado">
+            <div className="paso-numero-sub">4</div>
+            <div className="paso-texto-sub">Confirmación</div>
           </div>
         </div>
 
-        <div className="detalles-container">
-          <div className="detalles-card">
-            <div className="detalles-header">
+        <div className="detalles-container-sub">
+          <div className="detalles-card-sub">
+            <div className="detalles-header-sub">
               <h2>Detalles de la Suscripción</h2>
-              <div className="referencia-badge">
+              <div className="referencia-badge-sub">
                 Referencia: <span>{numeroReferencia}</span>
               </div>
             </div>
 
-            <div className="detalles-content">
-              <div className="detalles-section">
+            <div className="detalles-content-sub">
+              <div className="detalles-section-sub">
                 <h3>Plan Seleccionado</h3>
-                <div className="detalles-grid">
-                  <div className="detalles-item">
+                <div className="detalles-grid-sub">
+                  <div className="detalles-item-sub">
                     <span>Plan:</span>
                     <strong>{planInfo?.tipo}</strong>
                   </div>
-                  <div className="detalles-item">
+                  <div className="detalles-item-sub">
                     <span>Precio:</span>
                     <strong>
                       ${planInfo?.precio}
                       {planInfo?.periodo}
                     </strong>
                   </div>
-                  <div className="detalles-item">
+                  <div className="detalles-item-sub">
                     <span>Fecha:</span>
                     <strong>{fechaSuscripcion}</strong>
                   </div>
                 </div>
               </div>
 
-              <div className="detalles-section">
+              <div className="detalles-section-sub">
                 <h3>Datos Personales</h3>
-                <div className="detalles-grid">
-                  <div className="detalles-item">
-                    <FaIdCard className="detalles-icon" />
+                <div className="detalles-grid-sub">
+                  <div className="detalles-item-sub">
+                    <FaIdCard className="detalles-icon-sub" />
                     <span>Nombre:</span>
-                    <strong className="nombre-completo">
+                    <strong className="nombre-completo-sub">
                       {datosPersonales?.nombre} {datosPersonales?.apellidos}
                     </strong>
                   </div>
-                  <div className="detalles-item">
-                    <FaEnvelope className="detalles-icon" />
+                  <div className="detalles-item-sub">
+                    <FaEnvelope className="detalles-icon-sub" />
                     <span>Email:</span>
-                    <strong className="email-texto">{datosPersonales?.email}</strong>
+                    <strong className="email-texto-sub">{datosPersonales?.email}</strong>
                   </div>
-                  <div className="detalles-item">
-                    <FaPhone className="detalles-icon" />
+                  <div className="detalles-item-sub">
+                    <FaPhone className="detalles-icon-sub" />
                     <span>Teléfono:</span>
                     <strong>{datosPersonales?.telefono}</strong>
                   </div>
-                  <div className="detalles-item">
-                    <FaCalendarAlt className="detalles-icon" />
+                  <div className="detalles-item-sub">
+                    <FaCalendarAlt className="detalles-icon-sub" />
                     <span>Nacimiento:</span>
                     <strong>{datosPersonales?.fechaNacimiento}</strong>
                   </div>
@@ -250,21 +250,21 @@ const ConfirmacionSuscripcion = () => {
                   {/* Mostrar información del tutor si es menor de edad */}
                   {datosPersonales?.esMenorDeEdad && (
                     <>
-                      <div className="detalles-item tutor-info">
+                      <div className="detalles-item-sub tutor-info-sub">
                         <span colSpan="2">Información del Tutor:</span>
                       </div>
-                      <div className="detalles-item">
-                        <FaUser className="detalles-icon" />
+                      <div className="detalles-item-sub">
+                        <FaUser className="detalles-icon-sub" />
                         <span>Tutor:</span>
                         <strong>{datosPersonales?.tutorNombre}</strong>
                       </div>
-                      <div className="detalles-item">
-                        <FaPhone className="detalles-icon" />
+                      <div className="detalles-item-sub">
+                        <FaPhone className="detalles-icon-sub" />
                         <span>Teléfono:</span>
                         <strong>{datosPersonales?.tutorTelefono}</strong>
                       </div>
-                      <div className="detalles-item">
-                        <FaIdCard className="detalles-icon" />
+                      <div className="detalles-item-sub">
+                        <FaIdCard className="detalles-icon-sub" />
                         <span>Parentesco:</span>
                         <strong>{datosPersonales?.parentesco}</strong>
                       </div>
@@ -273,20 +273,20 @@ const ConfirmacionSuscripcion = () => {
                 </div>
               </div>
 
-              <div className="detalles-section">
+              <div className="detalles-section-sub">
                 <h3>Método de Pago</h3>
-                <div className="detalles-grid">
-                  <div className="detalles-item">
-                    {datosPago?.metodoPago === "tarjeta" && <FaCreditCard className="detalles-icon" />}
-                    {datosPago?.metodoPago === "paypal" && <FaPaypal className="detalles-icon" />}
-                    {datosPago?.metodoPago === "efectivo" && <FaMoneyBillWave className="detalles-icon" />}
+                <div className="detalles-grid-sub">
+                  <div className="detalles-item-sub">
+                    {datosPago?.metodoPago === "tarjeta" && <FaCreditCard className="detalles-icon-sub" />}
+                    {datosPago?.metodoPago === "paypal" && <FaPaypal className="detalles-icon-sub" />}
+                    {datosPago?.metodoPago === "efectivo" && <FaMoneyBillWave className="detalles-icon-sub" />}
                     <span>Método:</span>
                     <strong>{obtenerNombreMetodoPago()}</strong>
                   </div>
 
                   {datosPago?.metodoPago === "tarjeta" && (
-                    <div className="detalles-item">
-                      <FaCreditCard className="detalles-icon" />
+                    <div className="detalles-item-sub">
+                      <FaCreditCard className="detalles-icon-sub" />
                       <span>Tarjeta:</span>
                       <strong>**** **** **** {obtenerUltimosDigitos()}</strong>
                     </div>
@@ -295,11 +295,12 @@ const ConfirmacionSuscripcion = () => {
               </div>
             </div>
 
-            <div className="detalles-instrucciones">
+            <div className="detalles-instrucciones-sub">
               <h3>Próximos Pasos</h3>
               <p>
-                Hemos enviado un correo electrónico a <strong className="email-texto">{datosPersonales?.email}</strong>{" "}
-                con los detalles de tu suscripción.
+                Hemos enviado un correo electrónico a{" "}
+                <strong className="email-texto-sub">{datosPersonales?.email}</strong> con los detalles de tu
+                suscripción.
                 {datosPago?.metodoPago === "efectivo"
                   ? " Por favor, presenta el código de referencia en nuestras instalaciones para completar el pago."
                   : " Tu membresía ya está activa y puedes comenzar a disfrutar de nuestras instalaciones de inmediato."}
@@ -307,11 +308,11 @@ const ConfirmacionSuscripcion = () => {
               <p>Si tienes alguna pregunta, no dudes en contactarnos.</p>
             </div>
 
-            <div className="detalles-acciones">
-              <button className="btn-descargar" onClick={descargarComprobante}>
+            <div className="detalles-acciones-sub">
+              <button className="btn-descargar-sub" onClick={descargarComprobante}>
                 <FaDownload /> Descargar Comprobante
               </button>
-              <button className="btn-inicio-sus" onClick={volverInicio}>
+              <button className="btn-inicio-sub" onClick={volverInicio}>
                 <FaHome /> Volver al Inicio
               </button>
             </div>
@@ -325,4 +326,3 @@ const ConfirmacionSuscripcion = () => {
 }
 
 export default ConfirmacionSuscripcion
-

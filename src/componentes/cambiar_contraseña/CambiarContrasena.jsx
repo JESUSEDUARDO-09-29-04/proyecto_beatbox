@@ -511,7 +511,7 @@ const CambiarContrasena = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:3000/auth/reset/password", {
+      const response = await fetch("https://backendbeat-serverbeat.586pa0.easypanel.host/auth/reset/password", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

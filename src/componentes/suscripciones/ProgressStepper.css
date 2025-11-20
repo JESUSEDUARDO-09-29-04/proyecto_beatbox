@@ -1,0 +1,212 @@
+/* Progress Stepper Styles - Separated for better organization */
+
+.suscripcion-pasos-sub {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: clamp(24px, 4vw, 32px) auto;
+  max-width: 800px;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  padding: clamp(16px, 3vw, 20px) clamp(12px, 2vw, 16px);
+  border-radius: clamp(12px, 2vw, 16px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.dark .suscripcion-pasos-sub {
+  background: linear-gradient(135deg, #2a2a2a 0%, #1f1f1f 100%);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+  border-color: rgba(255, 255, 255, 0.05);
+}
+
+.suscripcion-pasos-sub::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #ff8800, #ff6600, #ff8800);
+  background-size: 200% 100%;
+  animation: gradientShift 3s ease-in-out infinite;
+}
+
+.dark .suscripcion-pasos-sub::before {
+  background: linear-gradient(90deg, #aaaaaa, #888888, #aaaaaa);
+  background-size: 200% 100%;
+}
+
+@keyframes gradientShift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.paso-sub {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  flex-shrink: 0;
+}
+
+.paso-numero-sub {
+  width: clamp(32px, 5vw, 40px);
+  height: clamp(32px, 5vw, 40px);
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: clamp(13px, 2.5vw, 15px);
+  color: #999;
+  margin-bottom: clamp(6px, 1.5vw, 8px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 2px solid transparent;
+}
+
+.dark .paso-numero-sub {
+  background: linear-gradient(135deg, #444 0%, #333 100%);
+  color: #666;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.paso-sub.activo .paso-numero-sub {
+  background: linear-gradient(135deg, #ff8800 0%, #ff6600 100%);
+  color: white;
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(255, 136, 0, 0.4);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.dark .paso-sub.activo .paso-numero-sub {
+  background: linear-gradient(135deg, #aaaaaa 0%, #888888 100%);
+  color: #121212;
+  box-shadow: 0 4px 12px rgba(170, 170, 170, 0.4);
+}
+
+.paso-sub.completado .paso-numero-sub {
+  background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+  color: white;
+  box-shadow: 0 2px 10px rgba(76, 175, 80, 0.3);
+}
+
+.dark .paso-sub.completado .paso-numero-sub {
+  background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%);
+}
+
+.paso-texto-sub {
+  font-size: clamp(10px, 2vw, 12px);
+  font-weight: 600;
+  color: #999;
+  text-align: center;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  max-width: 80px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dark .paso-texto-sub {
+  color: #666;
+}
+
+.paso-sub.activo .paso-texto-sub {
+  color: #ff8800;
+  font-weight: 700;
+}
+
+.dark .paso-sub.activo .paso-texto-sub {
+  color: #aaaaaa;
+}
+
+.paso-sub.completado .paso-texto-sub {
+  color: #4caf50;
+}
+
+.dark .paso-sub.completado .paso-texto-sub {
+  color: #2e7d32;
+}
+
+.paso-linea-sub {
+  width: clamp(30px, 6vw, 60px);
+  height: 3px;
+  background-color: #e0e0e0;
+  margin: 0 clamp(6px, 1.5vw, 12px);
+  margin-bottom: clamp(18px, 3vw, 24px);
+  transition: all 0.3s ease;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.dark .paso-linea-sub {
+  background-color: #444;
+}
+
+.paso-linea-sub.completada {
+  background: linear-gradient(90deg, #4caf50, #45a049);
+}
+
+.dark .paso-linea-sub.completada {
+  background: linear-gradient(90deg, #2e7d32, #1b5e20);
+}
+
+/* Mobile responsive improvements */
+@media (max-width: 768px) {
+  .suscripcion-pasos-sub {
+    padding: 14px 10px;
+    margin: 20px auto;
+    border-radius: 12px;
+  }
+
+  .paso-numero-sub {
+    width: 32px;
+    height: 32px;
+    font-size: 13px;
+    margin-bottom: 6px;
+  }
+
+  .paso-texto-sub {
+    font-size: 10px;
+  }
+
+  .paso-linea-sub {
+    width: 35px;
+    margin: 0 8px;
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 576px) {
+  .suscripcion-pasos-sub {
+    padding: 12px 8px;
+    border-radius: 10px;
+  }
+
+  .paso-numero-sub {
+    width: 28px;
+    height: 28px;
+    font-size: 12px;
+  }
+
+  .paso-texto-sub {
+    font-size: 9px;
+    max-width: 60px;
+  }
+
+  .paso-linea-sub {
+    width: 25px;
+    margin: 0 6px;
+    margin-bottom: 18px;
+  }
+}

@@ -1,23 +1,52 @@
 "use client"
 
-import { useContext } from "react"
+import { useState, useEffect, useContext } from "react"
 import { useNavigate } from "react-router-dom"
 import { ThemeContext } from "../../context/ThemeContext"
-import { useEmpresa } from "../../context/EmpresaContext"
 import FooterH from "../FooterH"
 import HeaderH from "../HeaderH"
 import Breadcrumbs from "../Breadcrumbs"
 import "./QuienesSomos.css"
+import misionImg from "../../assets/mision.jpg"
+import visionImg from "../../assets/vision.jpg"
+import comunidadImg from "../../assets/c9.jpg"
 
 const QuienesSomos = () => {
   const navigate = useNavigate()
   const { theme } = useContext(ThemeContext)
-  const { perfilEmpresa, cargando } = useEmpresa()
+  const [perfil, setPerfil] = useState(null)
+  const [cargando, setCargando] = useState(true)
+  const [modoOffline, setModoOffline] = useState(false)
 
-  // Debug para verificar los datos
-  console.log("Datos del perfil empresa:", perfilEmpresa)
-  console.log("Misión:", perfilEmpresa.mision)
-  console.log("Visión:", perfilEmpresa.vision)
+  useEffect(() => {
+    const cargarPerfil = async () => {
+      try {
+        const response = await fetch("https://backendbeat-serverbeat.586pa0.easypanel.host/perfil-empresa", {
+          method: "GET",
+          credentials: "include",
+        })
+
+        if (!response.ok) throw new Error("Error al obtener perfil")
+
+        const data = await response.json()
+        setPerfil(data)
+        localStorage.setItem("perfil_empresa_cache", JSON.stringify(data))
+      } catch (error) {
+        console.warn("⚠️ Error o sin conexión, usando datos guardados:", error.message)
+        const cache = localStorage.getItem("perfil_empresa_cache")
+        if (cache) {
+          setPerfil(JSON.parse(cache))
+          setModoOffline(true)
+        } else {
+          setPerfil(null)
+        }
+      } finally {
+        setCargando(false)
+      }
+    }
+
+    cargarPerfil()
+  }, [])
 
   if (cargando) {
     return (
@@ -32,152 +61,87 @@ const QuienesSomos = () => {
     )
   }
 
+  if (!perfil) {
+    return (
+      <div className={`quienes-somos-container ${theme}`}>
+        <HeaderH />
+        <main className="error-container">
+          <h2>No se pudo obtener la información de la empresa.</h2>
+          <button onClick={() => window.location.reload()} className="retry-button">
+            Reintentar
+          </button>
+        </main>
+        <FooterH />
+      </div>
+    )
+  }
+
   return (
     <div className={`quienes-somos-container ${theme}`}>
       <HeaderH />
-
       <div className="breadcrumb-container">
         <Breadcrumbs />
       </div>
 
       <div className="quienes-somos-content">
-        {/* Hero Section */}
+        {modoOffline && (
+          <div className="offline-warning">
+            ⚠️ Estás viendo información guardada localmente (sin conexión o sin login)
+          </div>
+        )}
+
+        {/* Hero */}
         <section className="hero-section">
           <div className="hero-content">
             <h1 className="hero-title">¿Quiénes Somos?</h1>
             <div className="hero-slogan">
-              <span className="slogan-text">Beatbox: Energía, Comunidad y Superación</span>
+              <span className="slogan-text">{perfil.slogan || "Beatbox: Energía, Comunidad y Superación"}</span>
             </div>
           </div>
         </section>
 
-        {/* Misión Section - Texto primero, imagen después */}
+        {/* Misión */}
         <section className="mission-section">
           <div className="section-container">
             <div className="content-split">
               <div className="text-content">
-                <div className="section-header-modern">
-                  <h2 className="section-title-modern">MISIÓN</h2>
-                </div>
-                <div className="text-block">
-                  <p className="main-text">
-                    {perfilEmpresa.mision ||
-                      `En Beatbox, nuestra misión es transformar la manera en que las personas experimentan el ejercicio, ofreciendo entrenamientos grupales de alta energía que combinan dinamismo, motivación y comunidad. Nos enfocamos en brindar experiencias únicas donde cada persona, sin importar su nivel de condición física, se sienta inspirada a superar sus límites y alcanzar sus objetivos de bienestar físico y mental.`}
-                  </p>
-                </div>
+                <h2 className="section-title-modern">MISIÓN</h2>
+                <p className="main-text">{perfil.mision || "Sin misión registrada"}</p>
               </div>
               <div className="image-content">
-                <div className="image-placeholder mission-image">
-                  <img
-                    src="\src\assets\mision.jpg"
-                    alt="Misión Beatbox"
-                    className="section-image"
-                  />
-                </div>
+                <img src={misionImg} alt="Misión Beatbox" className="section-image" />
               </div>
             </div>
           </div>
         </section>
 
-        {/* Visión Section - Imagen primero, texto después */}
+        {/* Visión */}
         <section className="vision-section">
           <div className="section-container">
             <div className="content-split reverse">
               <div className="image-content">
-                <div className="image-placeholder vision-image">
-                  <img
-                    src="\src\assets\vision.jpg"
-                    alt="Visión Beatbox"
-                    className="section-image"
-                  />
-                </div>
+                <img src={visionImg} alt="Visión Beatbox" className="section-image" />
               </div>
               <div className="text-content">
-                <div className="section-header-modern">
-                  <h2 className="section-title-modern">VISIÓN</h2>
-                </div>
-                <div className="text-block">
-                  <p className="main-text">
-                    {perfilEmpresa.vision ||
-                      `Nuestra visión es convertirnos en la sala de entrenamiento grupal de referencia, siendo reconocidos por la calidad de nuestras sesiones, la innovación en nuestras metodologías y el impacto positivo en la vida de nuestros miembros. Aspiramos a ser mucho más que un espacio de ejercicio; buscamos construir una comunidad activa y unida, donde el bienestar y la superación personal sean pilares fundamentales.`}
-                  </p>
-                </div>
+                <h2 className="section-title-modern">VISIÓN</h2>
+                <p className="main-text">{perfil.vision || "Sin visión registrada"}</p>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Valores Section */}
-        <section className="values-section">
-          <div className="section-container">
-            <div className="values-header">
-              <div className="section-header-modern centered">
-                <h2 className="section-title-modern">VALORES</h2>
-              </div>
-              <p className="values-subtitle">Los principios que guían cada una de nuestras acciones</p>
-            </div>
-
-            <div className="values-grid">
-              <div className="value-card">
-                <h3 className="itle">Pasión por el Movimiento</h3>
-                <p className="value-description">
-                  Creemos en el poder del ejercicio como herramienta de cambio físico y emocional.
-                </p>
-              </div>
-
-              <div className="value-card">
-                <h3 className="value-title">Comunidad y Conexión</h3>
-                <p className="value-description">
-                  Fomentamos un ambiente de apoyo donde cada persona se sienta valorada y motivada.
-                </p>
-              </div>
-
-              <div className="value-card">
-                <h3 className="value-title">Compromiso con la Excelencia</h3>
-                <p className="value-description">
-                  Buscamos la mejora continua en la calidad de nuestras sesiones y atención.
-                </p>
-              </div>
-
-              <div className="value-card">
-                <h3 className="value-title">Innovación Constante</h3>
-                <p className="value-description">
-                  Mantenemos nuestras rutinas actualizadas con las últimas tendencias.
-                </p>
-              </div>
-
-              <div className="value-card">
-                <h3 className="value-title">Disciplina y Superación</h3>
-                <p className="value-description">
-                  Promovemos la constancia y el esfuerzo personal para lograr resultados duraderos.
-                </p>
-              </div>
-
-              <div className="value-card">
-                <h3 className="value-title">Bienestar Integral</h3>
-                <p className="value-description">Promovemos hábitos positivos que impacten en el bienestar general.</p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* CTA Section */}
+        {/* CTA */}
         <section className="cta-section">
           <div className="cta-container">
             <div className="cta-content">
               <h2 className="cta-title">¿Listo para unirte a nuestra comunidad?</h2>
-              <p className="cta-subtitle">Descubre cómo Beatbox puede transformar tu experiencia de ejercicio</p>
+              <p className="cta-subtitle">Descubre cómo Beatbox puede transformar tu experiencia</p>
               <button className="cta-button" onClick={() => navigate("/contactanos")}>
-                <span>Contáctanos</span>
-                <span className="button-arrow"></span>
+                Contáctanos
               </button>
             </div>
             <div className="cta-image">
-              <img
-                src="\src\assets\c9.jpg"
-                alt="Únete a Beatbox"
-                className="cta-img"
-              />
+              <img src={comunidadImg} alt="Únete a Beatbox" className="cta-img" />
             </div>
           </div>
         </section>

@@ -2,109 +2,187 @@
 
 import { createContext, useState, useEffect } from "react"
 
-// Crear el contexto del carrito
 export const CartContext = createContext()
 
 export const CartProvider = ({ children }) => {
-  // Estado para almacenar los productos del carrito
   const [cartItems, setCartItems] = useState([])
 
-  // Cargar productos del carrito desde localStorage al iniciar
-  useEffect(() => {
-    const storedCart = localStorage.getItem("cartItems")
-    if (storedCart) {
-      try {
-        setCartItems(JSON.parse(storedCart))
-      } catch (error) {
-        console.error("Error al cargar el carrito:", error)
-        setCartItems([])
-      }
+  // 1️⃣ Cargar carrito desde el backend
+  const fetchCart = async () => {
+    try {
+      const response = await fetch("https://backendbeat-serverbeat.586pa0.easypanel.host/carrito", {
+        credentials: "include",
+      })
+
+      if (!response.ok) throw new Error("Error al obtener el carrito")
+
+      const data = await response.json()
+      // MODIFICACIÓN: Formatear los ítems del carrito al cargarlos
+      setCartItems(
+        data.items.map((item) => {
+          const precio = Number.parseFloat(item.producto.precio) || 0
+
+          return {
+            itemId: item.id,
+            id: item.producto.id,
+            nombre: item.producto.nombre,
+            precio: `$${precio.toFixed(2)}`,
+            precioNumerico: precio,
+            cantidad: item.cantidad,
+            imagen: item.producto.imagen,
+            descuento: item.producto.descuento,
+            stock: item.producto.stock || item.producto.existencia, // Asegurar que el stock esté disponible
+            existencia: item.producto.existencia || item.producto.stock,
+          }
+        }),
+      )
+    } catch (error) {
+      console.error("Error al cargar carrito desde backend:", error)
     }
+  }
+
+  useEffect(() => {
+    fetchCart()
   }, [])
 
-  // Guardar productos del carrito en localStorage cuando cambian
-  useEffect(() => {
-    localStorage.setItem("cartItems", JSON.stringify(cartItems))
-  }, [cartItems])
+  // 2️⃣ Agregar producto al carrito (backend)
+  const addToCart = async (product, quantity = 1) => {
+    const existingItem = cartItems.find((item) => item.id === product.id)
+    const finalQuantity = existingItem ? existingItem.cantidad + quantity : quantity
 
-  // Función para agregar un producto al carrito
-  const addToCart = (product) => {
-    setCartItems((prevItems) => {
-      // Verificar si el producto ya está en el carrito
-      const existingItemIndex = prevItems.findIndex((item) => item.id === product.id)
+    try {
+      const response = await fetch("https://backendbeat-serverbeat.586pa0.easypanel.host/carrito/agregar", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include", // ✅ NECESARIO para que se envíe el JWT de la cookie
+        body: JSON.stringify({
+          productoId: product.id,
+          cantidad: finalQuantity,
+        }),
+      })
 
-      if (existingItemIndex >= 0) {
-        // Si el producto ya existe, incrementar la cantidad
-        const updatedItems = [...prevItems]
-        updatedItems[existingItemIndex] = {
-          ...updatedItems[existingItemIndex],
-          cantidad: updatedItems[existingItemIndex].cantidad + 1,
-        }
-        return updatedItems
-      } else {
-        // Si el producto no existe, agregarlo con cantidad 1
-        return [
-          ...prevItems,
-          {
-            ...product,
-            cantidad: 1,
-            // Asegurarse de que el precio numérico esté disponible
-            precioNumerico: product.precioNumerico || Number.parseFloat(product.precio.replace(/[^0-9.-]+/g, "")),
-          },
-        ]
+      if (!response.ok) {
+        throw new Error("Error al agregar al carrito")
       }
-    })
+
+      const data = await response.json()
+      setCartItems(
+        data.items.map((item) => {
+          const precio = Number.parseFloat(item.producto.precio) || 0
+
+          return {
+            id: item.producto.id,
+            nombre: item.producto.nombre,
+            precio: `$${precio.toFixed(2)}`,
+            precioNumerico: precio,
+            cantidad: item.cantidad,
+            imagen: item.producto.imagen,
+            descuento: item.producto.descuento,
+            stock: item.producto.stock || item.producto.existencia, // Asegurar que el stock esté disponible
+            existencia: item.producto.existencia || item.producto.stock,
+          }
+        }),
+      )
+    } catch (error) {
+      console.error("Error al agregar producto:", error)
+    }
   }
 
-  // Función para actualizar la cantidad de un producto
-  const updateQuantity = (id, quantity) => {
-    if (quantity < 1) return
+  // 3️⃣ Actualizar cantidad de un producto (equivale a re-agregar con nueva cantidad)
+  const updateQuantity = async (itemId, cantidad) => {
+    try {
+      const response = await fetch("https://backendbeat-serverbeat.586pa0.easypanel.host/carrito/actualizar", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include", // por JWT en cookies
+        body: JSON.stringify({
+          itemId,      // <--- este es el nuevo nombre correcto
+          cantidad,
+        }),
+      });
 
-    setCartItems((prevItems) => prevItems.map((item) => (item.id === id ? { ...item, cantidad: quantity } : item)))
+      if (!response.ok) {
+        throw new Error("Error al actualizar cantidad");
+      }
+
+      await fetchCart(); // volver a cargar carrito
+    } catch (error) {
+      console.error("Error al actualizar producto:", error);
+    }
+  };
+
+  // 4️⃣ Eliminar producto del carrito
+  const removeFromCart = async (productoId) => {
+    try {
+      const response = await fetch(`https://backendbeat-serverbeat.586pa0.easypanel.host/carrito/eliminar/${productoId}`, {
+        method: "DELETE",
+        credentials: "include", // <- Muy importante si usas JWT en cookies
+      })
+
+      if (!response.ok) throw new Error("Error al eliminar producto")
+
+      await fetchCart() // Actualiza el carrito tras eliminar
+    } catch (error) {
+      console.error("Error al eliminar producto del carrito:", error)
+    }
   }
 
-  // Función para eliminar un producto del carrito
-  const removeFromCart = (id) => {
-    setCartItems((prevItems) => prevItems.filter((item) => item.id !== id))
+  // 5️⃣ Vaciar carrito (si tienes un endpoint específico, cámbialo)
+  const clearCart = async () => {
+    try {
+      const response = await fetch("https://backendbeat-serverbeat.586pa0.easypanel.host/carrito/vaciar", {
+        method: "DELETE",
+        credentials: "include",
+      })
+
+      if (!response.ok) throw new Error("Error al vaciar carrito")
+
+      await fetchCart()
+    } catch (error) {
+      console.error("Error al vaciar carrito:", error)
+    }
   }
 
-  // Función para vaciar el carrito
-  const clearCart = () => {
-    setCartItems([])
-  }
-
-  // Función para obtener el número total de productos en el carrito
+  // 6️⃣ Utilidades de cálculo
   const getCartItemsCount = () => {
     return cartItems.reduce((total, item) => total + item.cantidad, 0)
   }
 
-  // Función para calcular el subtotal del carrito
   const getSubtotal = () => {
     return cartItems.reduce((total, item) => {
-      return total + item.precioNumerico * item.cantidad
+      const precio = item.precioNumerico || Number.parseFloat(item.precio?.replace(/[^0-9.]+/g, "") || "0")
+      return total + precio * item.cantidad
     }, 0)
   }
 
-  // Función para calcular los descuentos
   const getDiscounts = () => {
-    let totalDiscounts = 0
-
-    cartItems.forEach((item) => {
+    return cartItems.reduce((total, item) => {
       if (item.descuento) {
-        const percentage = Number.parseInt(item.descuento.replace("%", ""))
-        totalDiscounts += item.precioNumerico * item.cantidad * (percentage / 100)
+        const porcentaje = Number.parseInt(item.descuento.replace("%", ""))
+        const precio = item.precioNumerico || Number.parseFloat(item.precio?.replace(/[^0-9.]+/g, "") || "0")
+        return total + precio * item.cantidad * (porcentaje / 100)
       }
-    })
-
-    return totalDiscounts
+      return total
+    }, 0)
   }
 
-  // Función para calcular el total del carrito
-  const getTotal = () => {
-    return getSubtotal() - getDiscounts()
+  const getTotal = () => getSubtotal() - getDiscounts()
+
+  const hasEnoughStock = (productId, requestedQuantity) => {
+    const item = cartItems.find((i) => i.id === productId)
+    const stock = item?.stock || item?.existencia || 999
+    return requestedQuantity <= stock
   }
 
-  // Valores y funciones que se proporcionarán a través del contexto
+  const getAvailableStock = (productId) => {
+    const item = cartItems.find((i) => i.id === productId)
+    return item?.stock || item?.existencia || 999
+  }
+
   const value = {
     cartItems,
     addToCart,
@@ -115,8 +193,10 @@ export const CartProvider = ({ children }) => {
     getSubtotal,
     getDiscounts,
     getTotal,
+    hasEnoughStock,
+    getAvailableStock,
+    fetchCart,
   }
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>
 }
-

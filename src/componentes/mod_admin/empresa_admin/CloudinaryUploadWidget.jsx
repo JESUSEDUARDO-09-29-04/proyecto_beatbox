@@ -5,12 +5,12 @@ const CloudinaryUploadWidget = ({ onUpload }) => {
   useEffect(() => {
     // Verifica si el script de Cloudinary ya está cargado
     const existingScript = document.querySelector(
-      'script[src="https://widget.cloudinary.com/v2.0/global/all.js"]'
+      'script[src="http://widget.cloudinary.com/v2.0/global/all.js"]'
     );
 
     if (!existingScript) {
       const script = document.createElement('script');
-      script.src = 'https://widget.cloudinary.com/v2.0/global/all.js';
+      script.src = 'http://widget.cloudinary.com/v2.0/global/all.js';
       script.async = true;
 
       script.onload = () => {

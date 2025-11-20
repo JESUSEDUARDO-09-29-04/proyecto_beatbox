@@ -21,11 +21,11 @@ const FooterH = () => {
   useEffect(() => {
     const fetchSocialLinks = async () => {
       try {
-        // Redes sociales esperadas
+        // Redes sociales esperadass
         const socialTypes = ["facebook", "instagram", "x"]
         const fetchPromises = socialTypes.map(async (type) => {
           try {
-            const response = await fetch(`http://localhost:3000/social/ver/${type}`)
+            const response = await fetch(`https://backendbeat-serverbeat.586pa0.easypanel.host/social/ver/${type}`)
 
             if (response.ok) {
               const data = await response.json()

@@ -9,7 +9,7 @@ import FooterH from "../FooterH"
 import Breadcrumbs from "../Breadcrumbs"
 import "./Suscripcion.css"
 import { FaCheck, FaArrowRight } from "react-icons/fa"
-import { verificarSesion } from "../../utils/verificarSesion" // ajusta el path si cambia
+import { verificarSesion } from "../../utils/verificarSesion"
 
 const Suscripcion = () => {
   const navigate = useNavigate()
@@ -73,7 +73,7 @@ const Suscripcion = () => {
     setPlanSeleccionado(id)
   }
 
-  // Función para continuar al siguiente paso - CORREGIDA
+  // Función para continuar al siguiente paso
   const continuarProceso = async () => {
     if (!planSeleccionado) {
       alert("Por favor selecciona un plan antes de continuar")
@@ -83,9 +83,7 @@ const Suscripcion = () => {
     setCargandoContinuar(true)
 
     try {
-      // Agregar timeout para evitar que se quede colgado
       const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error("Timeout")), 5000))
-
       const usuario = await Promise.race([verificarSesion(), timeoutPromise])
 
       if (!usuario) {
@@ -95,12 +93,9 @@ const Suscripcion = () => {
         return
       }
 
-      // Si llegamos aquí, el usuario está autenticado
       navigate(`/suscripcion/datos?plan=${planSeleccionado}`)
     } catch (error) {
       console.error("Error al verificar sesión:", error)
-
-      // Si hay error, asumir que no está autenticado y redirigir a login
       navigate("/iniciar-sesion", {
         state: { aviso: "Por favor inicia sesión para continuar con la suscripción." },
       })
@@ -121,52 +116,52 @@ const Suscripcion = () => {
           <p>Selecciona el plan que mejor se adapte a tus necesidades y objetivos de entrenamiento.</p>
         </div>
 
-        <div className="suscripcion-pasos">
-          <div className="paso activo">
-            <div className="paso-numero">1</div>
-            <div className="paso-texto">Elegir plan</div>
+        <div className="suscripcion-pasos-sub">
+          <div className="paso-sub activo">
+            <div className="paso-numero-sub">1</div>
+            <div className="paso-texto-sub">Elegir plan</div>
           </div>
-          <div className="paso-linea"></div>
-          <div className="paso">
-            <div className="paso-numero">2</div>
-            <div className="paso-texto">Datos personales</div>
+          <div className="paso-linea-sub"></div>
+          <div className="paso-sub">
+            <div className="paso-numero-sub">2</div>
+            <div className="paso-texto-sub">Datos personales</div>
           </div>
-          <div className="paso-linea"></div>
-          <div className="paso">
-            <div className="paso-numero">3</div>
-            <div className="paso-texto">Pago</div>
+          <div className="paso-linea-sub"></div>
+          <div className="paso-sub">
+            <div className="paso-numero-sub">3</div>
+            <div className="paso-texto-sub">Pago</div>
           </div>
-          <div className="paso-linea"></div>
-          <div className="paso">
-            <div className="paso-numero">4</div>
-            <div className="paso-texto">Confirmación</div>
+          <div className="paso-linea-sub"></div>
+          <div className="paso-sub">
+            <div className="paso-numero-sub">4</div>
+            <div className="paso-texto-sub">Confirmación</div>
           </div>
         </div>
 
-        <div className="planes-container">
+        <div className="planes-container-sub">
           {planes.map((plan) => (
             <div
               key={plan.id}
-              className={`plan-card ${plan.destacado ? "destacado" : ""} ${planSeleccionado === plan.id ? "seleccionado" : ""}`}
+              className={`plan-card-sub ${plan.destacado ? "destacado" : ""} ${planSeleccionado === plan.id ? "seleccionado" : ""}`}
               onClick={() => seleccionarPlan(plan.id)}
             >
-              {plan.destacado && <div className="plan-badge">Popular</div>}
-              <div className="plan-header">
+              {plan.destacado && <div className="plan-badge-sub">POPULAR</div>}
+              <div className="plan-header-sub">
                 <h3>{plan.tipo}</h3>
-                <div className="plan-precio">
-                  <span className="precio">${plan.precio}</span>
-                  <span className="periodo">{plan.periodo}</span>
+                <div className="plan-precio-sub">
+                  <span className="precio-sub">${plan.precio}</span>
+                  <span className="periodo-sub">{plan.periodo}</span>
                 </div>
               </div>
-              <div className="plan-body">
-                <ul className="plan-features">
+              <div className="plan-body-sub">
+                <ul className="plan-features-sub">
                   {plan.caracteristicas.map((caracteristica, index) => (
                     <li key={index}>
-                      <FaCheck className="check-icon" /> {caracteristica}
+                      <FaCheck className="check-icon-sub" /> {caracteristica}
                     </li>
                   ))}
                 </ul>
-                <div className={`plan-seleccion ${planSeleccionado === plan.id ? "seleccionado" : ""}`}>
+                <div className={`plan-seleccion-sub ${planSeleccionado === plan.id ? "seleccionado" : ""}`}>
                   {planSeleccionado === plan.id ? "Seleccionado" : "Seleccionar"}
                 </div>
               </div>
@@ -174,12 +169,12 @@ const Suscripcion = () => {
           ))}
         </div>
 
-        <div className="suscripcion-acciones">
-          <button className="btn btn-volver" onClick={() => navigate("/")}>
+        <div className="suscripcion-acciones-sub">
+          <button className="btn-sub btn-volver-sub" onClick={() => navigate("/")}>
             Volver
           </button>
           <button
-            className="btn btn-continuar"
+            className="btn-sub btn-continuar-sub"
             onClick={continuarProceso}
             disabled={!planSeleccionado || cargandoContinuar}
           >

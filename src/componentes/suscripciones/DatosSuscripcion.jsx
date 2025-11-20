@@ -325,25 +325,25 @@ const DatosSuscripcion = () => {
               <p>Completa tus datos para continuar con el proceso de suscripción.</p>
             </div>
 
-            <div className="suscripcion-pasos">
-              <div className="paso completado">
-                <div className="paso-numero">1</div>
-                <div className="paso-texto">Elegir plan</div>
+            <div className="suscripcion-pasos-sub">
+              <div className="paso-sub completado">
+                <div className="paso-numero-sub">1</div>
+                <div className="paso-texto-sub">Elegir plan</div>
               </div>
-              <div className="paso-linea completado"></div>
-              <div className="paso activo">
-                <div className="paso-numero">2</div>
-                <div className="paso-texto">Datos personales</div>
+              <div className="paso-linea-sub completada"></div>
+              <div className="paso-sub activo">
+                <div className="paso-numero-sub">2</div>
+                <div className="paso-texto-sub">Datos personales</div>
               </div>
-              <div className="paso-linea"></div>
-              <div className="paso">
-                <div className="paso-numero">3</div>
-                <div className="paso-texto">Pago</div>
+              <div className="paso-linea-sub"></div>
+              <div className="paso-sub">
+                <div className="paso-numero-sub">3</div>
+                <div className="paso-texto-sub">Pago</div>
               </div>
-              <div className="paso-linea"></div>
-              <div className="paso">
-                <div className="paso-numero">4</div>
-                <div className="paso-texto">Confirmación</div>
+              <div className="paso-linea-sub"></div>
+              <div className="paso-sub">
+                <div className="paso-numero-sub">4</div>
+                <div className="paso-texto-sub">Confirmación</div>
               </div>
             </div>
 
@@ -644,11 +644,16 @@ const DatosSuscripcion = () => {
                   </div>
                 </div>
 
-                <div className="suscripcion-acciones">
-                  <button type="button" className="btn btn-volver" onClick={volverPasoAnterior} disabled={enviando}>
+                <div className="suscripcion-acciones-sub">
+                  <button
+                    type="button"
+                    className="btn-sub btn-volver-sub"
+                    onClick={volverPasoAnterior}
+                    disabled={enviando}
+                  >
                     <FaArrowLeft /> Volver
                   </button>
-                  <button type="submit" className="btn btn-continuar" disabled={enviando}>
+                  <button type="submit" className="btn-sub btn-continuar-sub" disabled={enviando}>
                     {enviando ? "Procesando..." : "Continuar"} {!enviando && <FaArrowRight />}
                   </button>
                 </div>

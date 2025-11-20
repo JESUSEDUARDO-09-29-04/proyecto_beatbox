@@ -115,7 +115,7 @@ const InicioSesion = () => {
     }
   
     try {
-      const loginResponse = await fetch("http://localhost:3000/auth/login", {
+      const loginResponse = await fetch("https://backendbeat-serverbeat.586pa0.easypanel.host/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -128,7 +128,7 @@ const InicioSesion = () => {
       })
   
       if (loginResponse.ok) {
-        const userResponse = await fetch("http://localhost:3000/auth/validate-user", {
+        const userResponse = await fetch("https://backendbeat-serverbeat.586pa0.easypanel.host/auth/validate-user", {
           method: "GET",
           credentials: "include",
         })

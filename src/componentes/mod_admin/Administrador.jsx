@@ -7,7 +7,7 @@ import { useEmpresa } from "../../context/EmpresaContext"
 import {
   FaUsers,
   FaDollarSign,
-  FaStore, // Keep FaStore for the new "Tienda" card
+  FaStore,
   FaBuilding,
   FaFileAlt,
   FaExclamationTriangle,
@@ -17,24 +17,25 @@ import {
   FaTachometerAlt,
   FaBars,
   FaTimes,
-  FaMusic, // Agregar esta línea
+  FaMusic,
 } from "react-icons/fa"
 import FooterH from "../FooterH"
 import HeaderH from "../HeaderH"
 import Breadcrumbs from "../Breadcrumbs"
 import "./Administrador.css"
 import logo from "../../assets/logo.png"
+
 // Importamos los módulos de administración
 import DocumentosRegulatoriosAdmin from "../mod_admin/documentos_admin/DocumentosRegulatoriosAdmin"
 import EmpresaAdmin from "../mod_admin/empresa_admin/EmpresaAdmin"
 import IncidentesAdmin from "../mod_admin/incidentes_admin/IncidentesAdmin"
 import RedesSocialesAdmin from "../mod_admin/redes_sociales_admin/RedesSocialesAdmin"
 import UsuariosAdmin from "../mod_admin/usuarios_admin/UsuariosAdmin"
-// Añadir la importación del componente CategoriasAdmin
 import CategoriasAdmin from "../mod_admin/Tienda/Categorias"
 import Productos from "../mod_admin/Tienda/productos"
 import PlaylistAdmin from "../mod_admin/playlist_admin/PlaylistAdmin"
 import Reportes from "../mod_admin/reportes/reportes-ventas"
+import GestionSuscripciones from "../mod_admin/suscripciones_admin/GestionSuscripciones"
 
 const Administrador = () => {
   const navigate = useNavigate()
@@ -58,7 +59,7 @@ const Administrador = () => {
   const [estadisticas, setEstadisticas] = useState({
     usuarios: 120,
     suscripciones: 85,
-    tienda: 50, // New stat for "Tienda"
+    tienda: 50,
   })
 
   // Simulación de carga de estadísticas
@@ -68,28 +69,23 @@ const Administrador = () => {
         ...prev,
         usuarios: prev.usuarios + Math.floor(Math.random() * 3),
         suscripciones: prev.suscripciones + Math.floor(Math.random() * 2),
-        tienda: prev.tienda + Math.floor(Math.random() * 1), // Simulate growth for tienda
+        tienda: prev.tienda + Math.floor(Math.random() * 1),
       }))
-    }, 60000) // Actualizar cada minuto
-
+    }, 60000)
     return () => clearInterval(interval)
   }, [])
 
-  // Asegurar que el menú siempre se muestre completo al cargar la página
   useEffect(() => {
     setMenuColapsado(false)
   }, [])
 
   // Efecto para establecer la vista actual basada en la URL
   useEffect(() => {
-    // Obtener la parte de la ruta después de /administrador/
     const path = location.pathname.toLowerCase()
-
     if (path === "/administrador" || path === "/administrador/") {
       setVistaActual("bienvenida")
       return
     }
-
     if (path.includes("/administrador/dashboard")) {
       setVistaActual("dashboard")
     } else if (path.includes("/administrador/usuarios")) {
@@ -121,14 +117,14 @@ const Administrador = () => {
       setMenuAbierto((prev) => ({ ...prev, reportes: true }))
     } else if (path.includes("/administrador/playlistadmin")) {
       setVistaActual("playlist")
+    } else if (path.includes("/administrador/suscripcion_admin")) {
+      setVistaActual("suscripcion")
     }
   }, [location.pathname])
 
   const handleNavigation = (view) => {
     setVistaActual(view)
-    setMenuMobileVisible(false) // Cerrar menú móvil al navegar
-
-    // Actualizar la URL según la vista seleccionada
+    setMenuMobileVisible(false)
     switch (view) {
       case "dashboard":
         navigate("/administrador/dashboard")
@@ -169,6 +165,9 @@ const Administrador = () => {
       case "playlist":
         navigate("/administrador/playlistadmin")
         break
+      case "suscripcion":
+        navigate("/administrador/suscripcion_admin")
+        break
       default:
         navigate("/administrador")
         break
@@ -195,17 +194,14 @@ const Administrador = () => {
   }
 
   const cerrarSesion = () => {
-    // Lógica para cerrar sesión
     navigate("/iniciar-sesion")
   }
 
-  // Determinar qué logo usar: vigente del backend o logo por defecto
   const getLogoSrc = () => {
-    if (cargando) return logo // Usar logo por defecto mientras carga
-    return logoVigente || logo // Usar logo vigente si existe, sino el por defecto
+    if (cargando) return logo
+    return logoVigente || logo
   }
 
-  // Filtrar opciones de menú según búsqueda
   const menuFiltrado =
     busqueda.trim() === ""
       ? null
@@ -218,23 +214,18 @@ const Administrador = () => {
           { id: "incidencias", nombre: "Incidencias", icono: <FaExclamationTriangle /> },
           { id: "redesSociales", nombre: "Redes Sociales", icono: <FaGlobe /> },
           { id: "playlist", nombre: "Playlist", icono: <FaGlobe /> },
+          { id: "suscripcion", nombre: "Suscripcion", icono: <FaDollarSign /> },
           { id: "reportes", nombre: "Reportes y Estadísticas", icono: <FaChartBar /> },
         ].filter((item) => item.nombre.toLowerCase().includes(busqueda.toLowerCase()))
 
-  // Contar notificaciones no leídas
   const notificacionesSinLeer = notificaciones.filter((n) => !n.leida).length
 
   return (
     <div className={`contenedor-admin ${theme === "dark" ? "dark" : ""}`}>
-      {/* Usar HeaderH sin modificaciones */}
       <HeaderH />
-
-      {/* Contenedor para Breadcrumbs - sin modificar su comportamiento */}
       <div className="breadcrumb-container">
         <Breadcrumbs />
       </div>
-
-      {/* Botón de menú móvil */}
       <button
         className="mobile-menu-toggle"
         onClick={() => setMenuMobileVisible(!menuMobileVisible)}
@@ -242,9 +233,7 @@ const Administrador = () => {
       >
         {menuMobileVisible ? <FaTimes /> : <FaBars />}
       </button>
-
       <div className="admin-layout">
-        {/* Menú lateral */}
         <section
           className={`seccion-menu ${menuColapsado ? "collapsed" : ""} ${menuMobileVisible ? "mobile-visible" : ""}`}
         >
@@ -261,18 +250,15 @@ const Administrador = () => {
               </div>
             )}
           </div>
-
           <ul className="menu-admin">
             <li className={vistaActual === "dashboard" ? "active" : ""} onClick={() => handleNavigation("dashboard")}>
               <FaTachometerAlt className="icono-menu" />
               {!menuColapsado && <span>Dashboard</span>}
             </li>
-
             <li className={vistaActual === "usuarios" ? "active" : ""} onClick={() => handleNavigation("usuarios")}>
               <FaUsers className="icono-menu" />
               {!menuColapsado && <span>Gestión de Usuarios</span>}
             </li>
-
             <li
               className={vistaActual === "suscripciones" ? "active" : ""}
               onClick={() => handleNavigation("suscripciones")}
@@ -280,12 +266,17 @@ const Administrador = () => {
               <FaDollarSign className="icono-menu" />
               {!menuColapsado && <span>Gestión de Suscripciones</span>}
             </li>
-
+            <li
+              className={vistaActual === "suscripcion" ? "active" : ""}
+              onClick={() => handleNavigation("suscripcion")}
+            >
+              <FaDollarSign className="icono-menu" />
+              {!menuColapsado && <span>Activar Suscripciones</span>}
+            </li>
             <li className={vistaActual === "playlist" ? "active" : ""} onClick={() => handleNavigation("playlist")}>
               <FaMusic className="icono-menu" />
               {!menuColapsado && <span>Playlists de Spotify</span>}
             </li>
-
             <li
               className={`menu-item ${menuAbierto.tienda ? "submenu-open" : ""} ${vistaActual.startsWith("tienda") ? "active" : ""}`}
               onClick={() => toggleSubmenu("tienda")}
@@ -298,7 +289,6 @@ const Administrador = () => {
                 </>
               )}
             </li>
-
             {menuAbierto.tienda && !menuColapsado && (
               <ul className="submenu-admin">
                 <li
@@ -330,19 +320,14 @@ const Administrador = () => {
                 </li>
               </ul>
             )}
-
-            {/* Removed "Gestión de Entrenadores" and "Clases y Horarios" */}
-
             <li className={vistaActual === "empresa" ? "active" : ""} onClick={() => handleNavigation("empresa")}>
               <FaBuilding className="icono-menu" />
               {!menuColapsado && <span>Gestión de la Empresa</span>}
             </li>
-
             <li className={vistaActual === "documentos" ? "active" : ""} onClick={() => handleNavigation("documentos")}>
               <FaFileAlt className="icono-menu" />
               {!menuColapsado && <span>Documentos Regulatorios</span>}
             </li>
-
             <li
               className={vistaActual === "incidencias" ? "active" : ""}
               onClick={() => handleNavigation("incidencias")}
@@ -350,7 +335,6 @@ const Administrador = () => {
               <FaExclamationTriangle className="icono-menu" />
               {!menuColapsado && <span>Incidencias</span>}
             </li>
-
             <li
               className={vistaActual === "redesSociales" ? "active" : ""}
               onClick={() => handleNavigation("redesSociales")}
@@ -358,7 +342,6 @@ const Administrador = () => {
               <FaGlobe className="icono-menu" />
               {!menuColapsado && <span>Redes Sociales</span>}
             </li>
-
             <li
               className={`menu-item ${menuAbierto.reportes ? "submenu-open" : ""} ${vistaActual.startsWith("reportes") ? "active" : ""}`}
               onClick={() => toggleSubmenu("reportes")}
@@ -371,7 +354,6 @@ const Administrador = () => {
                 </>
               )}
             </li>
-
             {menuAbierto.reportes && !menuColapsado && (
               <ul className="submenu-admin">
                 <li
@@ -396,13 +378,10 @@ const Administrador = () => {
             )}
           </ul>
         </section>
-
-        {/* Contenido principal */}
         <section className={`seccion-contenido ${menuColapsado ? "expanded" : ""}`}>
           {vistaActual === "bienvenida" || vistaActual === "dashboard" ? (
             <div className="dashboard-container">
               <h1 className="dashboard-title">Dashboard</h1>
-
               <div className="dashboard-welcome">
                 <div className="welcome-content">
                   <h2>Bienvenido al Panel de Administración de Beatbox</h2>
@@ -418,7 +397,6 @@ const Administrador = () => {
                   )}
                 </div>
               </div>
-
               <div className="stats-cards">
                 <div className="stat-card" onClick={() => handleNavigation("usuarios")}>
                   <div className="stat-icon users">
@@ -430,7 +408,6 @@ const Administrador = () => {
                     <p className="stat-change positive">+5% esta semana</p>
                   </div>
                 </div>
-
                 <div className="stat-card" onClick={() => handleNavigation("suscripciones")}>
                   <div className="stat-icon subscriptions">
                     <FaDollarSign />
@@ -441,7 +418,6 @@ const Administrador = () => {
                     <p className="stat-change positive">+3% esta semana</p>
                   </div>
                 </div>
-
                 <div className="stat-card" onClick={() => handleNavigation("tienda-productos")}>
                   <div className="stat-icon store">
                     <FaStore />
@@ -477,7 +453,6 @@ const Administrador = () => {
                     </div>
                   </div>
                 </div>
-
                 <div className="dashboard-section quick-actions">
                   <h2>Acciones Rápidas</h2>
                   <div className="quick-actions-grid">
@@ -500,17 +475,16 @@ const Administrador = () => {
               {vistaActual === "incidencias" && <IncidentesAdmin />}
               {vistaActual === "redesSociales" && <RedesSocialesAdmin />}
               {vistaActual === "usuarios" && <UsuariosAdmin />}
+              {vistaActual === "suscripciones" && <GestionSuscripciones />}
               {vistaActual === "playlist" && <PlaylistAdmin />}
               {vistaActual === "tienda-categorias" && <CategoriasAdmin />}
               {vistaActual === "tienda-productos" && <Productos />}
               {vistaActual === "reportes-ventas" && <Reportes />}
-              {/* Aquí se pueden agregar más vistas según sea necesario */}
+              {vistaActual === "suscripcion" && <GestionSuscripciones />}
             </>
           )}
         </section>
       </div>
-
-      {/* Usar FooterH sin modificaciones */}
       <FooterH />
     </div>
   )

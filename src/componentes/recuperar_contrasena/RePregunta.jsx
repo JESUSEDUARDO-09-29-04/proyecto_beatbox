@@ -65,7 +65,7 @@ const RecuperarContrasenaPregunta = () => {
 
     try {
       // Llamar a la API para obtener la pregunta secreta con la URL correcta
-      const response = await fetch("http://localhost:3000/auth/give/secret-question", {
+      const response = await fetch("https://backendbeat-serverbeat.586pa0.easypanel.host/auth/give/secret-question", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

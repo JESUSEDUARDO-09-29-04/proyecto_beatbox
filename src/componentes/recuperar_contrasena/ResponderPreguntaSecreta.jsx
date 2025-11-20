@@ -60,7 +60,7 @@ const ResponderPreguntaSecreta = () => {
 
     try {
       // Llamar a la API para verificar la respuesta
-      const response = await fetch("http://localhost:3000/auth/reset/password/verify-secret-answer", {
+      const response = await fetch("https://backendbeat-serverbeat.586pa0.easypanel.host/auth/reset/password/verify-secret-answer", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

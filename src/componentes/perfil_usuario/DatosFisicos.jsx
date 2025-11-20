@@ -4,7 +4,15 @@ import { useState, useEffect } from "react"
 import { FaWeight, FaRulerVertical, FaCalendarAlt, FaSave, FaChartLine } from "react-icons/fa"
 import "./DatosFisicos.css"
 
-const DatosFisicos = ({ userData }) => {
+const API_URL = "https://backendbeat-serverbeat.586pa0.easypanel.host"
+
+const DatosFisicos = () => {
+  const [userData, setUserData] = useState(null)
+  const [perfilUsuario, setPerfilUsuario] = useState(null)
+  const [historialMediciones, setHistorialMediciones] = useState([])
+  const [guardando, setGuardando] = useState(false)
+  const [mensaje, setMensaje] = useState({ texto: "", tipo: "" })
+
   const [datosForm, setDatosForm] = useState({
     peso: "",
     altura: "",
@@ -22,62 +30,134 @@ const DatosFisicos = ({ userData }) => {
     calorias: null,
   })
 
-  const [guardando, setGuardando] = useState(false)
-  const [mensaje, setMensaje] = useState({ texto: "", tipo: "" })
-  const [historialMediciones, setHistorialMediciones] = useState([])
+  // === Calcula edad automáticamente ===
+  const calcularEdad = (fechaNacimiento) => {
+    if (!fechaNacimiento) return ""
+    const hoy = new Date()
+    const nacimiento = new Date(fechaNacimiento)
+    let edad = hoy.getFullYear() - nacimiento.getFullYear()
+    const mes = hoy.getMonth() - nacimiento.getMonth()
+    if (mes < 0 || (mes === 0 && hoy.getDate() < nacimiento.getDate())) edad--
+    return edad
+  }
 
-  // Cargar datos existentes
-  useEffect(() => {
-    if (userData) {
-      // Simulación de carga de datos desde una API
-      setTimeout(() => {
-        const datosGuardados = {
-          peso: "100",
-          altura: "175",
-          edad: "30",
-          genero: "masculino",
-          nivelActividad: "moderado",
-          fechaRegistro: new Date().toISOString().split("T")[0],
-        }
-
-        // Cargar historial de mediciones previas si existe
-        const historialSimulado = [
-          {
-            id: 1,
-            fecha: "2023-01-12",
-            peso: "100",
-            imc: "32.7",
-          },
-        ]
-
-        setDatosForm(datosGuardados)
-        setHistorialMediciones(historialSimulado)
-        calcularResultados(datosGuardados)
-      }, 500)
+  // === Obtiene usuario autenticado ===
+  const obtenerUsuario = async () => {
+    try {
+      const res = await fetch(`${API_URL}/auth/validate-user`, {
+        credentials: "include",
+      })
+      if (!res.ok) throw new Error("No se pudo validar usuario")
+      const data = await res.json()
+      console.log("✅ Usuario validado:", data)
+      console.log("👤 Estructura del usuario recibido:", JSON.stringify(data, null, 2))
+      return data
+    } catch (err) {
+      console.error("Error al obtener usuario:", err)
+      return null
     }
-  }, [userData])
+  }
 
-  // Calcular IMC cuando cambia peso o altura
-  useEffect(() => {
-    if (datosForm.peso && datosForm.altura) {
-      calcularResultados(datosForm)
+  // === Obtiene perfil del usuario ===
+  const obtenerPerfilUsuario = async (idusuario) => {
+    try {
+      const res = await fetch(`${API_URL}/perfil-usuarios/usuario/${idusuario}`, {
+        credentials: "include",
+      })
+      if (!res.ok) throw new Error("No se pudo obtener el perfil del usuario")
+      const data = await res.json()
+      console.log("✅ Perfil obtenido:", data)
+      return data
+    } catch (err) {
+      console.error("Error al obtener perfil:", err)
+      return null
     }
+  }
+
+  // === Obtiene historial de pesos ===
+  const obtenerHistorial = async (idPerfil) => {
+    try {
+      const res = await fetch(`${API_URL}/pesos/perfil/${idPerfil}`, {
+        credentials: "include",
+      })
+      if (!res.ok) throw new Error("No se pudo obtener historial de pesos")
+      const data = await res.json()
+      setHistorialMediciones(data)
+    } catch (err) {
+      console.error("Error al obtener historial:", err)
+    }
+  }
+
+  // === Guarda nueva medición en la BD ===
+  const guardarMedicion = async (idPerfil, nuevaMedicion) => {
+    try {
+      const res = await fetch(`${API_URL}/pesos`, {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          perfilUsuario: { id: idPerfil },
+          peso: Number.parseFloat(nuevaMedicion.peso),
+          fecha: new Date().toISOString().split("T")[0],
+          imc: nuevaMedicion.imc,
+        }),
+      })
+
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.message || "Error al guardar medición")
+      console.log("📤 Medición guardada:", data)
+      return data
+    } catch (err) {
+      console.error("Error al guardar medición:", err)
+      throw err
+    }
+  }
+
+  // === Carga datos iniciales ===
+  useEffect(() => {
+    const cargarDatos = async () => {
+      const user = await obtenerUsuario()
+      if (!user) return
+      setUserData(user)
+
+      const perfil = await obtenerPerfilUsuario(user.usuario)
+      if (perfil && perfil.id) {
+        setPerfilUsuario(perfil)
+
+        const edadCalculada = calcularEdad(perfil.fecha_nacimiento)
+        setDatosForm((prev) => ({
+          ...prev,
+          edad: edadCalculada,
+          genero: perfil.genero || "masculino",
+          altura: perfil.altura || "",
+          peso: perfil.peso_inicial || "",
+        }))
+
+        await obtenerHistorial(perfil.id)
+      } else {
+        console.warn("⚠️ No se encontró perfil del usuario")
+      }
+    }
+
+    cargarDatos()
+  }, [])
+
+  // === Calcula resultados ===
+  useEffect(() => {
+    if (datosForm.peso && datosForm.altura) calcularResultados(datosForm)
   }, [datosForm])
 
   const calcularResultados = (datos) => {
     const peso = Number.parseFloat(datos.peso)
-    const altura = Number.parseFloat(datos.altura) / 100 // convertir a metros
+    const altura = Number.parseFloat(datos.altura) / 100
     const edad = Number.parseInt(datos.edad)
     const genero = datos.genero
     const nivelActividad = datos.nivelActividad
-
     if (isNaN(peso) || isNaN(altura) || altura === 0) return
 
-    // Calcular IMC
     const imc = peso / (altura * altura)
     const imcRedondeado = Math.round(imc * 10) / 10
 
-    // Determinar categoría de IMC
     let categoriaIMC = ""
     if (imc < 18.5) categoriaIMC = "Bajo peso"
     else if (imc < 25) categoriaIMC = "Normal"
@@ -86,48 +166,25 @@ const DatosFisicos = ({ userData }) => {
     else if (imc < 40) categoriaIMC = "Obesidad II"
     else categoriaIMC = "Obesidad III"
 
-    // Calcular peso ideal (fórmula de Devine)
-    let pesoIdeal
-    if (genero === "masculino") {
-      pesoIdeal = 50 + 2.3 * (altura * 100 * 0.393701 - 60)
-    } else {
-      pesoIdeal = 45.5 + 2.3 * (altura * 100 * 0.393701 - 60)
-    }
+    let pesoIdeal =
+      genero === "masculino" ? 50 + 2.3 * (altura * 100 * 0.393701 - 60) : 45.5 + 2.3 * (altura * 100 * 0.393701 - 60)
     pesoIdeal = Math.round(pesoIdeal)
 
-    // Calcular TMB (Tasa Metabólica Basal) usando la fórmula de Mifflin-St Jeor
-    let tmb
-    if (genero === "masculino") {
-      tmb = 10 * peso + 6.25 * (altura * 100) - 5 * edad + 5
-    } else {
-      tmb = 10 * peso + 6.25 * (altura * 100) - 5 * edad - 161
-    }
+    let tmb =
+      genero === "masculino"
+        ? 10 * peso + 6.25 * (altura * 100) - 5 * edad + 5
+        : 10 * peso + 6.25 * (altura * 100) - 5 * edad - 161
     tmb = Math.round(tmb)
 
-    // Calcular calorías diarias según nivel de actividad
-    let factorActividad
-    switch (nivelActividad) {
-      case "sedentario":
-        factorActividad = 1.2
-        break
-      case "ligero":
-        factorActividad = 1.375
-        break
-      case "moderado":
-        factorActividad = 1.55
-        break
-      case "activo":
-        factorActividad = 1.725
-        break
-      case "muy activo":
-        factorActividad = 1.9
-        break
-      default:
-        factorActividad = 1.55
+    const factores = {
+      sedentario: 1.2,
+      ligero: 1.375,
+      moderado: 1.55,
+      activo: 1.725,
+      "muy activo": 1.9,
     }
-    const calorias = Math.round(tmb * factorActividad)
+    const calorias = Math.round(tmb * (factores[nivelActividad] || 1.55))
 
-    // Guardar los resultados en el estado
     setResultados({
       imc: imcRedondeado,
       categoriaIMC,
@@ -135,77 +192,87 @@ const DatosFisicos = ({ userData }) => {
       tmb,
       calorias,
     })
+  }
 
-    // Guardar los datos en localStorage para que ProgresoFisico pueda acceder a ellos
-    const datosParaProgresoFisico = {
-      pesoInicial: peso,
-      pesoObjetivo: pesoIdeal,
-      altura: altura * 100,
-      edad: edad,
-      genero: genero,
-      historialMediciones: historialMediciones,
+  // === Envía nueva medición al backend ===
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    if (!userData || !perfilUsuario) {
+      setMensaje({
+        texto: "No se pudo obtener la información del usuario",
+        tipo: "error",
+      })
+      return
     }
 
-    localStorage.setItem("datosFisicos", JSON.stringify(datosParaProgresoFisico))
-  }
-
-  const handleChange = (e) => {
-    const { name, value } = e.target
-    setDatosForm((prev) => ({ ...prev, [name]: value }))
-  }
-
-  const handleSubmit = (e) => {
-    e.preventDefault()
     setGuardando(true)
     setMensaje({ texto: "", tipo: "" })
 
-    // Validar datos
-    if (!datosForm.peso || !datosForm.altura || !datosForm.edad) {
+    if (!datosForm.peso || !datosForm.altura) {
       setMensaje({
-        texto: "Por favor complete todos los campos requeridos",
+        texto: "Por favor completa peso y altura",
         tipo: "error",
       })
       setGuardando(false)
       return
     }
 
-    // Simular envío de datos a la API
-    setTimeout(() => {
-      // Crear nueva medición
-      const nuevaMedicion = {
-        id: Date.now(),
-        fecha: datosForm.fechaRegistro,
-        peso: datosForm.peso,
-        imc: resultados.imc,
-      }
-
-      // Actualizar historial de mediciones
-      const nuevoHistorial = [...historialMediciones, nuevaMedicion]
-      setHistorialMediciones(nuevoHistorial)
-
-      // Actualizar los datos para ProgresoFisico
-      const datosParaProgresoFisico = {
-        pesoInicial: Number.parseFloat(datosForm.peso),
-        pesoObjetivo: resultados.pesoIdeal,
+    try {
+      const bodyData = {
+        idusuario: userData.usuario, // El backend requiere este campo en el body
+        peso_inicial: Number.parseFloat(datosForm.peso),
         altura: Number.parseFloat(datosForm.altura),
-        edad: Number.parseInt(datosForm.edad),
-        genero: datosForm.genero,
-        historialMediciones: nuevoHistorial,
+        imc: resultados.imc,
+        peso_objetivo: resultados.pesoIdeal,
       }
 
-      localStorage.setItem("datosFisicos", JSON.stringify(datosParaProgresoFisico))
+      console.log("[v0] 📤 Datos a enviar:", bodyData)
+      console.log("[v0] 🔗 URL:", `${API_URL}/perfil-usuarios/actualizarusuario/${userData.usuario}`)
+      console.log("[v0] 👤 Usuario ID:", userData.usuario)
 
-      setGuardando(false)
+      const response = await fetch(`${API_URL}/perfil-usuarios/actualizarusuario/${userData.usuario}`, {
+        method: "PUT",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(bodyData),
+      })
+
+      console.log("[v0] 📥 Response status:", response.status)
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        console.log("[v0] ❌ Error response:", errorData)
+        throw new Error(errorData.message || "Error al actualizar el perfil")
+      }
+
+      const data = await response.json()
+      console.log("[v0] ✅ Perfil actualizado correctamente:", data)
+
+      setPerfilUsuario(data)
+
       setMensaje({
-        texto: "Datos guardados correctamente",
+        texto: "¡Datos físicos guardados correctamente! ✅",
         tipo: "exito",
       })
 
-      // Ocultar mensaje después de 3 segundos
-      setTimeout(() => {
-        setMensaje({ texto: "", tipo: "" })
-      }, 3000)
-    }, 1000)
+      if (data.id) {
+        await obtenerHistorial(data.id)
+      }
+    } catch (error) {
+      console.error("[v0] ❌ Error al guardar datos físicos:", error)
+      setMensaje({
+        texto: `Error al guardar: ${error.message}`,
+        tipo: "error",
+      })
+    } finally {
+      setGuardando(false)
+      setTimeout(() => setMensaje({ texto: "", tipo: "" }), 5000)
+    }
+  }
+
+  const handleChange = (e) => {
+    const { name, value } = e.target
+    setDatosForm((prev) => ({ ...prev, [name]: value }))
   }
 
   return (
@@ -215,166 +282,113 @@ const DatosFisicos = ({ userData }) => {
         <p>Registra tus datos físicos para calcular tu IMC, peso ideal y requerimientos calóricos.</p>
       </div>
 
-      {mensaje.texto && (
-        <div className={`mensaje-alerta ${mensaje.tipo}`}>
-          <p>{mensaje.texto}</p>
-        </div>
-      )}
+      {mensaje.texto && <div className={`mensaje-alerta ${mensaje.tipo}`}>{mensaje.texto}</div>}
 
       <div className="datos-content">
-          <form onSubmit={handleSubmit} className="datos-form">
-            <div className="form-row-f">
-              <div className="form-group">
-                <label htmlFor="peso">
-                  <FaWeight /> Peso (kg)
-                </label>
-                <input
-                  type="number"
-                  id="peso"
-                  name="peso"
-                  value={datosForm.peso}
-                  onChange={handleChange}
-                  step="0.1"
-                  min="30"
-                  max="300"
-                  placeholder="Ej. 70.5"
-                />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="altura">
-                  <FaRulerVertical /> Altura (cm)
-                </label>
-                <input
-                  type="number"
-                  id="altura"
-                  name="altura"
-                  value={datosForm.altura}
-                  onChange={handleChange}
-                  step="1"
-                  min="100"
-                  max="250"
-                  placeholder="Ej. 175"
-                />
-              </div>
+        <form onSubmit={handleSubmit} className="datos-form">
+          <div className="form-row-f">
+            <div className="form-group">
+              <label>
+                <FaWeight /> Peso (kg)
+              </label>
+              <input
+                type="number"
+                name="peso"
+                value={datosForm.peso}
+                onChange={handleChange}
+                step="0.1"
+                min="30"
+                max="300"
+              />
             </div>
 
-            <div className="form-row-f">
-              <div className="form-group">
-                <label htmlFor="edad">
-                  <FaCalendarAlt /> Edad
-                </label>
-                <input
-                  type="number"
-                  id="edad"
-                  name="edad"
-                  value={datosForm.edad}
-                  onChange={handleChange}
-                  step="1"
-                  min="15"
-                  max="100"
-                  placeholder="Ej. 30"
-                />
-              </div>
+            <div className="form-group">
+              <label>
+                <FaRulerVertical /> Altura (cm)
+              </label>
+              <input
+                type="number"
+                name="altura"
+                value={datosForm.altura}
+                onChange={handleChange}
+                step="1"
+                min="100"
+                max="250"
+              />
+            </div>
+          </div>
 
-              <div className="form-group">
-                <label htmlFor="genero">Género</label>
-                <select id="genero" name="genero" value={datosForm.genero} onChange={handleChange}>
-                  <option value="masculino">Masculino</option>
-                  <option value="femenino">Femenino</option>
-                </select>
-              </div>
+          <div className="form-row-f">
+            <div className="form-group">
+              <label>
+                <FaCalendarAlt /> Edad
+              </label>
+              <input type="number" name="edad" value={datosForm.edad} readOnly disabled />
             </div>
 
-            <div className="form-row-f">
-              <div className="form-group">
-                <label htmlFor="nivelActividad">Nivel de Actividad</label>
-                <select
-                  id="nivelActividad"
-                  name="nivelActividad"
-                  value={datosForm.nivelActividad}
-                  onChange={handleChange}
-                >
-                  <option value="sedentario">Sedentario (poco o ningún ejercicio)</option>
-                  <option value="ligero">Ligero (ejercicio 1-3 días/semana)</option>
-                  <option value="moderado">Moderado (ejercicio 3-5 días/semana)</option>
-                  <option value="activo">Activo (ejercicio 6-7 días/semana)</option>
-                  <option value="muy activo">Muy activo (ejercicio intenso diario)</option>
-                </select>
-              </div>
+            <div className="form-group">
+              <label>Género</label>
+              <select name="genero" value={datosForm.genero} onChange={handleChange}>
+                <option value="masculino">Masculino</option>
+                <option value="femenino">Femenino</option>
+              </select>
+            </div>
+          </div>
 
-              <div className="form-group">
-                <label htmlFor="fechaRegistro">
-                  <FaCalendarAlt /> Fecha de Registro
-                </label>
-                <input
-                  type="date"
-                  id="fechaRegistro"
-                  name="fechaRegistro"
-                  value={datosForm.fechaRegistro}
-                  onChange={handleChange}
-                />
-              </div>
+          <div className="form-row-f">
+            <div className="form-group">
+              <label>Nivel de Actividad</label>
+              <select name="nivelActividad" value={datosForm.nivelActividad} onChange={handleChange}>
+                <option value="sedentario">Sedentario</option>
+                <option value="ligero">Ligero</option>
+                <option value="moderado">Moderado</option>
+                <option value="activo">Activo</option>
+                <option value="muy activo">Muy activo</option>
+              </select>
             </div>
 
-            <div className="form-actions">
-              <button type="submit" className="btn-guardar" disabled={guardando}>
-                {guardando ? (
-                  "Guardando..."
-                ) : (
-                  <>
-                    <FaSave /> Guardar Datos
-                  </>
-                )}
-              </button>
+            <div className="form-group">
+              <label>
+                <FaCalendarAlt /> Fecha de Registro
+              </label>
+              <input type="date" name="fechaRegistro" value={datosForm.fechaRegistro} onChange={handleChange} />
             </div>
-          </form>
+          </div>
+
+          <button type="submit" className="btn-guardar" disabled={guardando}>
+            {guardando ? (
+              "Guardando..."
+            ) : (
+              <>
+                <FaSave /> Guardar Datos
+              </>
+            )}
+          </button>
+        </form>
 
         <div className="resultados-container">
           <h2>
             <FaChartLine /> Resultados
           </h2>
-
           <div className="resultados-cards">
             <div className="resultado-card">
               <h3>IMC</h3>
-              <div className="resultado-valor">{resultados.imc || "-"}</div>
-              <div className="resultado-subtexto">{resultados.categoriaIMC}</div>
+              <div>{resultados.imc || "-"}</div>
+              <div>{resultados.categoriaIMC}</div>
             </div>
-
             <div className="resultado-card">
               <h3>Peso Ideal</h3>
-              <div className="resultado-valor">{resultados.pesoIdeal || "-"} kg</div>
+              <div>{resultados.pesoIdeal || "-"} kg</div>
             </div>
-
             <div className="resultado-card">
-              <h3>Tasa Metabólica Basal</h3>
-              <div className="resultado-valor">{resultados.tmb || "-"}</div>
-              <div className="resultado-subtexto">calorías/día</div>
+              <h3>TMB</h3>
+              <div>{resultados.tmb || "-"}</div>
+              <div>cal/día</div>
             </div>
-
             <div className="resultado-card highlight">
               <h3>Calorías Diarias</h3>
-              <div className="resultado-valor">{resultados.calorias || "-"}</div>
-              <div className="resultado-subtexto">para mantener tu peso actual</div>
+              <div>{resultados.calorias || "-"}</div>
             </div>
-          </div>
-
-          <div className="recomendaciones">
-            <h3>Recomendaciones</h3>
-            {resultados.imc && (
-              <div className="recomendacion-texto">
-                <p>
-                  {resultados.imc < 18.5
-                    ? "Tu IMC indica que estás por debajo del peso recomendado. Es importante aumentar tu ingesta calórica de manera saludable y considerar un programa de entrenamiento para ganar masa muscular."
-                    : resultados.imc < 25
-                      ? "¡Felicidades! Tu IMC está dentro del rango normal. Mantén tus hábitos saludables de alimentación y ejercicio regular."
-                      : resultados.imc < 30
-                        ? "Tu IMC indica sobrepeso. Recomendamos un déficit calórico moderado combinado con ejercicio regular para alcanzar un peso saludable."
-                        : "Tu IMC indica obesidad. Te recomendamos consultar con un profesional de la salud para establecer un plan personalizado de pérdida de peso."}
-                </p>
-              </div>
-            )}
           </div>
         </div>
       </div>
@@ -383,4 +397,3 @@ const DatosFisicos = ({ userData }) => {
 }
 
 export default DatosFisicos
-

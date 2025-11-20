@@ -2,7 +2,17 @@
 
 import { useState, useEffect, useContext } from "react"
 import { useNavigate } from "react-router-dom"
-import { FaHome, FaShoppingCart, FaEnvelope, FaBars, FaExclamationTriangle, FaUsersCog, FaUser } from "react-icons/fa"
+import {
+  FaHome,
+  FaShoppingCart,
+  FaEnvelope,
+  FaBars,
+  FaExclamationTriangle,
+  FaUsersCog,
+  FaUser,
+  FaSignInAlt,
+  FaUserPlus,
+} from "react-icons/fa"
 import { ThemeContext } from "../context/ThemeContext"
 import { useEmpresa } from "../context/EmpresaContext"
 import logo from "../assets/logo.png"
@@ -24,7 +34,7 @@ const HeaderH = () => {
   useEffect(() => {
     const verificarSesion = async () => {
       try {
-        const res = await fetch("http://localhost:3000/auth/validate-user", {
+        const res = await fetch("https://backendbeat-serverbeat.586pa0.easypanel.host/auth/validate-user", {
           method: "GET",
           credentials: "include",
         })
@@ -49,7 +59,7 @@ const HeaderH = () => {
 
   const manejarCerrarSesion = async () => {
     try {
-      await fetch("http://localhost:3000/auth/logout", {
+      await fetch("https://backendbeat-serverbeat.586pa0.easypanel.host/auth/logout", {
         method: "POST",
         credentials: "include",
       })
@@ -126,6 +136,12 @@ const HeaderH = () => {
               <button className="btn-suscribirse" onClick={() => navigate("/suscripcion")}>
                 ¡Suscríbete!
               </button>
+              {user && (
+                <div className="menu-user-greeting-text">
+                  <FaUser className="greeting-icon" />
+                  <span>Hola, {getUserName()}</span>
+                </div>
+              )}
             </div>
 
             <ul className="menu-secciones">
@@ -162,9 +178,30 @@ const HeaderH = () => {
                 <FaEnvelope /> Contáctanos
               </li>
             </ul>
-            {/* Opción para perfil de usuario, solo si está logueado */}
+
+            {!user && (
+              <ul className="menu-secciones menu-auth-mobile">
+                <li
+                  onClick={() => {
+                    navigate("/iniciar-sesion")
+                    setMenuAbierto(false)
+                  }}
+                >
+                  <FaSignInAlt /> Iniciar sesión
+                </li>
+                <li
+                  onClick={() => {
+                    navigate("/registro")
+                    setMenuAbierto(false)
+                  }}
+                >
+                  <FaUserPlus /> Registrarse
+                </li>
+              </ul>
+            )}
+
             {user && (
-              <ul className="menu-secciones">
+              <ul className="menu-secciones menu-user-mobile">
                 <li
                   onClick={() => {
                     navigate("/perfil")
@@ -173,8 +210,12 @@ const HeaderH = () => {
                 >
                   <FaUser /> Perfil de Usuario
                 </li>
+                <li onClick={manejarCerrarSesion}>
+                  <FaSignInAlt /> Cerrar sesión
+                </li>
               </ul>
             )}
+
             {/* Sección solo para admin */}
             {user?.role === "admin" && (
               <ul className="menu-secciones admin-section">

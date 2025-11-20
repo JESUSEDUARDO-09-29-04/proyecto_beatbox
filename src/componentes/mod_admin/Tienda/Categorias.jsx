@@ -330,7 +330,7 @@ const CategoriasAdmin = () => {
   useEffect(() => {
     const verificarRol = async () => {
       try {
-        const userResponse = await fetch("http://localhost:3000/auth/validate-user", {
+        const userResponse = await fetch("https://backendbeat-serverbeat.586pa0.easypanel.host/auth/validate-user", {
           method: "GET",
           credentials: "include",
         })
@@ -390,7 +390,7 @@ const CategoriasAdmin = () => {
       setCargando(true)
       setError(null)
 
-      const response = await fetch("http://localhost:3000/categorias")
+      const response = await fetch("https://backendbeat-serverbeat.586pa0.easypanel.host/categorias")
 
       if (!response.ok) {
         throw new Error(`Error al cargar categorías: ${response.status} ${response.statusText}`)
@@ -413,7 +413,7 @@ const CategoriasAdmin = () => {
       setCargando(true)
       setError(null)
 
-      const response = await fetch(`http://localhost:3000/subcategorias/by-categoria/${categoriaId}`)
+      const response = await fetch(`https://backendbeat-serverbeat.586pa0.easypanel.host/subcategorias/by-categoria/${categoriaId}`)
 
       if (!response.ok) {
         throw new Error(`Error al cargar subcategorías: ${response.status} ${response.statusText}`)
@@ -438,7 +438,7 @@ const CategoriasAdmin = () => {
       setCargando(true)
       setError(null)
 
-      const response = await fetch(`http://localhost:3000/categorias/${id}`)
+      const response = await fetch(`https://backendbeat-serverbeat.586pa0.easypanel.host/categorias/${id}`)
 
       if (!response.ok) {
         throw new Error(`Error al obtener categoría: ${response.status} ${response.statusText}`)
@@ -480,10 +480,10 @@ const CategoriasAdmin = () => {
 
       let url, method
       if (modoEdicionCategoria) {
-        url = `http://localhost:3000/categorias/${formularioCategoria.id}`
+        url = `https://backendbeat-serverbeat.586pa0.easypanel.host/categorias/${formularioCategoria.id}`
         method = "PUT"
       } else {
-        url = "http://localhost:3000/categorias"
+        url = "https://backendbeat-serverbeat.586pa0.easypanel.host/categorias"
         method = "POST"
       }
 
@@ -542,7 +542,7 @@ const CategoriasAdmin = () => {
       setCargando(true)
       setError(null)
 
-      const response = await fetch(`http://localhost:3000/categorias/${categoriaSeleccionada.id}`, {
+      const response = await fetch(`https://backendbeat-serverbeat.586pa0.easypanel.host/categorias/${categoriaSeleccionada.id}`, {
         method: "DELETE",
       })
 
@@ -604,10 +604,10 @@ const CategoriasAdmin = () => {
 
       let url, method
       if (modoEdicionSubcategoria) {
-        url = `http://localhost:3000/subcategorias/${formularioSubcategoria.id}`
+        url = `https://backendbeat-serverbeat.586pa0.easypanel.host/subcategorias/${formularioSubcategoria.id}`
         method = "PUT"
       } else {
-        url = "http://localhost:3000/subcategorias"
+        url = "https://backendbeat-serverbeat.586pa0.easypanel.host/subcategorias"
         method = "POST"
       }
 
@@ -669,7 +669,7 @@ const CategoriasAdmin = () => {
       setCargando(true)
       setError(null)
 
-      const response = await fetch(`http://localhost:3000/subcategorias/${subcategoriaSeleccionada.id}`, {
+      const response = await fetch(`https://backendbeat-serverbeat.586pa0.easypanel.host/subcategorias/${subcategoriaSeleccionada.id}`, {
         method: "DELETE",
       })
 

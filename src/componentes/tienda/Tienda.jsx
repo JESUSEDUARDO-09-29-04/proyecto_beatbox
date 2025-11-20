@@ -60,119 +60,159 @@ const Tienda = () => {
   const [error, setError] = useState("")
 
   // Obtener el contexto del carrito y del tema
-  const { addToCart, getCartItemsCount } = useContext(CartContext)
+  const { getCartItemsCount, addToCart } = useContext(CartContext)
   const { theme } = useContext(ThemeContext)
 
   // Obtener el parámetro de categoría de la URL
   const { categoria } = useParams()
 
   // Cargar categorías desde la API
-  useEffect(() => {
-    const cargarCategorias = async () => {
-      try {
-        setCargandoCategorias(true)
-        setError("")
+useEffect(() => {
+  const cargarCategorias = async () => {
+    try {
+      setCargandoCategorias(true)
+      setError("")
 
-        const response = await fetch("http://localhost:3000/categorias", {
-          method: "GET",
-          credentials: "include",
-        })
+      const response = await fetch("/categorias", { credentials: "include" })
+      if (!response.ok) throw new Error("Error al cargar categorías")
 
-        if (!response.ok) {
-          throw new Error("Error al cargar categorías")
-        }
+      const data = await response.json()
 
-        const data = await response.json()
+      // Guardar en localStorage
+      localStorage.setItem("categorias_cache", JSON.stringify(data))
 
-        // Mapear categorías con iconos
+      const categoriasConIconos = data.map((cat) => ({
+        ...cat,
+        icono: obtenerIconoCategoria(cat.nombre),
+        ruta: "/",
+      }))
+      setCategorias(categoriasConIconos)
+    } catch (error) {
+      console.warn("Error al cargar categorías:", error.message)
+      const cache = localStorage.getItem("categorias_cache")
+      if (cache) {
+        const data = JSON.parse(cache)
         const categoriasConIconos = data.map((cat) => ({
           ...cat,
           icono: obtenerIconoCategoria(cat.nombre),
           ruta: "/",
         }))
-
         setCategorias(categoriasConIconos)
-      } catch (error) {
-        console.error("Error al cargar categorías:", error)
+        setError("Mostrando categorías guardadas.")
+      } else {
         setError("Error al cargar las categorías")
-      } finally {
-        setCargandoCategorias(false)
       }
+    } finally {
+      setCargandoCategorias(false)
     }
+  }
 
-    cargarCategorias()
-  }, [])
+  cargarCategorias()
+}, [])
 
 useEffect(() => {
   const obtenerDatos = async () => {
-    const productosRes = await fetch("http://localhost:3000/productos")
-    const productos = await productosRes.json()
+    try {
+      const productosRes = await fetch("/productos")
+      if (!productosRes.ok) throw new Error("Error al cargar productos")
+      const productos = await productosRes.json()
 
-    const categoriasConImagen = {}
-    productos.forEach((producto) => {
-  const nombreCat = producto.categoria?.nombre
-  if (!nombreCat) return
-  if (!categoriasConImagen[nombreCat]) {
-    categoriasConImagen[nombreCat] = {
-      id: producto.categoriaId || nombreCat,
-      nombre: nombreCat,
-      imagen: producto.imagen || "/placeholder.svg",
+      // Guardar en caché local
+      localStorage.setItem("productos_cache", JSON.stringify(productos))
+
+      const categoriasConImagen = {}
+      productos.forEach((producto) => {
+        const nombreCat = producto.categoria?.nombre
+        if (!nombreCat) return
+        if (!categoriasConImagen[nombreCat]) {
+          categoriasConImagen[nombreCat] = {
+            id: producto.categoriaId || nombreCat,
+            nombre: nombreCat,
+            imagen: producto.imagen || "/placeholder.svg",
+          }
+        }
+      })
+      setCategoriasDestacadas(Object.values(categoriasConImagen))
+    } catch (error) {
+      console.warn("Error al cargar productos destacados:", error.message)
+      const cache = localStorage.getItem("productos_cache")
+      if (cache) {
+        const productos = JSON.parse(cache)
+        const categoriasConImagen = {}
+        productos.forEach((producto) => {
+          const nombreCat = producto.categoria?.nombre
+          if (!nombreCat) return
+          if (!categoriasConImagen[nombreCat]) {
+            categoriasConImagen[nombreCat] = {
+              id: producto.categoriaId || nombreCat,
+              nombre: nombreCat,
+              imagen: producto.imagen || "/placeholder.svg",
+            }
+          }
+        })
+        setCategoriasDestacadas(Object.values(categoriasConImagen))
+      }
     }
-  }
-})
-setCategoriasDestacadas(Object.values(categoriasConImagen))
   }
 
   obtenerDatos()
 }, [])
-
   // Cargar productos desde la API
-  useEffect(() => {
-    const cargarProductos = async () => {
-      try {
-        setCargandoProductos(true)
-        setError("")
+useEffect(() => {
+  const cargarProductos = async () => {
+    try {
+      setCargandoProductos(true)
+      setError("")
 
-        const response = await fetch("http://localhost:3000/productos", {
-          method: "GET",
-          credentials: "include",
-        })
+      const response = await fetch("/productos", { credentials: "include" })
+      if (!response.ok) throw new Error("Error al cargar productos")
 
-        if (!response.ok) {
-          throw new Error("Error al cargar productos")
-        }
+      const data = await response.json()
 
-        const data = await response.json()
+      // Guardar en localStorage
+      localStorage.setItem("productos_cache", JSON.stringify(data))
 
-        // Procesar productos para que tengan el formato esperado
-        const productosFormateados = data
-          //.filter((producto) => producto.vigente && !producto.eliminado)
-          .map((producto) => ({
-            ...producto,
-            precio: `$${Number.parseFloat(producto.precio).toFixed(2)} MXN`,
-            precioNumerico: Number.parseFloat(producto.precio),
-            imagen: producto.imagen || "/placeholder.svg?height=180&width=180",
-            calificacion: producto.calificacion || 5,
-            descuento: producto.descuento > 0 ? `${producto.descuento}%` : null,
-            caracteristicas: producto.caracteristicas ? producto.caracteristicas.split("\n") : [],
-            // Asegurar que la categoría tenga el formato correcto
-            categoria: producto.categoria ? producto.categoria.nombre || producto.categoria : null,
-            // Manejar subcategorías como array de objetos
-            subcategorias: producto.subcategorias || [],
-          }))
+      const productosFormateados = data.map((producto) => ({
+        ...producto,
+        precio: `$${Number.parseFloat(producto.precio).toFixed(2)} MXN`,
+        precioNumerico: Number.parseFloat(producto.precio),
+        imagen: producto.imagen || "/placeholder.svg?height=180&width=180",
+        calificacion: producto.calificacion || 5,
+        descuento: producto.descuento > 0 ? `${producto.descuento}%` : null,
+        caracteristicas: producto.caracteristicas ? producto.caracteristicas.split("\n") : [],
+        categoria: producto.categoria ? producto.categoria.nombre || producto.categoria : null,
+        subcategorias: producto.subcategorias || [],
+      }))
 
+      setProductos(productosFormateados)
+    } catch (error) {
+      console.warn("Error al cargar productos:", error.message)
+      const cache = localStorage.getItem("productos_cache")
+      if (cache) {
+        const data = JSON.parse(cache)
+        const productosFormateados = data.map((producto) => ({
+          ...producto,
+          precio: `$${Number.parseFloat(producto.precio).toFixed(2)} MXN`,
+          precioNumerico: Number.parseFloat(producto.precio),
+          imagen: producto.imagen || "/placeholder.svg?height=180&width=180",
+          calificacion: producto.calificacion || 5,
+          descuento: producto.descuento > 0 ? `${producto.descuento}%` : null,
+          caracteristicas: producto.caracteristicas ? producto.caracteristicas.split("\n") : [],
+          categoria: producto.categoria ? producto.categoria.nombre || producto.categoria : null,
+          subcategorias: producto.subcategorias || [],
+        }))
         setProductos(productosFormateados)
-      } catch (error) {
-        console.error("Error al cargar productos:", error)
-        setError("Error al cargar los productos")
-      } finally {
-        setCargandoProductos(false)
+        setError("Mostrando productos guardados en caché.")
+      } else {
+        setError("No hay productos disponibles sin conexión.")
       }
+    } finally {
+      setCargandoProductos(false)
     }
+  }
 
-    cargarProductos()
-  }, [])
-
+  cargarProductos()
+}, [])
   // Función para obtener icono según la categoría
   const obtenerIconoCategoria = (nombreCategoria) => {
     const nombre = nombreCategoria.toLowerCase()
@@ -284,7 +324,6 @@ setCategoriasDestacadas(Object.values(categoriasConImagen))
   const cargarMasProductos = () => {
     setProductosVisibles((prev) => Math.min(prev + 10, productos.length))
   }
-
 
   // Crear banners de categorías
   const bannersCategorias = categorias.map((cat) => ({
@@ -482,32 +521,32 @@ setCategoriasDestacadas(Object.values(categoriasConImagen))
           </div>
 
           {/* Sección de Destacados */}
-       {categoriasDestacadas.length > 0 && (
-          <section className="destacados">
-            <h2 className="titulo-destacados">DESTACADOS</h2>
-            <div className="destacados-contenedor">
-              {categoriasDestacadas.slice(0, 4).map((destacado) => (
-                <div
-                  key={destacado.id}
-                  className="destacado-card"
-                  onClick={() => manejarClickCategoria(destacado.nombre)}
-                  style={{ cursor: "pointer" }}
-                >
-                  <div className="destacado-imagen-container">
-                    <img
-                      src={destacado.imagen || "/placeholder.svg"}
-                      alt={destacado.nombre}
-                      onError={(e) => (e.target.src = "/placeholder.svg")}
-                    />
+          {categoriasDestacadas.length > 0 && (
+            <section className="destacados">
+              <h2 className="titulo-destacados">DESTACADOS</h2>
+              <div className="destacados-contenedor">
+                {categoriasDestacadas.slice(0, 4).map((destacado) => (
+                  <div
+                    key={destacado.id}
+                    className="destacado-card"
+                    onClick={() => manejarClickCategoria(destacado.nombre)}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <div className="destacado-imagen-container">
+                      <img
+                        src={destacado.imagen || "/placeholder.svg"}
+                        alt={destacado.nombre}
+                        onError={(e) => (e.target.src = "/placeholder.svg")}
+                      />
+                    </div>
+                    <div className="destacado-info">
+                      <h3 className="destacado-titulo">{destacado.nombre}</h3>
+                    </div>
                   </div>
-                  <div className="destacado-info">
-                    <h3 className="destacado-titulo">{destacado.nombre}</h3>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
+                ))}
+              </div>
+            </section>
+          )}
 
           {/* Sección del Carrusel */}
           {productos.length > 0 && (

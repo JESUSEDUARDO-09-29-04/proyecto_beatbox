@@ -36,7 +36,7 @@ const RedesSocialesAdmin = () => {
   useEffect(() => {
     const verificarRol = async () => {
       try {
-        const userResponse = await fetch("http://localhost:3000/auth/validate-user", {
+        const userResponse = await fetch("https://backendbeat-serverbeat.586pa0.easypanel.host/auth/validate-user", {
           method: "GET",
           credentials: "include",
         })
@@ -61,7 +61,7 @@ const RedesSocialesAdmin = () => {
   useEffect(() => {
     const cargarRedesSociales = async () => {
       try {
-        const response = await fetch("http://localhost:3000/social/listar-todos", {
+        const response = await fetch("https://backendbeat-serverbeat.586pa0.easypanel.host/social/listar-todos", {
           method: "GET",
           credentials: "include",
         })
@@ -173,7 +173,7 @@ const RedesSocialesAdmin = () => {
     console.log("Enviando datos a la API:", sanitizedData)
 
     try {
-      const response = await fetch("http://localhost:3000/social/agregar", {
+      const response = await fetch("https://backendbeat-serverbeat.586pa0.easypanel.host/social/agregar", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -225,7 +225,7 @@ const RedesSocialesAdmin = () => {
       // Sanitizar el tipo antes de usarlo en la URL
       const sanitizedTipo = encodeURIComponent(tipo.trim())
 
-      const response = await fetch(`http://localhost:3000/social/eliminar/${sanitizedTipo}`, {
+      const response = await fetch(`https://backendbeat-serverbeat.586pa0.easypanel.host/social/eliminar/${sanitizedTipo}`, {
         method: "DELETE",
         credentials: "include",
         // Eliminamos el encabezado X-CSRF-Token que estaba causando problemas de CORS

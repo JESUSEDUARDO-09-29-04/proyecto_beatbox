@@ -1,7 +1,7 @@
 // src/services/api.js
 import axios from 'axios';
 
-const BASE_URL = 'https://proyecto-7mo.vercel.app/api'; // Tu URL base en Vercel
+const BASE_URL = 'http://proyecto-7mo.vercel.app/api'; // Tu URL base en Vercel
 
 // Auth: Registrar usuario
 export const registerUser = async (email, password) => {
