@@ -1,92 +1,110 @@
 import React from "react"
 import { Link, useLocation } from "react-router-dom"
 import "./Breadcrumbs.css"
-import { FaHome, FaShoppingCart, FaInfoCircle } from "react-icons/fa"
+import { FaHome, FaShoppingCart, FaInfoCircle, FaCreditCard } from "react-icons/fa"
 
 const Breadcrumbs = () => {
-  const location = useLocation()
-  const pathname = location.pathname
+  const { pathname } = useLocation()
 
-  // Verificar si estamos en la página de detalle de producto
-  const isDetalleProducto = pathname.includes("/detalle-producto")
+  // Si estamos en rutas normales (no tienda), usar breadcrumbs dinámicos
+  const isTienda = pathname.startsWith("/tienda")
+  const isDetalle = pathname.startsWith("/detalle-producto")
+  const isCarrito = pathname.startsWith("/carrito")
+  const isCheckout = pathname.startsWith("/checkout")
 
-  // Si estamos en detalle de producto, mostrar breadcrumb fijo: Inicio / Tienda / Detalle producto
-  if (isDetalleProducto) {
+  // 🔥 CASO 1: DETALLE PRODUCTO
+  if (isDetalle) {
     return (
       <nav className="breadcrumbs">
-        <Link to="/" className="breadcrumb-item">
-          <FaHome /> Inicio
-        </Link>
+        <Link to="/" className="breadcrumb-item"><FaHome /> Inicio</Link>
         <span className="breadcrumb-separator">/</span>
+
         <Link to="/tienda" className="breadcrumb-item">
           <FaShoppingCart /> Tienda
         </Link>
         <span className="breadcrumb-separator">/</span>
-        <span className="breadcrumb-item">
-          <FaInfoCircle /> Detalle producto
-        </span>
+
+        <span className="breadcrumb-item"><FaInfoCircle /> Detalle del Producto</span>
       </nav>
     )
   }
 
-  // Para otras páginas, mantener el comportamiento normal
-  const pathSegments = pathname.split("/").filter((segment) => segment !== "")
+  // 🔥 CASO 2: CARRITO
+  if (isCarrito) {
+    return (
+      <nav className="breadcrumbs">
+        <Link to="/" className="breadcrumb-item"><FaHome /> Inicio</Link>
+        <span className="breadcrumb-separator">/</span>
 
-  // Generar breadcrumbs basados en la ruta actual
-  const generateBreadcrumbs = () => {
-    const breadcrumbs = []
+        <Link to="/tienda" className="breadcrumb-item">
+          <FaShoppingCart /> Tienda
+        </Link>
+        <span className="breadcrumb-separator">/</span>
 
-    // Siempre agregar el inicio
-    breadcrumbs.push({
-      path: "/",
-      name: "Inicio",
-      icon: <FaHome />,
-    })
-
-    // Construir la ruta acumulativa para cada segmento
-    let currentPath = ""
-
-    for (let i = 0; i < pathSegments.length; i++) {
-      const segment = pathSegments[i]
-      currentPath += `/${segment}`
-
-      // Buscar en el diccionario o crear un nombre legible
-      let name, icon
-
-      if (segment === "tienda") {
-        name = "Tienda"
-        icon = <FaShoppingCart />
-      } else {
-        // Convertir kebab-case a formato legible
-        name = segment.charAt(0).toUpperCase() + segment.slice(1).replace(/-/g, " ")
-        icon = <FaInfoCircle />
-      }
-
-      breadcrumbs.push({
-        path: currentPath,
-        name,
-        icon,
-      })
-    }
-
-    return breadcrumbs
+        <span className="breadcrumb-item"><FaShoppingCart /> Carrito</span>
+      </nav>
+    )
   }
 
-  const breadcrumbs = generateBreadcrumbs()
+  // 🔥 CASO 3: CHECKOUT
+  if (isCheckout) {
+    return (
+      <nav className="breadcrumbs">
+        <Link to="/" className="breadcrumb-item"><FaHome /> Inicio</Link>
+        <span className="breadcrumb-separator">/</span>
+
+        <Link to="/tienda" className="breadcrumb-item">
+          <FaShoppingCart /> Tienda
+        </Link>
+        <span className="breadcrumb-separator">/</span>
+
+        <Link to="/carrito" className="breadcrumb-item">
+          <FaShoppingCart /> Carrito
+        </Link>
+        <span className="breadcrumb-separator">/</span>
+
+        <span className="breadcrumb-item"><FaCreditCard /> Checkout</span>
+      </nav>
+    )
+  }
+
+  // 🔥 CASO 4: TIENDA GENERAL
+  if (isTienda) {
+    return (
+      <nav className="breadcrumbs">
+        <Link to="/" className="breadcrumb-item"><FaHome /> Inicio</Link>
+        <span className="breadcrumb-separator">/</span>
+        <span className="breadcrumb-item"><FaShoppingCart /> Tienda</span>
+      </nav>
+    )
+  }
+
+  // 🔥 CASO 5: RUTAS NORMALES → usar tus breadcrumbs dinámicos originales
+  const segments = pathname.split("/").filter(Boolean)
+
+  const crumbs = [
+    { path: "/", name: "Inicio", icon: <FaHome /> }
+  ]
+
+  let current = ""
+  segments.forEach((seg) => {
+    current += "/" + seg
+    crumbs.push({
+      path: current,
+      name: seg.replace(/-/g, " ").replace(/^\w/, (c) => c.toUpperCase()),
+      icon: <FaInfoCircle />
+    })
+  })
 
   return (
     <nav className="breadcrumbs">
-      {breadcrumbs.map((crumb, index) => (
+      {crumbs.map((crumb, index) => (
         <React.Fragment key={crumb.path}>
           {index > 0 && <span className="breadcrumb-separator">/</span>}
-          {index === breadcrumbs.length - 1 ? (
-            <span className="breadcrumb-item">
-              {crumb.icon} {crumb.name}
-            </span>
+          {index === crumbs.length - 1 ? (
+            <span className="breadcrumb-item">{crumb.icon} {crumb.name}</span>
           ) : (
-            <Link to={crumb.path} className="breadcrumb-item">
-              {crumb.icon} {crumb.name}
-            </Link>
+            <Link to={crumb.path} className="breadcrumb-item">{crumb.icon} {crumb.name}</Link>
           )}
         </React.Fragment>
       ))}
@@ -95,4 +113,3 @@ const Breadcrumbs = () => {
 }
 
 export default Breadcrumbs
-
