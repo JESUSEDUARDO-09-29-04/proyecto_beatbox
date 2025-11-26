@@ -158,7 +158,7 @@ const Checkout = () => {
       }
 
       const script = document.createElement("script")
-      script.src = `http://www.paypal.com/sdk/js?client-id=${PAYPAL_CLIENT_ID}&currency=MXN`
+      script.src = `https://www.paypal.com/sdk/js?client-id=${PAYPAL_CLIENT_ID}&currency=MXN`
       script.onload = () => setPaypalLoaded(true)
       script.onerror = () => {
         setPaymentError("Error al cargar PayPal. Por favor, recarga la página.")
